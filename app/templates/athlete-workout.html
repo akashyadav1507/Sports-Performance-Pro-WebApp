@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+        <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/js/select2.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.9/index.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css"/>
+        <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+
+        <!-- <link rel="stylesheet" href="athlete-workout-styles.css" /> -->
+
+        <style>
+            header {
+                background-color: #0077B5;
+                color: #fff;
+                padding: 20px 0;
+                text-align: center;
+            }
+
+            nav {
+                background-color: #0077B5;
+                color: #fff;
+                padding: 10px 0;
+            }
+
+            nav ul {
+                list-style-type: none;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+            }
+
+            nav li {
+                margin: 0 20px;
+            }
+
+            nav a {
+                text-decoration: none;
+                color: #fff;
+                font-weight: bold;
+                font-size: 16px;
+                transition: color 0.3s ease-in-out;
+                padding: 15px 25px;
+                border-radius: 15px; /* Add rounded corners to the tab */
+            }
+
+            nav a.current {
+                color: #fff;
+                background-color: #005599;
+                font-weight: bold;
+                border-radius: 15px; /* Apply rounded corners to the selected tab */
+            }
+
+            nav a:hover, nav a:focus {
+                color: #005599;
+                background-color: #fff;
+                border-radius: 15px; /* Apply the same rounded corners on hover/focus */
+            }
+
+            .footer {
+                position: fixed;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%); /* Center the footer horizontally */
+                width: 100%;
+                background-color: #fff;
+                color: #333;
+                text-align: center;
+                padding: 10px 0;
+                z-index: 999;
+                box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+            }
+
+            footer {
+              position: relative;
+              bottom: 0;
+              width: 100%;
+              background-color: #fff;
+              color: #333;
+              text-align: center;
+              padding: 10px 0;
+            }
+
+            .footer-content {
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+
+            body {
+              font-family: Arial, sans-serif;
+              background-color: #f3f2ef;
+              margin: 0;
+              padding: 0;
+              color: #333;
+            }
+
+            .container {
+              margin: 0 auto;
+              padding: 20px;
+              background-color: #fff;
+              box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+              border-radius: 5px;
+              text-align: center;
+            }
+
+            .login-forms {
+              display: grid;
+              grid-template-columns: 0.4fr 0.6fr;
+              justify-content: stretch; 
+              /* align-items: center;  */
+              flex-wrap: wrap;
+            }
+
+            .login-container-1 {
+              background-color: #fff;
+              box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+              border-radius: 8px;
+              padding: 30px;
+              text-align: center;
+              width: max-width;
+              margin: 20px; /* Added margin */
+            }
+
+            .login-container-2 {
+              background-color: #fff;
+              box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+              border-radius: 8px;
+              padding: 30px;
+              /* text-align: center; */
+              /* width: max-width; */
+              width: 850px;
+              margin: 20px; /* Added margin */
+            }
+
+
+            button {
+              background-color: #0077b5;
+              color: #fff;
+              border: none;
+              padding: 10px 20px;
+              font-size: 16px;
+              border-radius: 5px;
+              cursor: pointer;
+              transition: background-color 0.3s ease-in-out;
+            }
+
+            button:hover {
+              background-color: #005599;
+            }
+
+            h1 {
+                font-size: 28px;
+                margin-top: 20px;
+                margin-bottom: 30px;
+                color: #0077B5;
+            }
+
+            .title {
+                font-size: 28px;
+                margin-top: 20px;
+                margin-bottom: 30px;
+                color: #fff; 
+            }
+
+            h2 {
+                font-size: 24px;
+                margin-bottom: 30px;
+                color: #0077B5;
+            }
+
+            #athlete-calendar .card table {
+                width: 100%;
+                height: 100%;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                /* Other CSS styles for the table here, if needed */
+            }
+
+            /* Add vertical spacing to calendar dates */
+            td {
+              padding: 30px;
+            }
+
+            #calendar td {
+              height: 60px; 
+            }
+
+            .today-date {
+            background-color: #9308cf; 
+            color: #fff;
+            border-radius: 12px;
+            }
+
+            .clicked-date {
+            background-color: #e10c6f;
+            color: #fff;
+            border-radius: 12px;
+            }
+
+            #treeview {
+                padding: 0;
+                margin: 0;
+            }
+
+            .form-inline {
+                display: flex; 
+                justify-content: space-between; 
+                width: 100%;
+            }
+
+            #previous {
+                margin-right: 5px;
+            }
+
+            /* Style for labels and select boxes */
+            .form-inline label,
+            .form-inline select {
+                flex: 1; 
+                margin-right: 10px; 
+            }
+
+            .form-inline select {
+                width: auto; 
+            }
+
+            #month, #year {
+                font-size: 20px;
+            }
+
+            .lead {
+                font-size: 20px;
+            }
+
+            #calendar th,
+            #calendar td {
+                padding-top: 10px;
+                padding-bottom: 10px; 
+            }
+
+            .athlete-list-node {
+            list-style: none;
+            cursor: pointer;
+            color: #fff;
+            font-weight: bold;
+            margin-left: -40px;
+            margin-bottom: 10px;
+            border: 1px solid #d6d9da;
+            padding: 20px;
+            background-color: #0077b5;
+            text-align: center;
+            }
+
+            #block-tabs-container {
+                overflow-x: auto; 
+                white-space: nowrap; 
+            }
+
+            #block-tabs-container button {
+                display: inline-block; 
+                padding: 10px 20px; 
+                margin-right: 10px; 
+                font-size: 18px; 
+            }
+
+            #exercise-tabs-container {
+                overflow-x: auto;  
+                white-space: nowrap; 
+            }
+
+            #exercise-tabs-container button {
+                display: inline-block; 
+                padding: 10px 20px; 
+                margin-right: 10px; 
+                font-size: 18px; 
+            }
+
+            #block-tabs button, button#add-block-button,
+            #exercise-tabs button {
+                font-size: 16px;
+                padding: 30px 20px; 
+                margin: 5px;
+            }
+
+            #block-tabs button {
+                width: 200px; 
+            }
+
+            #exercise-tabs button {
+                width: 180px; 
+            }
+
+            #exercise-details{
+                margin: 20px;
+            }
+
+            #athlete-name {
+                min-width: 160px;
+                padding: 30px 25px;
+                border-radius: 5px;
+                color: #fff; 
+                background-color: #ff9408;
+            }
+
+            .athlete-container {
+                display: flex;
+                align-items: center; 
+                margin-bottom: 20px;
+            }
+
+            ul#athlete-list,
+            h1,
+            span#athlete-name,
+            button#selectAthleteButton {
+                display: inline; 
+                margin-right: 10px; 
+            }
+
+            button#selectAthleteButton {
+                background-color: #00b515;
+                color: #fff;
+                padding: 30px 25px;
+                border: none; 
+                border-radius: 5px;
+                cursor: pointer;
+
+                /* Hover effect */
+                transition: background-color 0.3s; 
+            }
+
+            button#selectAthleteButton:hover {
+                background-color: #007a1a; 
+            }
+
+            /* DataTable container */
+            #exercise-datatable {
+                border-collapse: collapse;
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            /* DataTable header row */
+            #exercise-datatable thead {
+                background-color: #f2f2f2;
+            }
+
+            /* DataTable header cells */
+            #exercise-datatable th {
+                font-weight: bold;
+                text-align: left;
+                padding: 12px;
+            }
+
+            /* DataTable body rows */
+            #exercise-datatable tbody {
+                text-align: left;
+            }
+
+            /* DataTable body cells */
+            #exercise-datatable td {
+                padding: 8px;
+                border-bottom: 1px solid #ddd;
+            }
+
+            /* Apply alternate row background color for better readability */
+            #exercise-datatable tbody tr:nth-child(odd) {
+                background-color: #f9f9f9;
+            }
+
+            /* Style the "Add Set" button */
+            #add-set-button {
+                margin-top: 10px;
+                margin-right: 10px;
+            }
+
+            #add-set-button:hover {
+                background-color: #0056b3;
+            }
+
+        </style>
+    </head>
+    <body>
+    <header>
+        <h1 class="title">Sports Performance Pro</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/coachLanding">Home</a></li>
+            <li><a href="/workoutSelection">Assign Workouts</a></li>
+            <li><a href="/testSelection">Assign Tests</a></li>
+            <li><a href="#">Create Exercises</a></li>
+            <li><a href="/coachNotes">Notes</a></li>
+            <li><a href="#">Notifications</a></li>
+            <li><a href="/coachProfile">My Profile</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Athlete training sessions!</h1>
+        <!-- Container for login forms -->
+        <div class="login-forms">
+            <div class="login-container-1" style="margin-right: 20px">
+                <!-- <div class="container mt-7"> -->
+                    <h1 class="text-center" style="margin-bottom: 10px;">Athlete Workout</h1>
+                    <div class="row">
+                        <!-- <div class="col-md-7"> -->
+                            <!-- Left side div for the calendar -->
+                            <!-- <div id="athlete-calendar"></div> -->
+                            <div class="container col-sm-4 col-md-7 col-lg-4 mt-5 d-flex justify-content-center" style="margin-top: 15px;" id="athlete-calendar">
+                                <div class="card">
+                                    <h3 class="card-header" id="monthAndYear"></h3>
+                                    <table class="table table-bordered table-responsive-sm" id="calendar">
+                                        <thead>
+                                            <tr>
+                                                <th>Sun</th>
+                                                <th>Mon</th>
+                                                <th>Tue</th>
+                                                <th>Wed</th>
+                                                <th>Thu</th>
+                                                <th>Fri</th>
+                                                <th>Sat</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="calendar-body"></tbody>
+                                    </table>
+                                    <div class="form-inline" style="width: 100%;">
+                                        <button class="btn btn-outline-primary" style="width: 50%;" id="previous" onclick="previous()">Previous</button>
+                                        <button class="btn btn-outline-primary" style="width: 50%;" id="next" onclick="next()">Next</button>
+                                    </div>                                                                        
+                                    <br />
+                                    <form class="form-inline" style="width: 100%;">
+                                        <label class="lead mr-2" for="month">Jump To:</label>
+                                        <select class="form-control col-sm-6" name="month" id="month" onchange="jump()">
+                                            <option value="0">Jan</option>
+                                            <option value="1">Feb</option>
+                                            <option value="2">Mar</option>
+                                            <option value="3">Apr</option>
+                                            <option value="4">May</option>
+                                            <option value="5">Jun</option>
+                                            <option value="6">Jul</option>
+                                            <option value="7">Aug</option>
+                                            <option value="8">Sep</option>
+                                            <option value="9">Oct</option>
+                                            <option value="10">Nov</option>
+                                            <option value="11">Dec</option>
+                                        </select>
+      
+                                        <label for="year"></label>
+                                        <select class="form-control col-sm-6" name="year" id="year" onchange="jump()">
+                                            <option value="1990">1990</option>
+                                            <option value="1991">1991</option>
+                                            <option value="1992">1992</option>
+                                            <option value="1993">1993</option>
+                                            <option value="1994">1994</option>
+                                            <option value="1995">1995</option>
+                                            <option value="1996">1996</option>
+                                            <option value="1997">1997</option>
+                                            <option value="1998">1998</option>
+                                            <option value="1999">1999</option>
+                                            <option value="2000">2000</option>
+                                            <option value="2001">2001</option>
+                                            <option value="2002">2002</option>
+                                            <option value="2003">2003</option>
+                                            <option value="2004">2004</option>
+                                            <option value="2005">2005</option>
+                                            <option value="2006">2006</option>
+                                            <option value="2007">2007</option>
+                                            <option value="2008">2008</option>
+                                            <option value="2009">2009</option>
+                                            <option value="2010">2010</option>
+                                            <option value="2011">2011</option>
+                                            <option value="2012">2012</option>
+                                            <option value="2013">2013</option>
+                                            <option value="2014">2014</option>
+                                            <option value="2015">2015</option>
+                                            <option value="2016">2016</option>
+                                            <option value="2017">2017</option>
+                                            <option value="2018">2018</option>
+                                            <option value="2019">2019</option>
+                                            <option value="2020">2020</option>
+                                            <option value="2021">2021</option>
+                                            <option value="2022">2022</option>
+                                            <option value="2023">2023</option>
+                                            <option value="2024">2024</option>
+                                            <option value="2025">2025</option>
+                                            <option value="2026">2026</option>
+                                            <option value="2027">2027</option>
+                                            <option value="2028">2028</option>
+                                            <option value="2029">2029</option>
+                                            <option value="2030">2030</option>
+                                        </select>
+                                    </form>
+                                </div>
+                            </div>
+                        <!-- </div> -->
+                    <div class="col-md-6">
+                <!-- Right side div (vacant for now) -->
+                </div>
+            <!-- </div> -->
+          </div>
+        </div>
+
+        <div class="login-container-2">
+                <!-- Search for an athlete -->
+            <div class="athlete-container">
+                <ul id="athlete-list"></ul>
+                <h1>Assign training sessions to : </h1> 
+                <span id="athlete-name">[Athlete Name]</span>
+                <button id="selectAthleteButton">Select another Athlete</button>
+            </div>
+            
+            <!-- Tabs for blocks and exercises -->
+            <div class="tab-container">
+                <div class="block-tabs" id="block-tabs">
+                    <button id="add-block-button">Add a Block</button>
+                </div>
+                <div class="exercise-tabs" id="exercise-tabs">
+                    <button id="add-exercise-button">Add an Exercise</button>
+                </div>
+                <!-- Display exercise details -->
+                <div id="exercise-details">
+                    <!-- Exercise - sets table -  Need a datatable here -->
+                </div>
+                <div id="exercise-datatable"></div>
+            </div>
+        </div>
+
+      <div style="margin-top: 100px"></div>
+    </div> 
+    
+    <footer>
+        <div class="footer">
+            2023 Sports Performance Pro
+        </div>
+    </footer>
+
+    <!-- Your custom JavaScript code -->
+    <script src="../static/js/calendar.js"></script> 
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Find the "Select another Athlete" button element
+            document.getElementById("selectAthleteButton").addEventListener('click', function() {
+                // Redirect to the workout-selection.html page
+                window.location.href = '/athleteSelection';
+            });
+
+            const athleteData = [
+                // {
+                //     name: "Jason",
+                //     blocks: [
+                //         {
+                //             id: 1,
+                //             exercises: ["Crunches", "Push Ups", "Squats"]
+                //         },
+                //         {
+                //             id: 2,
+                //             exercises: ["Jogging", "Fencing"]
+                //         },
+                //         {
+                //             id: 3,
+                //             exercises: ["Swimming", "Football"]
+                //         }
+                //     ]
+                // }
+                // Add more athlete data as needed
+            ];
+
+            const blockTabs = document.getElementById("block-tabs");
+            const exerciseTabs = document.getElementById("exercise-tabs");
+            const exerciseDetails = document.getElementById("exercise-details");
+            const addBlockButton = document.getElementById("add-block-button");
+            const addExerciseButton = document.getElementById("add-exercise-button");
+            const athleteList = document.getElementById("athlete-list");
+            const athleteNameElement = document.getElementById("athlete-name");
+
+            // Default selected athlete (in this case, "Jason")
+            const selectedAthlete = athleteData[0];
+
+            let currentBlock = null;
+            let currentExercise = null;
+
+            
+            // Get athleteId, coachId, and selectedDate from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const athleteId = urlParams.get("athleteId");
+            const coachId = urlParams.get("coachId");
+            // const selectedDate = urlParams.get("selectedDate");
+            console.log(selectedDate)
+
+            // Define the API endpoint URL to fetch athlete's name
+            const getAthleteNameUrl = "/getAthleteName";
+
+            // Make the AJAX GET request to fetch the athlete's name
+            $.get(getAthleteNameUrl, { athlete_id: athleteId }, function (data) {
+                if (data.athlete_name) {
+                    // Display the athlete's name
+                    athleteNameElement.innerText = data.athlete_name;
+                } else {
+                    alert("Athlete not found.");
+                }
+            });
+
+            // Define the API endpoint URL
+            const apiUrl = "/get_blocks";
+
+            // Make the AJAX GET request
+            $.get(apiUrl, { athleteId, coachId, selectedDate }, function (data) {
+                // Handle the response data
+                displayBlocks(data);
+            });
+
+            // Function to display blocks
+            function displayBlocks(data) {
+                // Clear any existing blockTabs content
+                const blockTabs = document.getElementById("block-tabs");
+                blockTabs.innerHTML = '';
+
+                // Iterate through the blocks and populate the blockTabs
+                data.forEach(function (block) {
+                    const blockButton = document.createElement('button');
+                    blockButton.innerText = block.name;
+                    blockButton.addEventListener('click', function () {
+                        // Handle block click event to display exercises
+                        displayExercises(block.exercises);
+                    });
+                    blockTabs.appendChild(blockButton);
+                });
+
+                // Add an "Add Block" button if needed
+                const addBlockButton = document.createElement('button');
+                addBlockButton.innerText = 'Add a new Block';
+                addBlockButton.addEventListener('click', function () {
+                    // Handle adding a new block
+                    addNewBlock();
+                });
+                blockTabs.appendChild(addBlockButton);
+
+                // Function to add a new block
+                function addNewBlock() {
+                    // give ajax call to add new block
+                }
+            }
+
+            // // Function to add a block for the selected athlete
+            // function addBlock(athlete) {
+            //     const newBlockId = athlete.blocks.length + 1;
+            //     athlete.blocks.push({ id: newBlockId, exercises: [] });
+            //     displayBlocks(athlete);
+            // }
+
+            // Function to display exercises for the selected block
+            function displayExercises(exercises) {
+                exerciseTabs.innerHTML = '';
+                exerciseDetails.innerHTML = 'Select an exercise to view details';
+                currentBlock = exercises; // Update currentBlock
+
+                exercises.forEach((exercise, index) => {
+                    const exerciseButton = document.createElement('button');
+                    exerciseButton.innerText = exercise.name;
+                    exerciseButton.addEventListener('click', () => displayExerciseDetails(exercise));
+                    exerciseTabs.appendChild(exerciseButton);
+                });
+
+                // Show "Add an Exercise" button
+                const addExerciseButton = document.createElement('button');
+                addExerciseButton.innerText = 'Add an Exercise';
+                addExerciseButton.addEventListener('click', () => addExercise(currentBlock));
+                exerciseTabs.appendChild(addExerciseButton);
+            }
+
+
+            // Call the function to display blocks for the default selected athlete (Jason) on page load
+            displayBlocks(selectedAthlete);
+
+            // Function to add an exercise for the selected block
+            function addExercise(block) {
+                const newExerciseId = block.exercises.length + 1;
+                block.exercises.push(`Exercise ${newExerciseId}`);
+                displayExercises(block);
+            }
+
+            // Add event listeners for the "Add a Block" and "Add an Exercise" buttons
+            addBlockButton.addEventListener('click', () => addBlock(selectedAthlete));
+            addExerciseButton.addEventListener('click', () => addExercise(currentBlock));
+
+            function displayExerciseDetails(exercise) {
+                exerciseDetails.innerHTML = '';
+
+                // Create a DataTable for the exercise
+                const table = document.createElement('table');
+                table.id = 'exercise-datatable';
+                exerciseDetails.appendChild(table);
+
+                // Initialize the DataTable
+                const dataTable = $('#exercise-datatable').DataTable({
+                    columns: [
+                        { title: 'Set' },
+                        { title: 'Reps' },
+                        { title: 'Loads' },
+                        { title: 'Action' },
+                    ],
+                    // Additional DataTable options can be added here
+                });
+
+                exercise.sets = exercise.sets || 1; // Default to 1 set if not provided
+
+                for (let i = 1; i <= exercise.sets; i++) {
+                    const setNumber = i;
+                    const loads = exercise.loads_reps.load;
+                    const reps = exercise.loads_reps.reps;
+
+                    const repsInput = document.createElement('input');
+                    repsInput.type = 'number';
+                    repsInput.placeholder = 'Reps';
+                    repsInput.style.padding = '10px';
+                    repsInput.value = reps;
+
+                    const loadsInput = document.createElement('input');
+                    loadsInput.type = 'number';
+                    loadsInput.placeholder = 'Loads';
+                    loadsInput.style.padding = '10px';
+                    loadsInput.value = loads;
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.innerText = 'Delete';
+                    deleteButton.className = 'delete-button';
+
+                    // Create a new row with input fields for reps and loads, and a delete button
+                    const newRow = dataTable.row.add([setNumber, repsInput.value, loadsInput.value, deleteButton.outerHTML]).draw(false);
+                }
+
+                // Add a "Add Set" button
+                const addSetButton = document.createElement('button');
+                addSetButton.id = 'add-set-button';
+                addSetButton.innerText = 'Add Set';
+                addSetButton.addEventListener('click', () => addSet(dataTable));
+                exerciseDetails.appendChild(addSetButton);
+
+                // Assign exercise button
+                const assignExerciseButton = document.createElement('button');
+                assignExerciseButton.id = 'assign-exercise-button';
+                assignExerciseButton.innerText = 'Assign Exercise';
+                assignExerciseButton.addEventListener('click', () => assignExercise(exercise, dataTable)); // You can define assignExercise later
+                exerciseDetails.appendChild(assignExerciseButton);
+            }
+
+
+
+            // Function to add a new row (set) to the DataTable
+            function addSet(dataTable) {
+                const table = document.getElementById('exercise-datatable');
+                const rows = table.getElementsByTagName('tr');
+
+                // Find the maximum 'Set' value currently in the table
+                let maxSet = 0;
+                for (let i = 1; i < rows.length; i++) { // Start from 1 to skip the header row
+                    const row = rows[i];
+                    const setCell = row.cells[0];
+                    const setValue = parseInt(setCell.innerText);
+                    if (!isNaN(setValue) && setValue > maxSet) {
+                        maxSet = setValue;
+                    }
+                }
+
+                // Increment the maxSet to get the next 'Set' value
+                const newSetValue = (maxSet + 1).toString();
+
+                // Create input elements for 'Reps' and 'Loads'
+                const repsInput = document.createElement('input');
+                repsInput.type = 'text';
+                repsInput.placeholder = 'Reps';
+                repsInput.style.padding = '10px';
+
+                const loadsInput = document.createElement('input');
+                loadsInput.type = 'text';
+                loadsInput.placeholder = 'Loads';
+                loadsInput.style.padding = '10px';
+
+                // Create a delete button
+                const deleteButton = document.createElement('button');
+                deleteButton.innerText = 'Delete';
+                // deleteButton.innerHTML = `
+                //     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                //         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                //         <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                //     </svg>
+                // `;
+                deleteButton.className = 'delete-button';
+
+                // Create a new row with input fields and the delete button
+                const newRow = dataTable.row.add([newSetValue, repsInput.outerHTML, loadsInput.outerHTML, deleteButton.outerHTML]).draw();
+
+                // Clear input values after adding a new row
+                repsInput.value = '';
+                loadsInput.value = '';
+
+                // Attach the click event listener for the delete button
+                table.querySelector('tbody').addEventListener('click', function (event) {
+                    if (event.target && event.target.nodeName === 'BUTTON') {
+                        const row = event.target.parentElement.parentElement;
+                        dataTable.row(row).remove().draw(false);
+                    }
+                });
+            }
+        });
+    </script>
+    
+</body>
+</html>

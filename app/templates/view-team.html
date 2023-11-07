@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Athlete</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+
+    <style>
+        header {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav li {
+            margin: 0 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s ease-in-out;
+            padding: 15px 25px;
+            border-radius: 15px; /* Add rounded corners to the tab */
+        }
+
+        nav a.current {
+            color: #fff;
+            background-color: #005599;
+            font-weight: bold;
+            border-radius: 15px; /* Apply rounded corners to the selected tab */
+        }
+
+        nav a:hover, nav a:focus {
+            color: #005599;
+            background-color: #fff;
+            border-radius: 15px; /* Apply the same rounded corners on hover/focus */
+        }
+
+        .container {
+            width: 100%; 
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-bottom: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 60px); 
+            margin-bottom: 60px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 50%; /* Align the footer to the horizontal center of the viewport */
+            transform: translateX(-50%); /* Center the footer horizontally */
+            width: 100%;
+            background-color: #fff;
+            color: #333;
+            text-align: center;
+            padding: 10px 0;
+            z-index: 999;
+            box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #0077B5;
+        }
+
+        .title {
+            font-size: 30px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #fff; /* White color */
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #0077B5;
+        }
+
+        /* Basic styling for the DataTable */
+        #athleteTable {
+            font-family: Arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #athleteTable th, #athleteTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        #athleteTable th {
+            background-color: #f2f2f2;
+        }
+
+        /* Style for Edit and Delete buttons */
+        .edit-button, .delete-button {
+            background-color: #0077b5;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .edit-button:hover, .delete-button:hover {
+            background-color: #00568d;
+        }
+
+        /* Hover effect for table rows */
+        #athleteTable tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* #athleteTable_filter input[type="search"] {
+            padding-right: 100px;
+        } */
+
+        #athleteTable_filter {
+            margin-bottom: 20px;
+        }
+
+        #athleteTable tbody tr.selected {
+            background-color: #0077B5;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        /* Style for the button container */
+        #buttonContainer {
+            text-align: center; /* Center align the buttons */
+            margin-top: 20px; /* Add spacing between the buttons and the table */
+        }
+
+        /* Style for the "Save Team" button */
+        #saveChangesButton {
+            margin-right: 20px;
+            padding: 10px;
+            padding-left: 25px; 
+            padding-right: 25px;
+        }
+
+        /* Style for the "Return" button */
+        #returnButton {
+            margin-left: 20px;
+            padding: 10px;
+            padding-left: 25px; 
+            padding-right: 25px;
+        }
+
+        #deleteTeamButton {
+            padding: 10px;
+            padding-left: 25px; 
+            padding-right: 25px;
+        }
+
+        .new-athlete-button {
+            background-color: #0077b5; /* Button background color */
+            color: #fff; /* Button text color */
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            position: relative;
+            top: 35px;
+            left: 200px;
+        }
+
+        /* Hover effect for the button */
+        .new-athlete-button:hover {
+            background-color: #00568d; /* Button background color on hover */
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="title">Sports Performance Pro</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/coachLanding">Home</a></li>
+            <li><a href="/workoutSelection">Assign Workouts</a></li>
+            <li><a href="/testSelection">Assign Tests</a></li>
+            <li><a href="/defineExercises">Create Exercises</a></li>
+            <li><a href="/coachNotes">Notes</a></li>
+            <li><a href="#">Notifications</a></li>
+            <li><a href="/coachProfile">My Profile</a></li>
+        </ul>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center">Team details</h1>
+            <form id="createTeamForm">
+                <!-- Name Field -->
+                <div class="mb-3">
+                    <label for="name" class="form-label"><h2>Team name:</h2></label> 
+                    <!-- should fill in the team name using API call -->
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="name" class="form-label"><h2>Athletes:</h2></label>
+                    <table id="athleteTable" class="display">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Sports</th>
+                                <th>Institute</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dynamic data will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="buttonContainer">
+                    <button id="saveChangesButton" class="btn btn-primary">Save Changes</button>
+                    <button id="deleteTeamButton" class="btn btn-danger">Delete Team</button>
+                    <button id="returnButton" class="btn btn-secondary">Return</button>
+                </div>
+            </form>
+
+        
+    </div>
+
+    <footer>
+        <div class="footer">
+            2023 Sports Performance Pro
+        </div>
+    </footer>
+
+    <script>
+        $(document).ready(function () {
+
+            // Retrieve the teamId from the query parameter
+            var params = new URLSearchParams(window.location.search);
+            var teamId = params.get('teamId');
+
+            // Fetch the team name using an API call
+            $.get("/getTeamName?teamId=" + teamId, function (data) {
+                if (data && data.teamName) {
+                    // Set the team input field with the retrieved team name
+                    $('#name').val(data.teamName);
+                } else {
+                    console.error('Error: Team name not retrieved or invalid response.');
+                }
+            }).fail(function (xhr, status, error) {
+                console.error('API request failed with status: ' + status);
+                console.error('Error details: ' + error);
+            });
+                    
+            // Fetch athletes for the selected team
+            $.get("/getAthletesForTeam?teamId=" + teamId, function (data) {
+                var athletes = data.athletes;
+                var athleteTable = $("#athleteTable").DataTable();
+                athleteTable.clear().rows.add(athletes).draw();
+            });
+
+            // Create athlete data
+            var athletes = [];
+
+            // Initialize DataTable
+            var table = $('#athleteTable').DataTable({
+                data: athletes,
+                columns: [
+                    { data: 'name' },
+                    { data: 'sports' },
+                    { data: 'institute' },
+                    {
+                        title: 'Actions',
+                        render: function (data, type, row, meta) {
+                            return `
+                                
+                                <button class="delete-button" data-id="${meta.row}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                                    </svg>
+                                </button>`;
+                        }
+                    }
+                ],
+                dom: 'Blfrtip',
+                buttons: [
+                    {
+                        text: 'Add an Athlete',
+                        action: function () {
+                            // Handle the "New Team" action here
+                            // window.location.href = '/addTeamAthlete';
+                            window.location.href = '/addTeamAthlete?teamId=' + teamId;
+                        },
+                        className: 'new-athlete-button'
+                    }
+                ]
+            });
+
+            $('#athleteTable tbody').on('click', 'button.delete-button', function (e) {
+                e.preventDefault(); // Prevent the default behavior of the anchor element
+
+                // Get the athlete's name from the table row
+                var data = table.row($(this).parents('tr')).data();
+                var athleteName = data.name;
+                
+                console.log(teamId);
+                // Confirm the deletion action
+                var confirmDelete = window.confirm("Are you sure you want to delete " + athleteName + " from the team?");
+                
+                if (confirmDelete) {
+                    // Get the athlete's ID and team's ID from the table row
+                    var athleteId = data.athlete_id;
+                    // var teamId = teamId; // Get the team ID from your page, possibly from a query parameter
+
+                    console.log(athleteId);
+                    console.log(teamId);
+
+                    // Send a DELETE request to your server to remove the athlete from the team
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '/removeAthleteFromTeam',
+                        data: {
+                            athleteId: athleteId,
+                            teamId: teamId
+                        },
+                        success: function (response) {
+                            // Show a success message
+                            alert("Athlete " + athleteName + " has been successfully deleted from the team.");
+                            
+                            // Remove the athlete from the table
+                            table.row($(this).parents('tr')).remove().draw();
+                            location.reload();
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('API request failed with status: ' + status);
+                            console.error('Error details: ' + error);
+                        }
+                    });
+                }
+            });
+
+
+            // Handle the "Save Changes" button
+            $('#saveChangesButton').click(function (e) {
+                e.preventDefault();
+                
+                // Get the new team name from the input field
+                var newTeamName = $('#name').val();
+                
+                // Send a PUT request to update the team name
+                $.ajax({
+                    type: 'PUT',
+                    url: '/updateTeamName?teamId=' + teamId,
+                    contentType: 'application/json',
+                    data: JSON.stringify({ newTeamName: newTeamName }),
+                    success: function (response) {
+                        // Show a success message (you can customize this part)
+                        alert(response.message);
+                        
+                        // Redirect to the previous page (coachLanding) or any other desired page
+                        window.location.href = '/coachLanding';
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('API request failed with status: ' + status);
+                        console.error('Error details: ' + error);
+                    }
+                });
+            });
+
+
+            // Handle the "Return" button
+            $('#returnButton').click(function (e) {
+
+                // Prevent the default behavior of the anchor element
+                e.preventDefault();
+
+                // Display a confirmation dialog
+                var confirmReturn = window.confirm("Are you sure you want to return? Any unsaved changes will be lost.");
+
+                // Check if the user confirmed
+                if (confirmReturn) {
+
+                    // Redirect to the previous page (coachLanding)
+                    window.location.href = '/coachLanding';
+                } else {
+                    // If the user cancels, close the confirmation dialog
+                    // This ensures that the dialog is closed even on the first click
+                    return;
+                }
+            });
+
+            $('#deleteTeamButton').click(function (e) {
+                e.preventDefault();
+
+                var confirmDelete = window.confirm("Are you sure you want to delete this team and all its members?");
+
+                if (confirmDelete) {
+                    // Send a DELETE request to your server to delete the team
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '/deleteTeam',
+                        data: {
+                            teamId: teamId
+                        },
+                        success: function (response) {
+                            alert("Team and its memberships deleted successfully.");
+                            // Redirect to the previous page (coachLanding) or any other desired page
+                            window.location.href = '/coachLanding';
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('API request failed with status: ' + status);
+                            console.error('Error details: ' + error);
+                        }
+                    });
+                }
+            });
+
+            
+        });
+
+    </script>
+</body>
+</html>

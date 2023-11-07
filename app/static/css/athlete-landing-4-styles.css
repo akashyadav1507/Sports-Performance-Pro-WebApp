@@ -1,0 +1,382 @@
+#athlete-calendar .card table {
+  width: 100%;
+  height: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  /* Other CSS styles for the table here, if needed */
+}
+
+.today-date {
+  background-color: #9308cf;
+  color: #fff;
+  border-radius: 12px;
+}
+
+.clicked-date {
+  background-color: #e10c6f;
+  color: #fff;
+  border-radius: 12px;
+}
+
+#treeview {
+  padding: 0;
+  margin: 0;
+}
+
+.form-inline {
+  display: flex; /* Use flexbox to make the buttons appear horizontally */
+  justify-content: space-between; /* Add space between the buttons */
+  width: 100%;
+}
+
+#previous {
+  margin-right: 5px; /* Add a small margin to the right of the "Previous" button */
+}
+
+/* Style for labels and select boxes */
+.form-inline label,
+.form-inline select {
+  flex: 1; /* Let each item take up an equal amount of space within the container */
+  margin-right: 10px; /* Add a small margin to the right of each item for spacing */
+}
+
+/* Additional styling for select boxes if needed */
+.form-inline select {
+  width: auto; /* You can adjust the width as needed */
+}
+
+#month,
+#year {
+  font-size: 20px; /* Adjust the font size to your preference */
+}
+
+.lead {
+  font-size: 20px;
+}
+
+#calendar th,
+#calendar td {
+  padding-top: 10px;
+  padding-bottom: 10px; /* Adjust the margin value as needed */
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f3f2ef;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+h2 {
+  margin-left: 20px;
+}
+header {
+  background-color: #0077b5;
+  color: #fff;
+  padding: 20px 0;
+  text-align: center;
+}
+
+nav {
+  background-color: #0077b5;
+  color: #fff;
+  text-align: center;
+  padding: 10px 0;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav li {
+  display: inline;
+  margin: 0 20px;
+}
+nav a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  transition: color 0.3s ease-in-out;
+}
+
+nav a:hover {
+  color: #005599;
+}
+/* 
+.container {
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  text-align: center;
+} */
+
+#addExercise {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 5px;
+  box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+#addExerciseForm {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  /* margin-bottom: 10px; */
+}
+
+/* Apply styles to labels */
+label {
+  flex: 1;
+  width: 50%; /* Set a fixed width for the labels */
+}
+
+/* Apply styles to input fields and select elements */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+select {
+  flex: 2;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin: 10px 0;
+  border-radius: 5px;
+  background-color: #fff;
+  width: 50%; /* Expand the input/select to fill available space */
+}
+
+/* Style for the close button */
+#closeFormButton {
+  background-color: #ff9999;
+  color: #fff;
+}
+
+#closeFormButton:hover {
+  background-color: #f44336;
+}
+
+/* Added a container for login forms */
+.login-forms {
+  display: grid;
+  grid-template-columns: 0.4fr 0.6fr;
+  justify-content: stretch; /* Center horizontally */
+  /*align-items: center; /* Center vertically */
+  flex-wrap: wrap; /* Wrap login containers if the screen is narrow */
+}
+
+.login-container-1 {
+  background-color: #fff;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  width: max-width;
+  margin: 20px; /* Added margin */
+}
+
+.login-container-2 {
+  background-color: #fff;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 30px;
+  /* text-align: center; */
+  width: max-width;
+  margin: 20px; /* Added margin */
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+p {
+  font-size: 16px;
+  margin-bottom: 30px;
+  color: #666;
+}
+
+button {
+  background-color: #0077b5;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: #005599;
+}
+
+footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+  color: #333;
+  text-align: center;
+  padding: 10px 0;
+}
+
+/* EVENT VIEW STYLES */
+/* Hide elements with the hidden class */
+.hidden {
+  display: none;
+}
+
+/* Hover effect */
+.team-nodes:hover {
+  background-color: #175e97;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.block-nodes:hover {
+  transition: background-color 0.3s ease-in-out;
+  background-color: #014b87;
+}
+
+.exc_nodes:hover {
+  transition: background-color 0.3s ease-in-out;
+  background-color: #04335b;
+}
+
+/* Style for Team nodes */
+.team-nodes {
+  list-style: none;
+  cursor: pointer;
+  color: #fff; /* Blue color, customize as needed */
+  font-weight: bold;
+  margin-bottom: 10px;
+  border: 1px solid #d6d9da; /* Add border */
+  padding: 20px; /* Increase padding */
+  background-color: #0077b5; /* Light gray background color */
+  text-align: center;
+}
+
+/* Style for Block nodes */
+.block-nodes {
+  list-style: none;
+  cursor: pointer;
+  color: #fff; /* Green color, customize as needed */
+  margin-left: 2px;
+  border: 1px solid #d6d9da;
+  padding: 20px; /* Increase padding */
+  background-color: #2a8fc5; /* Slightly different shade of green */
+  text-align: left;
+}
+
+/* Style for Exercise nodes */
+.exc_nodes {
+  list-style: none;
+  cursor: pointer;
+  color: #fff; /* Red color, customize as needed */
+  margin-left: 2px;
+  border: 1px solid #d6d9da;
+  padding: 20px; /* Increase padding */
+  background-color: #2e769d; /* Slightly different shade of red */
+  text-align: left;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.createBlock-btn,
+addExercise-btn {
+  justify-content: left;
+}
+
+/*Search Bar*/
+.search-bar {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#team-search,
+#athlete-search {
+  width: 100%;
+  padding: 12px 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.team-train-sessions {
+  max-height: 450px; /* Adjust the height as needed */
+  overflow-y: scroll; /* Add a vertical scrollbar */
+}
+
+.athlete-train-sessions {
+  max-height: 450px; /* Adjust the height as needed */
+  overflow-y: scroll; /* Add a vertical scrollbar */
+}
+
+/* Hide the scrollbar until it's needed */
+.team-train-sessions ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.athlete-train-sessions::-webkit-scrollbar {
+  width: 6px;
+}
+
+.team-train-sessions ::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 3px;
+}
+
+.athlete-train-sessions::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 3px;
+}
+
+.jsonDisplay {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  font-family: Arial, sans-serif;
+}
+
+/* Apply styles to JSON keys */
+.json-key {
+  font-weight: bold;
+  width: 100px;
+  /* Fixed width for keys */
+  display: inline-block;
+  /* To make keys inline */
+}
+
+/* Apply styles to JSON values */
+.json-value {
+  margin-left: 50px;
+  display: inline-block;
+  /* To make values inline */
+}
+
+/* Apply styles to JSON items for spacing */
+.json-item {
+  margin: 10px 0;
+}

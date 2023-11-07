@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LinkedIn-like Login</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f3f2ef;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+
+      header {
+        background-color: #0077b5;
+        color: #fff;
+        padding: 20px 0;
+        text-align: center;
+      }
+
+      nav {
+        background-color: #0077b5;
+        color: #fff;
+        text-align: center;
+        padding: 10px 0;
+      }
+
+      nav ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      nav li {
+        display: inline;
+        margin: 0 20px;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        text-align: center;
+      }
+
+      /* Added a container for login forms */
+      .login-forms {
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        flex-wrap: wrap; /* Wrap login containers if the screen is narrow */
+      }
+
+      .login-container {
+        background-color: #fff;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 30px;
+        text-align: center;
+        width: 400px;
+        margin: 20px; /* Added margin */
+      }
+
+      h1 {
+        font-size: 28px;
+        margin-bottom: 20px;
+        color: #fff;
+      }
+
+      h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      p {
+        font-size: 16px;
+        margin-bottom: 30px;
+        color: #666;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 16px;
+        color: #333;
+      }
+
+      button {
+        background-color: #0077b5;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+      }
+
+      button:hover {
+        background-color: #005599;
+      }
+
+      footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background-color: #fff;
+        color: #333;
+        text-align: center;
+        padding: 10px 0;
+      }
+
+      /* Added a style for the "Create one" link */
+      .create-account-link {
+        font-size: 16px;
+        color: #0077b5;
+        text-decoration: none;
+        margin-top: 30px; /* Added more margin-top */
+        display: block; /* Display as a block element */
+      }
+
+      .create-account-link:hover {
+        text-decoration: underline;
+      }
+
+      /* Error message styling */
+      .error-message {
+        color: red;
+        margin-top: 10px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Sports Performance Pro</h1>
+    </header>
+
+    <nav>
+      <ul>
+        <li>Game On: Elevate Your Sports Experience with Our App!</li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <!-- Container for login forms -->
+      <div class="login-forms">
+        <div class="login-container" style="margin-right: 20px">
+          <!-- Added margin-right -->
+          <h2>Sign in as Coach</h2>
+          <p>Stay updated on your progress</p>
+          <input
+            type="text"
+            name="coach_username"
+            placeholder="Email "
+            required
+          />
+          <input
+            type="password"
+            name="coach_password"
+            placeholder="Password"
+            required
+          />
+          <button id="signin_coach" type="button">Sign In</button>
+          <div id="coachEmailError" class="error-message"></div>
+          <a class="create-account-link" href="/registerCoach"
+        >Don't have an account yet? Create one</a
+      >
+        </div>
+
+        <div class="login-container">
+          <h2>Sign in as Athlete</h2>
+          <p>Stay updated on your progress</p>
+          <input
+            type="text"
+            name="athlete_username"
+            placeholder="Email "
+            required
+          />
+          <input
+            type="password"
+            name="athlete_password"
+            placeholder="Password"
+            required
+          />
+          <button id="signin_athlete" type="button">Sign In</button>
+          <div id="athleteEmailError" class="error-message"></div>
+          <a class="create-account-link" href="/registerAthlete"
+        >Don't have an account yet? Create one</a
+      >
+        </div>
+      </div>
+
+      <div style="margin-top: 100px"></div>
+
+      
+    </div>
+
+    <footer>2023 Sports Performance Pro</footer>
+
+    <script>
+      const signInCoach = document.getElementById("signin_coach");
+      const signInAthlete = document.getElementById("signin_athlete");
+
+      function validateCoachEmailPassword() {
+        const coachEmailInput = document.getElementsByName("coach_username")[0];
+        const coachPasswordInput = document.getElementsByName("coach_password")[0];
+        const coachEmailError = document.getElementById("coachEmailError");
+        var coachLoginData = {
+          "username": coachEmailInput.value,
+          "password": coachPasswordInput.value
+        };
+        // Regular expression for email validation
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailPattern.test(coachEmailInput.value)) {
+          coachEmailError.textContent = "Invalid email format";
+        } else {
+          coachEmailError.textContent = "";
+          $.post("/coachLogin", JSON.stringify(coachLoginData), function (response) {
+            if (response === 'Successful') {
+              window.location.href = "/coachLanding";
+            } else {
+              coachEmailError.textContent = response;
+          }
+             
+          });
+          // Add your sign-in logic for coaches here
+          // Back-end checking database, validating credentials
+        }
+      }
+
+      function validateAthleteEmailPassword() {
+        const athleteEmailInput =
+          document.getElementsByName("athlete_username")[0];
+        const athleteEmailError = document.getElementById("athleteEmailError");
+        const athletePasswordInput  = document.getElementsByName("athlete_password")[0];
+        var athleteLoginData = {
+          "username": athleteEmailInput.value,
+          "password": athletePasswordInput.value
+        };
+        // Regular expression for email validation
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailPattern.test(athleteEmailInput.value)) {
+          athleteEmailError.textContent = "Invalid email format";
+        } else {
+          athleteEmailError.textContent = "";
+          $.post("/athleteLogin", JSON.stringify(athleteLoginData), function (response) {
+            if (response === 'Successful') {
+              window.location.href = "/athleteLanding";
+            } else {
+              document.getElementById('athleteEmailError').textContent = response;
+          }
+          });
+          // Add your sign-in logic for athletes here
+          // Back-end checking database, validating credentials
+          
+        }
+      }
+
+      signInAthlete.addEventListener("click", function (e) {
+        validateAthleteEmailPassword();
+      });
+
+      signInCoach.addEventListener("click", function (e) {
+        validateCoachEmailPassword();
+      });
+
+      console.log(signInAthlete);
+      console.log(signInCoach);
+    </script>
+  </body>
+</html>

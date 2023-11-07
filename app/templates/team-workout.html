@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="../static/css/athlete-styles.css" />
+        <!-- Include Bootstrap CSS -->
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.9/main.min.css" rel="stylesheet"/> 
+        <style>
+            header {
+                background-color: #0077B5;
+                color: #fff;
+                padding: 20px 0;
+                text-align: center;
+            }
+
+            nav {
+                background-color: #0077B5;
+                color: #fff;
+                padding: 10px 0;
+            }
+
+            nav ul {
+                list-style-type: none;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+            }
+
+            nav li {
+                margin: 0 20px;
+            }
+
+            nav a {
+                text-decoration: none;
+                color: #fff;
+                font-weight: bold;
+                font-size: 16px;
+                transition: color 0.3s ease-in-out;
+                padding: 15px 25px;
+                border-radius: 15px; /* Add rounded corners to the tab */
+            }
+
+            nav a.current {
+                color: #fff;
+                background-color: #005599;
+                font-weight: bold;
+                border-radius: 15px; /* Apply rounded corners to the selected tab */
+            }
+
+            nav a:hover, nav a:focus {
+                color: #005599;
+                background-color: #fff;
+                border-radius: 15px; /* Apply the same rounded corners on hover/focus */
+            }
+
+            .footer {
+                position: fixed;
+                bottom: 0;
+                left: 50%; /* Align the footer to the horizontal center of the viewport */
+                transform: translateX(-50%); /* Center the footer horizontally */
+                width: 100%;
+                background-color: #fff;
+                color: #333;
+                text-align: center;
+                padding: 10px 0;
+                z-index: 999;
+                box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+            }
+
+            .footer-content {
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+
+            h1 {
+                font-size: 28px;
+                margin-top: 20px;
+                margin-bottom: 30px;
+                color: #0077B5;
+            }
+
+            .title {
+                font-size: 28px;
+                margin-top: 20px;
+                margin-bottom: 30px;
+                color: #fff; /* White color */
+            }
+
+            h2 {
+                font-size: 24px;
+                margin-bottom: 20px;
+                color: #0077B5;
+            }
+
+            #athlete-calendar .card table {
+                width: 100%;
+                height: 100%;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                /* Other CSS styles for the table here, if needed */
+            }
+
+            .today-date {
+            background-color: #9308cf; 
+            color: #fff;
+            border-radius: 12px;
+            }
+
+            .clicked-date {
+            background-color: #e10c6f;
+            color: #fff;
+            border-radius: 12px;
+            }
+
+            #treeview {
+                padding: 0;
+                margin: 0;
+            }
+
+            .form-inline {
+                display: flex; /* Use flexbox to make the buttons appear horizontally */
+                justify-content: space-between; /* Add space between the buttons */
+                width: 100%;
+            }
+
+            #previous {
+                margin-right: 5px; /* Add a small margin to the right of the "Previous" button */
+            }
+
+            /* Style for labels and select boxes */
+            .form-inline label,
+            .form-inline select {
+                flex: 1; /* Let each item take up an equal amount of space within the container */
+                margin-right: 10px; /* Add a small margin to the right of each item for spacing */
+            }
+
+            /* Additional styling for select boxes if needed */
+            .form-inline select {
+                width: auto; /* You can adjust the width as needed */
+            }
+
+            #month, #year {
+                font-size: 20px; /* Adjust the font size to your preference */
+            }
+
+            .lead {
+                font-size: 20px;
+            }
+
+            #calendar th,
+            #calendar td {
+                padding-top: 10px;
+                padding-bottom: 10px; /* Adjust the margin value as needed */
+            }
+
+        </style>
+    </head>
+    <body>
+    <header>
+        <h1 class="title">Sports Performance Pro</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="coach-landing-page.html">Home</a></li>
+            <li><a href="workout-selection.html">Create Workouts</a></li>
+            <li><a href="test-selection.html">Create Tests</a></li>
+            <li><a href="#">Notes</a></li>
+            <li><a href="#">Notifications</a></li>
+            <li><a href="coach-profile.html">My Profile</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Team training sessions!</h1>
+        <!-- Container for login forms -->
+        <div class="login-forms">
+            <div class="login-container-1" style="margin-right: 20px">
+                <div class="container mt-7">
+                    <h1 class="text-center">Team Workout</h1>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <!-- Left side div for the calendar -->
+                            <!-- <div id="athlete-calendar"></div> -->
+                            <div class="container col-sm-4 col-md-7 col-lg-4 mt-5 d-flex justify-content-center" id="athlete-calendar">
+                                <div class="card">
+                                    <h3 class="card-header" id="monthAndYear"></h3>
+                                    <table class="table table-bordered table-responsive-sm" id="calendar">
+                                        <thead>
+                                            <tr>
+                                                <th>Sun</th>
+                                                <th>Mon</th>
+                                                <th>Tue</th>
+                                                <th>Wed</th>
+                                                <th>Thu</th>
+                                                <th>Fri</th>
+                                                <th>Sat</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="calendar-body"></tbody>
+                                    </table>
+                                    <div class="form-inline" style="width: 100%;">
+                                        <button class="btn btn-outline-primary" style="width: 50%;" id="previous" onclick="previous()">Previous</button>
+                                        <button class="btn btn-outline-primary" style="width: 50%;" id="next" onclick="next()">Next</button>
+                                    </div>                                                                        
+                                    <br />
+                                    <form class="form-inline" style="width: 100%;">
+                                        <label class="lead mr-2" for="month">Jump To:</label>
+                                        <select class="form-control col-sm-6" name="month" id="month" onchange="jump()">
+                                            <option value="0">Jan</option>
+                                            <option value="1">Feb</option>
+                                            <option value="2">Mar</option>
+                                            <option value="3">Apr</option>
+                                            <option value="4">May</option>
+                                            <option value="5">Jun</option>
+                                            <option value="6">Jul</option>
+                                            <option value="7">Aug</option>
+                                            <option value="8">Sep</option>
+                                            <option value="9">Oct</option>
+                                            <option value="10">Nov</option>
+                                            <option value="11">Dec</option>
+                                        </select>
+      
+                                        <label for="year"></label>
+                                        <select class="form-control col-sm-6" name="year" id="year" onchange="jump()">
+                                            <option value="1990">1990</option>
+                                            <option value="1991">1991</option>
+                                            <option value="1992">1992</option>
+                                            <option value="1993">1993</option>
+                                            <option value="1994">1994</option>
+                                            <option value="1995">1995</option>
+                                            <option value="1996">1996</option>
+                                            <option value="1997">1997</option>
+                                            <option value="1998">1998</option>
+                                            <option value="1999">1999</option>
+                                            <option value="2000">2000</option>
+                                            <option value="2001">2001</option>
+                                            <option value="2002">2002</option>
+                                            <option value="2003">2003</option>
+                                            <option value="2004">2004</option>
+                                            <option value="2005">2005</option>
+                                            <option value="2006">2006</option>
+                                            <option value="2007">2007</option>
+                                            <option value="2008">2008</option>
+                                            <option value="2009">2009</option>
+                                            <option value="2010">2010</option>
+                                            <option value="2011">2011</option>
+                                            <option value="2012">2012</option>
+                                            <option value="2013">2013</option>
+                                            <option value="2014">2014</option>
+                                            <option value="2015">2015</option>
+                                            <option value="2016">2016</option>
+                                            <option value="2017">2017</option>
+                                            <option value="2018">2018</option>
+                                            <option value="2019">2019</option>
+                                            <option value="2020">2020</option>
+                                            <option value="2021">2021</option>
+                                            <option value="2022">2022</option>
+                                            <option value="2023">2023</option>
+                                            <option value="2024">2024</option>
+                                            <option value="2025">2025</option>
+                                            <option value="2026">2026</option>
+                                            <option value="2027">2027</option>
+                                            <option value="2028">2028</option>
+                                            <option value="2029">2029</option>
+                                            <option value="2030">2030</option>
+                                        </select>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="col-md-6">
+                <!-- Right side div (vacant for now) -->
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="login-container-2">
+            <h1 class="text-center">Lets get onto some training sessions!</h1>
+            <div class="search-bar">
+                <input type="text" id="team-search" placeholder="Search for a team">
+            </div>
+
+      
+            <ul id="treeview">
+                <div class="team-train-sessions">
+                <li class="team-nodes" visibility=0>
+              Team 1
+              <ul>
+                <li class="block-nodes hidden" visibility=0>
+                      Block 1
+                      <ul>
+                        <li class="exc_nodes hidden" visibility=0>Exercise 1</li>
+                        <li class="exc_nodes hidden" visibility=0>Exercise 2</li>
+                      </ul>
+                    </li>
+                </li>
+                <li class="block-nodes hidden" visibility=0>
+                  Block 2
+                  <ul>
+                    <li class="exc_nodes hidden" visibility=0>Exercise 3</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li class="team-nodes" visibility=0>
+              Team 2
+              <ul>
+                <li class="block-nodes hidden" visibility=0>
+                  Block 3
+                  <ul>
+                      <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li class="team-nodes" visibility=0>
+                Team 3
+                <ul>
+                  <li class="block-nodes hidden" visibility=0>
+                    Block 3
+                    <ul>
+                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li class="team-nodes" visibility=0>
+                Team 4
+                <ul>
+                  <li class="block-nodes hidden" visibility=0>
+                    Block 3
+                    <ul>
+                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li class="team-nodes" visibility=0>
+                Team 5
+                <ul>
+                  <li class="block-nodes hidden" visibility=0>
+                    Block 3
+                    <ul>
+                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li class="team-nodes" visibility=0>
+                Team 6
+                <ul>
+                  <li class="block-nodes hidden" visibility=0>
+                    Block 3
+                    <ul>
+                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li class="team-nodes" visibility=0>
+                Team 7
+                <ul>
+                  <li class="block-nodes hidden" visibility=0>
+                    Block 3
+                    <ul>
+                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li class="team-nodes" visibility=0>
+                Team 8
+                <ul>
+                  <li class="block-nodes hidden" visibility=0>
+                    Block 3
+                    <ul>
+                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li class="team-nodes" visibility=0>
+                Team 9
+                <ul>
+                  <li class="block-nodes hidden" visibility=0>
+                    Block 3
+                    <ul>
+                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li class="team-nodes" visibility=0>
+                Team 10
+                <ul>
+                  <li class="block-nodes hidden" visibility=0>
+                    Block 3
+                    <ul>
+                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li class="team-nodes" visibility=0>
+                Team 11
+                <ul>
+                  <li class="block-nodes hidden" visibility=0>
+                    Block 3
+                    <ul>
+                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li class="team-nodes" visibility=0>
+                Team 12
+                <ul>
+                  <li class="block-nodes hidden" visibility=0>
+                    Block 1
+                    <ul>
+                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </div>
+        <br>
+        
+      </div>
+
+      <div style="margin-top: 100px"></div>
+    </div>   
+
+    <footer>
+        <div class="footer">
+            2023 Sports Performance Pro
+        </div>
+    </footer>
+
+    <!-- Your custom JavaScript code -->
+    <script src="../static/js/calendar.js"></script>
+    <script src="../static/js/team-workout.js" defer></script>
+</body>
+</html>

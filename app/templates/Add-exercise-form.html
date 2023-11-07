@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Coach Profile</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <style>
+        /* body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f2ef;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        } */
+
+        header {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav li {
+            margin: 0 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s ease-in-out;
+            padding: 15px 25px;
+            border-radius: 15px; /* Add rounded corners to the tab */
+        }
+
+        nav a.current {
+            color: #fff;
+            background-color: #005599;
+            font-weight: bold;
+            border-radius: 15px; /* Apply rounded corners to the selected tab */
+        }
+
+        nav a:hover, nav a:focus {
+            color: #005599;
+            background-color: #fff;
+            border-radius: 15px; /* Apply the same rounded corners on hover/focus */
+        }
+
+        .container {
+            width: 100%; 
+            /* max-width: 1400px; */
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            /* min-height: calc(100vh - 60px);  */
+            margin-bottom: 60px;
+        }
+
+        .dataTables_wrapper {
+            margin: 20px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 50%; /* Align the footer to the horizontal center of the viewport */
+            transform: translateX(-50%); /* Center the footer horizontally */
+            width: 100%;
+            background-color: #fff;
+            color: #333;
+            text-align: center;
+            padding: 10px 0;
+            z-index: 999;
+            box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #0077B5;
+        }
+
+        .title {
+            font-size: 30px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #fff; /* White color */
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #0077B5;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="title">Sports Performance Pro</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="coach-landing-page.html">Home</a></li>
+            <li><a href="workout-selection.html">Create Workouts</a></li>
+            <li><a href="test-selection.html">Create Tests</a></li>
+            <li><a href="#">Notes</a></li>
+            <li><a href="#">Notifications</a></li>
+            <li><a href="coach-profile.html">My Profile</a></li>
+        </ul>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center">Add a new Exercise</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Exercise Details</h2>
+                <form id="addExerciseForm">
+                    <!-- Category Field -->
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <select class="form-select" id="category" name="category" required>
+                            <option value="Cardio">Cardio</option>
+                            <option value="Strength training">Strength training</option>
+                            <option value="Core">Core</option>
+                            <option value="Yoga">Yoga</option>
+                        </select>
+                    </div>
+    
+                    <!-- Exercise Type Field -->
+                    <div class="mb-3">
+                        <label for="exerciseType" class="form-label">Exercise Type</label>
+                        <select class="form-select" id="exerciseType" name="exerciseType" required>
+                            <!-- Options will be dynamically generated using JavaScript -->
+                        </select>
+                    </div>
+    
+                    <!-- Exercise Name Field -->
+                    <div class="mb-3">
+                        <label for="exerciseName" class="form-label">Exercise Name</label>
+                        <select class="form-select" id="exerciseName" name="exerciseName" required>
+                            <!-- Options will be dynamically generated using JavaScript -->
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Save Exercise Button -->
+            <div class="mb-3 text-center">
+                <button type="button" id="addExerciseButton" class="btn btn-primary">Add Exercise</button>
+                <button type="button" id="cancelButton" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+
+    <footer>
+        <div class = footer>
+            2023 Sports Performance Pro
+        </div>
+    </footer>
+
+    <!-- Include Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // JavaScript to populate Exercise Type and Exercise Name based on selected Category and Exercise Type
+        const categorySelect = document.getElementById("category");
+        const exerciseTypeSelect = document.getElementById("exerciseType");
+        const exerciseNameSelect = document.getElementById("exerciseName");
+        
+        const exerciseData = {
+            Cardio: {
+                "Treadmill": ["Running"],
+                "Elliptical": ["Elliptical training"],
+                "Stationary bike": ["Cycling"],
+                "Rowing machine": ["Rowing"],
+                "Stair climber": ["Stair climbing"],
+            },
+            "Strength training": {
+                "Push": ["Bench press", "Overhead press", "Push-ups", "Machine chest press"],
+                "Pull": ["Pull-ups", "Lat pulldown", "Barbell row", "Dumbbell row", "Cable row"],
+                "Hip hinge": ["Deadlift", "Good morning", "Romanian deadlift", "Clean", "Kettlebell swing"],
+                "Squat": ["Squat", "Front squat", "Bulgarian split squat", "Goblet squat", "Leg press"],
+            },
+            Core: {
+                "Plank": ["Plank", "Side plank", "Knee raise plank", "Hollow body hold"],
+                "Crunches": ["Crunches", "Leg raises", "Sit-ups"],
+                "Russian twists": ["Russian twists"],
+            },
+            Yoga: {
+                "Downward-facing dog": ["Downward-facing dog"],
+                "Warrior I pose": ["Warrior I pose"],
+                "Triangle pose": ["Triangle pose"],
+                "Tree pose": ["Tree pose"],
+                "Bridge pose": ["Bridge pose"],
+            },
+        };
+        
+        categorySelect.addEventListener("change", updateExerciseTypes);
+        exerciseTypeSelect.addEventListener("change", updateExerciseNames);
+        
+        function updateExerciseTypes() {
+            const selectedCategory = categorySelect.value;
+            exerciseTypeSelect.innerHTML = "";
+            exerciseNameSelect.innerHTML = "";
+        
+            if (exerciseData[selectedCategory]) {
+                const exerciseTypes = Object.keys(exerciseData[selectedCategory]);
+                exerciseTypes.forEach((type) => {
+                    const option = document.createElement("option");
+                    option.value = type;
+                    option.textContent = type;
+                    exerciseTypeSelect.appendChild(option);
+                });
+            }
+        
+            updateExerciseNames();
+        }
+        
+        function updateExerciseNames() {
+            const selectedCategory = categorySelect.value;
+            const selectedExerciseType = exerciseTypeSelect.value;
+            exerciseNameSelect.innerHTML = "";
+        
+            if (exerciseData[selectedCategory] && exerciseData[selectedCategory][selectedExerciseType]) {
+                exerciseData[selectedCategory][selectedExerciseType].forEach((name) => {
+                    const option = document.createElement("option");
+                    option.value = name;
+                    option.textContent = name;
+                    exerciseNameSelect.appendChild(option);
+                });
+            }
+        }
+        
+        // Initial population of Exercise Types
+        updateExerciseTypes();
+
+        // Save Exercise Button Click Event
+        const addExerciseButton = document.getElementById("addExerciseButton");
+        addExerciseButton.addEventListener("click", function (event) {
+            const loadsValue = document.getElementById("loads").value;
+            const repsValue = document.getElementById("reps").value;
+            const setsValue = document.getElementById("sets").value;
+
+            if (!loadsValue || !repsValue || !setsValue) {
+                event.preventDefault(); // Prevent form submission
+                alert("Please fill in all the required fields (Loads, Reps, and Sets).");
+            } else {
+                // Continue with form submission or data handling
+            }
+        });
+    </script>
+
+</body>
+</html>
+    

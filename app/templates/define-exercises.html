@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Define Exercises</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+
+    <style>
+        header {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav li {
+            margin: 0 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s ease-in-out;
+            padding: 15px 25px;
+            border-radius: 15px; /* Add rounded corners to the tab */
+        }
+
+        nav a.current {
+            color: #fff;
+            background-color: #005599;
+            font-weight: bold;
+            border-radius: 15px; /* Apply rounded corners to the selected tab */
+        }
+
+        nav a:hover, nav a:focus {
+            color: #005599;
+            background-color: #fff;
+            border-radius: 15px; /* Apply the same rounded corners on hover/focus */
+        }
+
+        .container {
+            width: 100%; 
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-bottom: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 60px); 
+            margin-bottom: 60px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 50%; /* Align the footer to the horizontal center of the viewport */
+            transform: translateX(-50%); /* Center the footer horizontally */
+            width: 100%;
+            background-color: #fff;
+            color: #333;
+            text-align: center;
+            padding: 10px 0;
+            z-index: 999;
+            box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #0077B5;
+        }
+
+        .title {
+            font-size: 30px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #fff; /* White color */
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #0077B5;
+        }
+
+        /* Basic styling for the DataTable */
+        #defineExerciseTable {
+            font-family: Arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #defineExerciseTable th, #defineExerciseTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        #defineExerciseTable th {
+            background-color: #f2f2f2;
+        }
+
+        /* Style for Edit and Delete buttons */
+        .edit-button, .delete-button {
+            background-color: #0077b5;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .edit-button:hover, .delete-button:hover {
+            background-color: #00568d;
+        }
+
+        /* Hover effect for table rows */
+        #defineExerciseTable tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        #defineExerciseTable_filter {
+            margin-bottom: 20px;
+        }
+
+        #defineExerciseTable tbody tr.selected {
+            background-color: #0077B5;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .new-exercise-button {
+            background-color: #0077b5; /* Button background color */
+            color: #fff; /* Button text color */
+            border: none;
+            padding: 12px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            position: relative;
+            top: 35px;
+            left: 200px;
+            margin-right: 5px;
+        }
+
+        .new-category-button {
+            background-color: #0077b5; /* Button background color */
+            color: #fff; /* Button text color */
+            border: none;
+            padding:12px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            position: relative;
+            top: 35px;
+            left: 200px;
+            margin-right: 5px;
+        }
+
+        .new-exercise-type-button {
+            background-color: #0077b5; /* Button background color */
+            color: #fff; /* Button text color */
+            border: none;
+            padding: 12px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            position: relative;
+            top: 35px;
+            left: 200px;
+            margin-right: 5px;
+        }
+
+        /* Hover effect for the button */
+        .new-exercise-button:hover {
+            background-color: #00568d; 
+        }
+
+        .new-exercise-type-button:hover {
+            background-color: #00568d; 
+        }
+
+        .new-category-button:hover {
+            background-color: #00568d; 
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="title">Sports Performance Pro</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/coachLanding">Home</a></li>
+            <li><a href="/workoutSelection">Assign Workouts</a></li>
+            <li><a href="/testSelection">Assign Tests</a></li>
+            <li><a href="/defineExercises" class="current">Create Exercises</a></li>
+            <li><a href="/coachNotes">Notes</a></li>
+            <li><a href="#">Notifications</a></li>
+            <li><a href="/coachProfile">My Profile</a></li>
+        </ul>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center">Exercise details</h1>
+            <form id="createTeamForm">
+                <!-- Name Field -->
+                <div class="mb-3">
+                    <table id="defineExerciseTable" class="display">
+                        <thead>
+                            <tr>
+                                <th>Exercise Name</th>
+                                <th>Category</th>
+                                <th>Exercise type</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dynamic data will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+
+        
+    </div>
+
+    <footer>
+        <div class="footer">
+            2023 Sports Performance Pro
+        </div>
+    </footer>
+
+    <script>
+        $(document).ready(function () {
+                    
+            // Fetch exercises
+            // $.get AJAX call here 
+
+            // Create definedExercises data
+            var definedExercises = [];
+
+            // Initialize DataTable
+            var table = $('#defineExerciseTable').DataTable({
+                data: definedExercises,
+                columns: [
+                    { data: 'name' },
+                    { data: 'category' },
+                    { data: 'exercise_type' },
+                    {
+                        title: 'Actions',
+                        render: function (data, type, row, meta) {
+                            return `
+                                <button class="edit-button" data-id="${meta.row}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                                        <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+                                    </svg>
+                                </button>
+                                <button class="delete-button" data-id="${meta.row}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                                    </svg>
+                                </button>`;
+                        }
+                    }
+                ],
+                dom: 'Blfrtip',
+                buttons: [
+                    {
+                        text: 'Add a new Exercise',
+                        action: function () {
+                            // Handle the "New Exercise" action here
+                        },
+                        className: 'new-exercise-button'
+                    },
+                    {
+                        text: 'Add a new Catgory',
+                        action: function () {
+                            // Handle the "New Category" action here
+                        },
+                        className: 'new-category-button'
+                    },
+                    {
+                        text: 'Add a new Exercise-type',
+                        action: function () {
+                            // Handle the "New Exercise-type" action here
+                        },
+                        className: 'new-exercise-type-button'
+                    }
+                ]
+            });
+
+            // AJAX call to fetch exercises
+            $.get('/api/exercises', function (data) {
+                if (data && data.exercises) {
+                    // Populate DataTable with fetched data
+                    table.clear().rows.add(data.exercises).draw();
+                }
+            });
+
+            $('#defineExerciseTable tbody').on('click', 'button.edit-button', function (e) {
+                e.preventDefault(); // Prevent the default behavior of the anchor element
+
+            });
+
+            $('#defineExerciseTable tbody').on('click', 'button.delete-button', function (e) {
+                e.preventDefault();
+
+                // Get the exercise ID from the DataTable row data
+                var data = table.row($(this).parents('tr')).data();
+                if (data && data.id) {
+                    var exerciseId = data.id;
+                    console.log(exerciseId)
+
+                    // Confirm with the user before deleting
+                    if (confirm('Are you sure you want to delete this exercise?')) {
+                        // Send an AJAX request to the server to delete the exercise
+                        $.ajax({
+                            method: 'DELETE',
+                            url: '/api/exercises/' + exerciseId,
+                            success: function (data) {
+                                // remove it from the DataTable and reload the table
+                                table.row($(this).parents('tr')).remove().draw();
+                                // Display the API response message in an alert
+                                alert(data.message);
+
+                                // Refresh the page after a successful delete
+                                location.reload();
+                            },
+                            error: function (err) {
+                                console.error('Error deleting exercise:', err);
+                            }
+                        });
+                    }
+                }
+            });
+            
+        });
+
+    </script>
+</body>
+</html>

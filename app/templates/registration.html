@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration - Sports Performance Pro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f2ef;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #0077B5;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav li {
+            display: inline;
+            margin: 0 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .registration-form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .registration-container {
+            background-color: #fff;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: left;
+            width: 100%;
+            margin: 20px auto;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .form-column {
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            color: #666;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: #333;
+        }
+
+        select {
+            height: 40px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #0077B5;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+            width: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        button:hover {
+            background-color: #005599;
+        }
+
+        footer {
+            width: 100%;
+            background-color: #fff;
+            color: #333;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .login-link {
+            font-size: 16px;
+            color: #0077B5;
+            text-decoration: none;
+            margin-top: 20px;
+            display: block;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Sports Performance Pro</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li>Game On: Elevate Your Sports Experience with Our App!</li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h2>Registration</h2>
+        <div class="registration-form">
+            <div class="registration-container">
+                <form action="submit_registration.php" method="post" class="form-column">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" id="name" required pattern="[A-Za-z]+$">
+                    <span class="error-message" id="name-error"></span>
+
+                    <label for="age">Age</label>
+                    <input type="text" name="age" id="age" required pattern="[0-9]+">
+                    <span class="error-message" id="age-error"></span>
+
+                    <label for="phone">Phone No</label>
+                    <input type="text" name="phone" id="phone" required pattern="\d{10}">
+                    <span class="error-message" id="phone-error"></span>
+
+                    <label for="institute">Institute</label>
+                    <select name="institute" id="institute" required>
+                        <option value="Example Institute 1">SUNY Buffalo</option>
+                        <option value="Example Institute 2">SUNY Stony Brook</option>
+                        <option value="Example Institute 3">Daemen University</option>
+                    </select>
+
+                    <label for="registerAs">Register as</label>
+                    <select name="registerAs" id="registerAs" required>
+                        <option value="coach">Coach</option>
+                        <option value="athlete">Athlete</option>
+                    </select>
+
+                </form>
+                <form action="submit_registration.php" method="post" class="form-column">
+                    <label for="address">Address</label>
+                    <input type="text" name="address" id="address" required>
+                    <span class="error-message" id="address-error"></span>
+
+                    <label for="email">Email</label>
+                    <input type="text" name="email" id="email" required pattern="[^\s@]+@[^\s@]+\.[^\s@]+">
+                    <span class="error-message" id="email-error"></span>
+
+
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" required>
+                    <span class="error-message" id="password-error"></span>
+
+
+                    <!-- Additional Fields -->
+                    <label for="sports">Sports</label>
+                    <select name="sports" id="sports">
+                        <option value="football">Football</option>
+                        <option value="basketball">Basketball</option>
+                        <option value="cricket">Cricket</option>
+                        <option value="rugby">Rugby</option>
+                    </select>
+
+                    <label for="Gender">Gender</label>
+                    <select name="Gender" id="gender" required>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="non-binary">Non-binary</option>
+                        <option value="transgender">Transgender</option>
+                        <option value="genderqueer">Genderqueer</option>
+                        <option value="other">Other</option>
+
+                        
+                    </select>
+                
+
+                    <div style="text-align:center;">
+                        <button type="submit" id="registerButton">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <a class="login-link" href="login.html">Already have an account? Login</a>
+    </div>
+
+    <footer>
+        &copy; 2023 Sports Performance Pro
+    </footer>
+
+    <script>
+        // JavaScript email and phone validation
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const nameInput = document.getElementById('name');
+        const ageInput = document.getElementById('age');
+        const addressInput = document.getElementById('address');
+        const passwordInput = document.getElementById('password');
+        const registerButton = document.getElementById('registerButton');
+
+        registerButton.addEventListener('click', function(event) {
+            let valid = true;
+
+            // Reset error messages
+            document.getElementById('name-error').textContent = '';
+            document.getElementById('age-error').textContent = '';
+            document.getElementById('email-error').textContent = '';
+            document.getElementById('phone-error').textContent = '';
+            document.getElementById('address-error').textContent = '';
+            document.getElementById('password-error').textContent = '';
+
+            if (!isValidEmail(emailInput.value)) {
+                valid = false;
+                document.getElementById('email-error').textContent = 'Please enter a valid email address.';
+            }
+
+            if (!isValidPhone(phoneInput.value)) {
+                valid = false;
+                document.getElementById('phone-error').textContent = 'Please enter a valid phone number (10 digits).';
+            }
+
+            if (!isValidName(nameInput.value)) {
+                valid = false;
+                document.getElementById('name-error').textContent = 'Please enter a valid name (letters only).';
+            }
+
+            if (!isValidAge(ageInput.value)) {
+                valid = false;
+                document.getElementById('age-error').textContent = 'Please enter a valid age (numbers only).';
+            }
+
+            if (!isValidPassword(passwordInput.value)) {
+                valid = false;
+                document.getElementById('password-error').textContent = 'Password must be at least 8 characters long.';
+            }
+
+            if (!valid) {
+                event.preventDefault(); // Prevent form submission
+            }
+        });
+
+        function isValidEmail(email) {
+            // Simple email validation regex
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function isValidPhone(phone) {
+            // Simple phone number validation regex (assuming 10-digit phone number)
+            const phoneRegex = /^\d{10}$/;
+            return phoneRegex.test(phone);
+        }
+
+        function isValidName(name) {
+            // Name validation regex (letters only)
+            const nameRegex = /^[A-Za-z\s]+$/;
+            return nameRegex.test(name);
+        }
+
+        function isValidAge(age) {
+            // Age validation regex (numbers only)
+            const ageRegex = /^[0-9]+$/;
+            return ageRegex.test(age);
+        }
+
+        function isValidPassword(password) {
+            // Password validation: at least 8 characters long
+            return password.length >= 8;
+        }
+    </script>
+</body>
+</html>
+
+
+                   
+
+
+
+

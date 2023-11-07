@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Coach Profile</title>
+    <!-- Include Bootstrap CSS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <style>
+
+        header {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav li {
+            margin: 0 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s ease-in-out;
+            padding: 15px 25px;
+            border-radius: 15px; /* Add rounded corners to the tab */
+        }
+
+        nav a.current {
+            color: #fff;
+            background-color: #005599;
+            font-weight: bold;
+            border-radius: 15px; /* Apply rounded corners to the selected tab */
+        }
+
+        nav a:hover, nav a:focus {
+            color: #005599;
+            background-color: #fff;
+            border-radius: 15px; /* Apply the same rounded corners on hover/focus */
+        }
+
+        .container {
+            width: 100%; 
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-bottom: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 60px); 
+            margin-bottom: 60px;
+        }
+
+        .dataTables_wrapper {
+            margin: 20px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 50%; /* Align the footer to the horizontal center of the viewport */
+            transform: translateX(-50%); /* Center the footer horizontally */
+            width: 100%;
+            background-color: #fff;
+            color: #333;
+            text-align: center;
+            padding: 10px 0;
+            z-index: 999;
+            box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #0077B5;
+        }
+
+        .title {
+            font-size: 30px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #fff; /* White color */
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #0077B5;
+        }
+
+        /* sports menu */
+
+        .scrollable-menu {
+            max-height: 120px; 
+            overflow-y: auto; 
+            border: 1px solid #ccc;
+            padding: 5px;
+            border-radius: var(--bs-border-radius);
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column; /* Display checkboxes in a vertical coln */
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center; /* Center the checkbox and text vertically */
+            margin-bottom: 5px; /* Add spacing between checkboxes */
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 10px; /* Add spacing between the checkbox and text */
+        }
+
+        /* Style for the button container */
+        #buttonContainer {
+            display:flex;
+            justify-content:end; 
+            align-items: center;
+            align-items: end;
+            margin-bottom: 20px;
+        }
+
+        #logoutButton {
+            padding: 10px 30px;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+
+        /* Modal styles */
+        .modal {
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+        }
+
+        .modal-header {
+            background-color: #0077B5; /* Header background color */
+            color: #fff; /* Header text color */
+            border: none; /* Remove the header border */
+        }
+
+        .modal-title {
+            font-size: 24px; /* Header title font size */
+        }
+
+        .modal-body {
+            padding: 20px; /* Padding for the modal body */
+        }
+
+        .modal-footer {
+            background-color: #fff; /* Footer background color */
+            border: none; /* Remove the footer border */
+        }
+
+        .modal-footer button {
+            background-color: #0077B5; /* Button background color */
+            color: #fff; /* Button text color */
+            border: none; /* Remove button border */
+        }
+
+        /* Close button */
+        .close {
+            color: #fff; /* Close button color */
+            font-size: 30px; /* Close button size */
+        }
+
+        .close:hover {
+            color: #ccc; /* Close button color on hover */
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="title">Sports Performance Pro</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/coachLanding">Home</a></li>
+            <li><a href="/workoutSelection">Assign Workouts</a></li>
+            <li><a href="/testSelection">Assign Tests</a></li>
+            <li><a href="/defineExercises">Create Exercises</a></li>
+            <li><a href="/coachNotes">Notes</a></li>
+            <li><a href="#">Notifications</a></li>
+            <li><a href="/coachProfile" class="current">My Profile</a></li>
+        </ul>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center">My Profile</h1>
+        <div id="buttonContainer">
+            <p>Wish to sign out? There can always be a next time!</p>
+            <button id="logoutButton" class="btn btn-danger">Log out</button>
+        </div>
+        <!-- Edit Profile Section -->
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Edit Profile</h2>
+                <form id="editProfileForm">
+                    <!-- Name Field -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+
+                    <!-- Address Field -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="text" class="form-control" id="email" name="email" required disabled>
+                    </div>
+
+                    <!-- Phone Number Field -->
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" required>
+                    </div>
+
+                    <!-- Sports Field (Dropdown) -->
+                    <div class="mb-3">
+                        <label for="sports" class="form-label">Sports</label>
+                        <div class="scrollable-menu">
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="sports[]" value="football" id="football">
+                                    Football
+                                </label>
+    
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="sports[]" value="basketball" id="basketball">
+                                    Basketball
+                                </label>
+    
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="sports[]" value="cricket" id="cricket">
+                                    Cricket
+                                </label>
+    
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="sports[]" value="badminton" id="badminton">
+                                    Badminton
+                                </label>
+
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="sports[]" value="tennis" id="tennis">
+                                    Tennis
+                                </label>
+
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="sports[]" value="rugby" id="rugby">
+                                    Rugby
+                                </label>
+
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="sports[]" value="lacrose" id="lacrose">
+                                    Lacrose
+                                </label>
+
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="sports[]" value="trackandfield" id="trackandfield">
+                                    Track and Field
+                                </label>
+
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="sports[]" value="hockey" id="hockey">
+                                    Hockey
+                                </label>
+
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="sports[]" value="soccer" id="soccer">
+                                    Soccer
+                                </label>
+
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="sports[]" value="golf" id="golf">
+                                    Golf
+                                </label>
+
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="sports[]" value="swimming" id="swimming">
+                                    Swimming
+                                </label>
+
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="sports[]" value="volleyball" id="volleyball">
+                                    Volleyball
+                                </label>
+
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="sports[]" value="baseball" id="baseball">
+                                    Baseball
+                                </label>
+
+                                <label class="checkbox-container">
+                                    <input type="checkbox" name="sports[]" value="softball" id="softball">
+                                    Softball
+                                </label>
+                                <!-- Add more sports options here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Institute Field (Dropdown) -->
+                    <div class="mb-3">
+                        <label for="institute" class="form-label">Institute</label>
+                        <select class="form-select" id="institute" name="institute" required>
+                            <option value="SUNY Buffalo">SUNY Buffalo</option>
+                            <option value="SUNY Stony Brook">SUNY Stony Brook</option>
+                            <option value="New York University">New York University</option>
+                            <option value="Buffalo State">Buffalo State</option>
+                        </select>
+                    </div>
+
+                    <!-- Save Changes Button -->
+                    <div class="mb-3 text-center">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Change Password Section -->
+            <div class="col-md-6">
+                <h2>Change Password</h2>
+                <form id="changePasswordForm">
+                    <!-- Old Password Field -->
+                    <div class="mb-3">
+                        <label for="oldPassword" class="form-label">Old Password</label>
+                        <input type="password" class="form-control" id="oldPassword" name="oldPassword" required>
+                    </div>
+
+                    <!-- New Password Field -->
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+                    </div>
+
+                    <!-- Retype New Password Field -->
+                    <div class="mb-3">
+                        <label for="confirmNewPassword" class="form-label">Retype New Password</label>
+                        <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword" required>
+                    </div>
+
+                    <!-- Save Password Changes Button -->
+                    <div class="mb-3 text-center">
+                        <button type="submit" class="btn btn-primary">Save Password Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class = footer>
+            2023 Sports Performance Pro
+        </div>
+    </footer>
+
+    <!-- Include Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        var coachEmail = "{{ session['username'] }}"; 
+        console.log("coachEmail", coachEmail)
+        // Function to populate the form fields with coach data
+        function populateCoachData() {
+            // Make an API request to getAllCoaches to fetch the coach data
+            $.ajax({
+                url: '/getAllCoaches',
+                type: 'GET',
+                data: { email: coachEmail }, 
+                success: function (data) {
+                    // Populate the form fields with coach data
+                    $('#name').val(data.name);
+                    $('#email').val(data.email);
+                    $('#phone').val(data.phone);
+                    
+                    // Select the sports checkboxes based on the coach's sports
+                    var sports = data.sports;
+                    $('input[name="sports[]"]').each(function() {
+                        if (sports.includes($(this).val())) {
+                            $(this).prop('checked', true);
+                        }
+                    });
+                    
+                    $('#institute').val(data.institute);
+                },
+                error: function () {
+                    console.log('Error fetching coach data.');
+                }
+            });
+        }
+
+        // Function to update the coach profile using the API
+        function updateCoachProfile() {
+            // Get the updated data from the form
+            var updatedData = {
+                name: $('#name').val(),
+                phone: $('#phone').val(),
+                sports: $('input[name="sports[]"]:checked').map(function() {
+                    return this.value;
+                }).get(),
+                institute: $('#institute').val()
+            };
+
+            // Make an API request to update the coach profile
+            $.ajax({
+                url: '/updateCoachProfile',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(updatedData),
+                success: function (response) {
+                    console.log(response.message);
+                    // Display the success modal
+                    alert('Coach profile updated successfully!')
+                },
+                error: function () {
+                    console.log('Error updating coach profile.');
+                    // Display the error modal
+                    alert('Error updating coach profile.');
+                }
+            });
+        }
+
+        // Call the updateCoachProfile function when the Save Changes button is clicked
+        $('#editProfileForm').submit(function (event) {
+            event.preventDefault(); // Prevent the default form submission
+            updateCoachProfile(); // Call the function to update the coach profile
+        });
+
+        // Function to update the coach's password using the API
+        function updateCoachPassword() {
+            // Get the old and new passwords from the form
+            var oldPassword = $('#oldPassword').val();
+            var newPassword = $('#newPassword').val();
+            var confirmNewPassword = $('#confirmNewPassword').val();
+
+            if (newPassword !== confirmNewPassword) {
+                alert('New passwords do not match. Please retype new password correctly.');
+                return;
+            }
+
+            // Make an API request to update the coach's password
+            $.ajax({
+                url: '/updateCoachPassword',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    oldPassword: oldPassword,
+                    newPassword: newPassword
+                }),
+                success: function (response) {
+                    console.log(response.message);
+                    alert('Password updated successfully');
+                },
+                error: function (xhr) {
+                    if (xhr.status === 401) {
+                        console.log('Invalid old password');
+                        alert('Invalid old password. Please enter the correct old password.');
+                    } else {
+                        console.log('Error updating password');
+                        alert('An error occurred while updating the password.');
+                    }
+                }
+            });
+        }
+
+        // Call the updateCoachPassword function when the Save Password Changes button is clicked
+        $('#changePasswordForm').submit(function (event) {
+            event.preventDefault(); // Prevent the default form submission
+            updateCoachPassword(); // Call the function to update the coach's password
+        });
+
+        // Function to log out and clear session data
+        function logOut() {
+            var confirmLogout = confirm("Are you sure you want to log out?");
+            if (confirmLogout) {
+                // Make an API request to log out on the server side if necessary
+                // For example, you can call a log out API endpoint
+
+                // Clear the session data on the client side
+                $.ajax({
+                    url: '/logout',  // Replace with your log out API endpoint if needed
+                    type: 'POST',
+                    success: function (response) {
+                        // Clear the session data on the client side
+
+                        // Redirect to /coachAthtleteHome
+                        window.location.href = '/coachAthleteHome';
+                    },
+                    error: function () {
+                        // Handle the error if log out fails
+                        alert('Error logging out.');
+                    }
+                });
+            }
+        }
+
+        // Call the logOut function when the Log out button is clicked
+        $('#logoutButton').click(function () {
+            logOut();
+        });
+
+        // Call the populateCoachData function when the page loads
+        $(document).ready(function() {
+            populateCoachData();
+        });
+    </script>   
+</body>
+</html>
+    

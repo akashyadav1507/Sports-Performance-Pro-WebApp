@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration - Sports Performance Pro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f2ef;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #0077B5;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav li {
+            display: inline;
+            margin: 0 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .registration-form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .registration-container {
+            background-color: #fff;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: left;
+            width: 100%;
+            margin: 20px auto;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .form-column {
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            color: #666;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: #333;
+        }
+
+        select {
+            height: 40px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #0077B5;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+            width: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        button:hover {
+            background-color: #005599;
+        }
+
+        footer {
+            width: 100%;
+            background-color: #fff;
+            color: #333;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .login-link {
+            font-size: 16px;
+            color: #0077B5;
+            text-decoration: none;
+            margin-top: 20px;
+            display: block;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Add this in your <style> section or in an external CSS file */
+
+        .scrollable-menu {
+            max-height: 42px; /* Set the maximum height for the scrollable menu */
+            overflow-y: auto; /* Add a vertical scrollbar when the content exceeds the height */
+            border: 1px solid #ccc; /* Add a border to create a box-like appearance */
+            padding: 5px; /* Add some padding for spacing */
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column; /* Display checkboxes in a vertical coln */
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center; /* Center the checkbox and text vertically */
+            margin-bottom: 5px; /* Add spacing between checkboxes */
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 10px; /* Add spacing between the checkbox and text */
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Sports Performance Pro</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li>Game On: Elevate Your Sports Experience with Our App!</li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h2>Athlete Registration</h2>
+        <div class="registration-form">
+            <div class="registration-container">
+                <form class="form-column" onsubmit="return false">
+                    <label for="name">Name<span style="color: red;">*</span></label>
+                    <input type="text" name="name" id="name" required pattern="[A-Za-z]+">
+                    <span class="error-message" id="name-error"></span>
+
+                    <label for="age">Age<span style="color: red;">*</span></label>
+                    <input type="text" name="age" id="age" required pattern="[0-9]+">
+                    <span class="error-message" id="age-error"></span>
+
+                    <label for="phone">Phone No<span style="color: red;">*</span></label>
+                    <input type="text" name="phone" id="phone" required pattern="\d{10}">
+                    <span class="error-message" id="phone-error"></span>
+
+                    <label for="institute">Institute<span style="color: red;">*</span></label>
+                    <select name="institute" id="institute" required>
+                        <option value="SUNY Buffalo">SUNY Buffalo</option>
+                        <option value="SUNY Stony Brook">SUNY Stony Brook</option>
+                        <option value="Daemen University">Daemen University</option>
+                    </select>
+
+
+                </form>
+                <form class="form-column" onsubmit="return false">
+
+
+                    <label for="password">Password<span style="color: red;">*</span></label>
+                    <input type="password" name="password" id="password" required>
+                    <span class="error-message" id="password-error"></span>
+
+                    <label for="retype-password">Retype Password<span style="color: red;">*</span></label>
+                    <input type="password" name="retype-password" id="retype-password" required>
+                    <span class="error-message" id="retype-password-error"></span>
+
+                    <label for="email">Email<span style="color: red;">*</span></label>
+                    <input type="text" name="email" id="email" required pattern="[^\s@]+@[^\s@]+\.[^\s@]+">
+                    <span class="error-message" id="email-error"></span>
+
+                    <!-- Additional Fields -->
+                    <!-- ... (your existing HTML code) ... -->
+
+                    <!-- ... (your existing HTML code) ... -->
+                    <!-- ... (your existing HTML code) ... -->
+                    <label for="sports">Sports<span style="color: red;">*</span></label>
+                    <div class="scrollable-menu">
+                        <div class="checkbox-group">
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="sports[]" value="football" id="football">
+                                Football
+                            </label>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="sports[]" value="basketball" id="basketball">
+                                Basketball
+                            </label>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="sports[]" value="cricket" id="cricket">
+                                Cricket
+                            </label>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="sports[]" value="badminton" id="badminton">
+                                Badminton
+                            </label>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="sports[]" value="tennis" id="tennis">
+                                Tennis
+                            </label>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="sports[]" value="rugby" id="rugby">
+                                Rugby
+                            </label>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="sports[]" value="lacrose" id="lacrose">
+                                Lacrose
+                            </label>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="sports[]" value="trackandfield" id="trackandfield">
+                                Track and Field
+                            </label>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="sports[]" value="hockey" id="hockey">
+                                Hockey
+                            </label>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="sports[]" value="soccer" id="soccer">
+                                Soccer
+                            </label>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="sports[]" value="golf" id="golf">
+                                Golf
+                            </label>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="sports[]" value="swimming" id="swimming">
+                                Swimming
+                            </label>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="sports[]" value="volleyball" id="volleyball">
+                                Volleyball
+                            </label>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="sports[]" value="baseball" id="baseball">
+                                Baseball
+                            </label>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="sports[]" value="softball" id="softball">
+                                Softball
+                            </label>
+                            <!-- Add more sports options here -->
+                        </div>
+                    </div>
+                    <span class="error-message" id="sports-error"></span>
+<!-- ... (rest of your HTML code) ... -->
+
+<!-- ... (rest of your HTML code) ... -->
+
+
+
+<!-- ... (rest of your HTML code) ... -->
+
+
+                    <label for="Gender">Gender<span style="color: red;">*</span></label>
+                    <select name="Gender" id="gender" required>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="non-binary">Non-binary</option>
+                        <option value="transgender">Transgender</option>
+                        <option value="genderqueer">Genderqueer</option>
+                        <option value="other">Other</option>
+
+                        
+                    </select>
+                
+
+                    <div style="text-align:center;">
+                        <span class="error-message" id="general-error"></span>
+                        <button type="submit" id="registerButton">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <a class="login-link" href="/coachAthleteHome">Already have an account? Login</a>
+    </div>
+
+    <footer>
+        &copy; 2023 Sports Performance Pro
+    </footer>
+
+    <script>
+        // JavaScript email and phone validation
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const nameInput = document.getElementById('name');
+        const ageInput = document.getElementById('age');
+        const passwordInput = document.getElementById('password');
+        const retypePasswordInput = document.getElementById('retype-password');
+        const registerButton = document.getElementById('registerButton');
+        const genderInput = document.getElementById('gender');
+        const instituteInput = document.getElementById('institute');
+        registerButton.addEventListener('click', function(event) {
+        var selectedSports = [];
+        var checkboxes = document.querySelectorAll('input[name="sports[]"]:checked');
+        for (var i = 0; i < checkboxes.length; i++) {
+            selectedSports.push(checkboxes[i].value);
+        }
+            let valid = true;
+            // Reset error messages
+            document.getElementById('name-error').textContent = '';
+            document.getElementById('age-error').textContent = '';
+            document.getElementById('email-error').textContent = '';
+            document.getElementById('phone-error').textContent = '';
+            document.getElementById('password-error').textContent = '';
+            document.getElementById('retype-password-error').textContent = '';
+            document.getElementById('sports-error').textContent = '';
+            if(passwordInput.value!==retypePasswordInput.value){
+                valid=false;
+                document.getElementById('retype-password-error').textContent = 'Passwords do not match!';
+            }
+
+            if (!isValidEmail(emailInput.value)) {
+                valid = false;
+                document.getElementById('email-error').textContent = 'Please enter a valid email address.';
+            }
+
+            if (!isValidPhone(phoneInput.value)) {
+                valid = false;
+                document.getElementById('phone-error').textContent = 'Please enter a valid phone number (10 digits).';
+            }
+
+            if (!isValidName(nameInput.value)) {
+                valid = false;
+                document.getElementById('name-error').textContent = 'Please enter a valid name (letters only).';
+            }
+
+            if (!isValidAge(ageInput.value)) {
+                valid = false;
+                document.getElementById('age-error').textContent = 'Please enter a valid age (numbers only).';
+            }
+
+            if (!isValidPassword(passwordInput.value)) {
+                valid = false;
+                document.getElementById('password-error').textContent = 'Password must be at least 8 characters long.';
+            }
+            if (selectedSports.length === 0) {
+                valid = false;
+                document.getElementById('sports-error').textContent = 'You must select one sports';
+            }
+            if (!valid) {
+                event.preventDefault(); // Prevent form submission
+            }
+            else{
+                var athleteRegistrationData = {
+                    "email": emailInput.value,
+                    "gender":genderInput.value,
+                    "phone": phoneInput.value,
+                    "name": nameInput.value,
+                    "age": ageInput.value,
+                    "password": passwordInput.value,
+                    "institute": instituteInput.value,
+                    "sports": selectedSports
+        };
+                $.post("/postAthlete", JSON.stringify(athleteRegistrationData), function (response) {
+                    document.getElementById('general-error').style.color='red';
+                    if(response==='Registration successful, go to login!')
+                        document.getElementById('general-error').style.color='green';
+                    document.getElementById('general-error').textContent = response;
+                
+          });
+            }
+        });
+
+        function isValidEmail(email) {
+            // Simple email validation regex
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function isValidPhone(phone) {
+            // Simple phone number validation regex (assuming 10-digit phone number)
+            const phoneRegex = /^\d{10}$/;
+            return phoneRegex.test(phone);
+        }
+
+        function isValidName(name) {
+            // Name validation regex (letters only)
+            const nameRegex = /^[A-Za-z\s]+$/;
+            return nameRegex.test(name);
+        }
+
+        function isValidAge(age) {
+            // Age validation regex (numbers only)
+            const ageRegex = /^[0-9]+$/;
+            return ageRegex.test(age);
+        }
+
+        function isValidPassword(password) {
+            // Password validation: at least 8 characters long
+            return password.length >= 8;
+        }
+    </script>
+</body>
+</html>
+
+
+                   
+
+
+
+

@@ -1,0 +1,212 @@
+﻿body {
+  font-family: Arial, sans-serif;
+  background-color: #f3f2ef;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+h2 {
+  margin-left: 20px;
+}
+header {
+  background-color: #0077b5;
+  color: #fff;
+  padding: 20px 0;
+  text-align: center;
+}
+
+nav {
+  background-color: #0077b5;
+  color: #fff;
+  text-align: center;
+  padding: 10px 0;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav li {
+  display: inline;
+  margin: 0 20px;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  text-align: center;
+}
+
+/* Added a container for login forms */
+.login-forms {
+  display: grid;
+  grid-template-columns: 0.4fr 0.6fr;
+  justify-content: stretch; /* Center horizontally */
+  /*align-items: center; /* Center vertically */
+  flex-wrap: wrap; /* Wrap login containers if the screen is narrow */
+}
+
+.login-container-1 {
+  background-color: #fff;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  width: max-width;
+  margin: 20px; /* Added margin */
+}
+
+.login-container-2 {
+  background-color: #fff;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 30px;
+  /* text-align: center; */
+  width: max-width;
+  margin: 20px; /* Added margin */
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+p {
+  font-size: 16px;
+  margin-bottom: 30px;
+  color: #666;
+}
+
+button {
+  background-color: #0077b5;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: #005599;
+}
+
+footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+  color: #333;
+  text-align: center;
+  padding: 10px 0;
+}
+
+/* EVENT VIEW STYLES */
+/* Hide elements with the hidden class */
+.hidden {
+  display: none;
+}
+
+/* Style for Team nodes */
+.team-nodes {
+  list-style: none;
+  cursor: pointer;
+  color: #fff; /* Blue color, customize as needed */
+  font-weight: bold;
+  margin-bottom: 10px;
+  border: 1px solid #d6d9da; /* Add border */
+  padding: 20px;
+  background-color: #0077b5; /* Light gray background color */
+  text-align: center;
+}
+
+/* Style for Block nodes */
+.block-nodes {
+  list-style: none;
+  cursor: pointer;
+  color: #fff; /* Green color, customize as needed */
+  margin-left: 2px;
+  border: 1px solid #d6d9da;
+  padding: 20px; /* Increase padding */
+  background-color: #2a8fc5; /* Slightly different shade of green */
+  text-align: left;
+}
+
+/* Style for Exercise nodes */
+.exc_nodes {
+  list-style: none;
+  cursor: pointer;
+  color: #fff; /* Red color, customize as needed */
+  margin-left: 2px;
+  border: 1px solid #d6d9da;
+  padding: 20px; /* Increase padding */
+  background-color: #2e769d; /* Slightly different shade of red */
+  text-align: left;
+}
+
+/* Hover effect */
+.team-nodes:hover,
+.block-nodes:hover,
+.exc_nodes:hover {
+  text-decoration: underline;
+}
+
+/*Search Bar*/
+.search-bar {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#team-search,
+#athlete-search {
+  width: 100%;
+  padding: 12px 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.team-train-sessions {
+  max-height: 450px; /* Adjust the height as needed */
+  overflow-y: scroll; /* Add a vertical scrollbar */
+}
+
+.athlete-train-sessions {
+  max-height: 450px; /* Adjust the height as needed */
+  overflow-y: scroll; /* Add a vertical scrollbar */
+}
+
+/* Hide the scrollbar until it's needed */
+.team-train-sessions ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.athlete-train-sessions::-webkit-scrollbar {
+  width: 6px;
+}
+
+.team-train-sessions ::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 3px;
+}
+
+.athlete-train-sessions::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 3px;
+}

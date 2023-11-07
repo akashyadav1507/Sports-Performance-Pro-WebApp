@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login</title>
+    <style>
+      /* Your existing CSS styles here */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f3f2ef;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+
+      header {
+        background-color: #0077b5;
+        color: #fff;
+        padding: 20px 0;
+        text-align: center;
+      }
+
+      nav {
+        background-color: #0077b5;
+        color: #fff;
+        text-align: center;
+        padding: 10px 0;
+      }
+
+      nav ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      nav li {
+        display: inline;
+        margin: 0 20px;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        text-align: center;
+      }
+
+      /* Added a container for login forms */
+      .login-forms {
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        flex-wrap: wrap; /* Wrap login containers if the screen is narrow */
+      }
+
+      .login-container {
+        background-color: #fff;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 30px;
+        text-align: center;
+        width: 400px;
+        margin: 20px; /* Added margin */
+      }
+
+      h1 {
+        font-size: 28px;
+        margin-bottom: 20px;
+        color: #fff;
+      }
+
+      h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      p {
+        font-size: 16px;
+        margin-bottom: 30px;
+        color: #666;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 16px;
+        color: #333;
+      }
+
+      button {
+        background-color: #0077b5;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+      }
+
+      button:hover {
+        background-color: #005599;
+      }
+
+      footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background-color: #fff;
+        color: #333;
+        text-align: center;
+        padding: 10px 0;
+      }
+
+      /* Added a style for the "Create one" link */
+      .create-account-link {
+        font-size: 16px;
+        color: #0077b5;
+        text-decoration: none;
+        margin-top: 30px; /* Added more margin-top */
+        display: block; /* Display as a block element */
+      }
+
+      .create-account-link:hover {
+        text-decoration: underline;
+      }
+
+      /* Error message styling */
+      .error-message {
+        color: red;
+        margin-top: 10px;
+        font-weight: bold;
+      }
+
+      /* Adjust the container style */
+      .login-container {
+        background-color: #fff;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 30px;
+        text-align: center;
+        width: 400px;
+        margin: 20px auto; /* Center the login form */
+      }
+
+      /* Adjust the page content style */
+      .container {
+        max-width: 500px; /* Adjust the container width */
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        text-align: center;
+        margin-top: 50px; /* Adjust the margin-top */
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Sports Performance Pro</h1>
+    </header>
+
+    <nav>
+      <ul>
+        <li>Game On: Elevate Your Sports Experience with Our App!</li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <!-- Container for the single login form -->
+      <div class="login-container">
+        <h2>Admin Login</h2>
+        <p>Stay updated on your progress</p>
+        <input type="text" name="admin_username" placeholder="Email" required />
+        <input
+          type="password"
+          name="admin_password"
+          placeholder="Password"
+          required
+        />
+        <button type="button" id="admin_signin">Sign In</button>
+        <div id="adminEmailError" class="error-message"></div>
+      </div>
+
+      <div style="margin-top: 30px"></div>
+
+      <a class="create-account-link" href="registration.html"></a>
+    </div>
+
+    <footer>2023 Sports Performance Pro</footer>
+
+    <script>
+      const adminSignIn = document.getElementById("admin_signin");
+      function validateAdminEmail() {
+        const adminEmailInput = document.getElementsByName("admin_username")[0];
+        const adminPasswordInput = document.getElementsByName("admin_password")[0];
+        const adminEmailError = document.getElementById("adminEmailError");
+        var adminLoginData = {
+          "username": adminEmailInput.value,
+          "password": adminPasswordInput.value
+        };
+        // Regular expression for email validation
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailPattern.test(adminEmailInput.value)) {
+          adminEmailError.textContent = "Invalid email format";
+        } else {
+          adminEmailError.textContent = "";
+          $.post("/adminPost", JSON.stringify(adminLoginData), function (response) {
+            if (response === 'Successful') {
+              window.location.href = "/adminLanding";
+            } else {
+              adminEmailError.textContent = response;
+          }  
+          });
+        }
+      }
+
+      adminSignIn.addEventListener("click", function (e) {
+        validateAdminEmail();
+      });
+    </script>
+  </body>
+</html>

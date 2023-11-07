@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Athlete</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
+    <style>
+        header {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav li {
+            margin: 0 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s ease-in-out;
+            padding: 15px 25px;
+            border-radius: 15px; /* Add rounded corners to the tab */
+        }
+
+        nav a.current {
+            color: #fff;
+            background-color: #005599;
+            font-weight: bold;
+            border-radius: 15px; /* Apply rounded corners to the selected tab */
+        }
+
+        nav a:hover, nav a:focus {
+            color: #005599;
+            background-color: #fff;
+            border-radius: 15px; /* Apply the same rounded corners on hover/focus */
+        }
+
+        .container {
+            width: 100%; 
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-bottom: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 60px); 
+            margin-bottom: 60px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 50%; /* Align the footer to the horizontal center of the viewport */
+            transform: translateX(-50%); /* Center the footer horizontally */
+            width: 100%;
+            background-color: #fff;
+            color: #333;
+            text-align: center;
+            padding: 10px 0;
+            z-index: 999;
+            box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #0077B5;
+        }
+
+        .title {
+            font-size: 30px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #fff; /* White color */
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #0077B5;
+        }
+
+        /* Basic styling for the DataTable */
+        #athleteTable {
+            font-family: Arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #athleteTable th, #athleteTable td {
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: left;
+        }
+
+        #athleteTable th {
+            background-color: #f2f2f2;
+        }
+
+        /* Style for Edit and Delete buttons */
+        .edit-button, .delete-button {
+            background-color: #0077b5;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .edit-button:hover, .delete-button:hover {
+            background-color: #00568d;
+        }
+
+        /* Hover effect for table rows */
+        #athleteTable tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* #athleteTable_filter input[type="search"] {
+            padding-right: 100px;
+        } */
+
+        #athleteTable_filter {
+            margin-bottom: 20px;
+        }
+
+        #athleteTable tbody tr.selected {
+            background-color: #0077B5;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        /* Style for the button container */
+        #buttonContainer {
+            text-align: center; /* Center align the buttons */
+            margin-top: 20px; /* Add spacing between the buttons and the table */
+        }
+
+        /* Style for the "Continue" button */
+        #createTeamButton {
+            margin-right: 20px;
+            padding: 10px;
+            padding-left: 25px; 
+            padding-right: 25px;
+        }
+
+        /* Style for the "Return" button */
+        #returnButton {
+            margin-left: 20px;
+            padding: 10px;
+            padding-left: 25px; 
+            padding-right: 25px;
+        }
+
+        #clearSelectionButton {
+            padding: 10px;
+            padding-left: 25px; 
+            padding-right: 25px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="title">Sports Performance Pro</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/coachLanding">Home</a></li>
+            <li><a href="/workoutSelection">Assign Workouts</a></li>
+            <li><a href="test-selection.html">Create Tests</a></li>
+            <li><a href="#">Create Workouts</a></li>
+            <li><a href="#">Notes</a></li>
+            <li><a href="#">Notifications</a></li>
+            <li><a href="coach-profile.html">My Profile</a></li>
+        </ul>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center">Create a new team</h1>
+            <form id="createTeamForm">
+                <!-- Name Field -->
+                <div class="mb-3">
+                    <label for="name" class="form-label"><h2>Team name:</h2></label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="sports" class="form-label"><h2>Sports:</h2></label>
+                    <select class="form-select" id="sports" name="sports" required>
+                        <option value="sport">Select Sport</option>
+                        <option value="Football">Football</option>
+                        <option value="Baseball">Baseball</option>
+                        <option value="Swimming">Swimming</option>
+                        <option value="Hockey">Hockey</option>
+                        <option value="Golf">Golf</option>
+                        <option value="Tennis">Tennis</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="name" class="form-label"><h2>Select Athletes:</h2></label>
+                    <table id="athleteTable" class="display">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Sports</th>
+                                <th>Institute</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dynamic data will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="buttonContainer">
+                    <button id="createTeamButton" class="btn btn-primary" disabled>Create Team</button>
+                    <button id="clearSelectionButton" class="btn btn-secondary">Clear Selection</button>
+                    <button id="returnButton" class="btn btn-secondary">Return</button>
+                </div>
+            </form>
+    </div>
+
+    <footer>
+        <div class="footer">
+            2023 Sports Performance Pro
+        </div>
+    </footer>
+
+    <script>
+        $(document).ready(function () {
+            // Create athlete data
+            var athletes = [];
+
+            // Initialize DataTable
+            var table = $('#athleteTable').DataTable({
+                data: athletes,
+                columns: [
+                    { data: 'name' },
+                    { data: 'sports' },
+                    { data: 'institute' }
+                ],
+                select: {
+                    style: 'multi'
+                },
+            });
+
+            // Track selected rows in an array
+            var selectedRows = [];
+
+            $('#athleteTable tbody').on('click', 'tr', function () {
+                var data = table.row(this).data();
+                var athleteName = data.name;
+
+                // Add or remove 'selected' class on click
+                $(this).toggleClass('selected');
+
+                // Update the selectedRows array
+                var isSelected = $(this).hasClass('selected');
+                if (isSelected) {
+                    selectedRows.push(data);
+                } else {
+                    // Remove the deselected row from the selectedRows array
+                    var rowIndex = selectedRows.findIndex(function (row) {
+                        return row.name === data.name; // You might need to adjust the key based on your data
+                    });
+                    if (rowIndex !== -1) {
+                        selectedRows.splice(rowIndex, 1);
+                    }
+                }
+
+                // Enable the "Create Team" button if one or more athletes are selected
+                updateCreateTeamButtonState();
+            });
+
+            // Function to update the state of the "Create Team" button
+            function updateCreateTeamButtonState() {
+                var teamName = $('#name').val();
+                var sport = $('#sports').val();
+                var selectedRows = $('#athleteTable tbody tr.selected');
+
+                // Enable the "Create Team" button only if all conditions are met
+                if (teamName && sport && selectedRows.length > 0) {
+                    $('#createTeamButton').prop('disabled', false);
+                } else {
+                    $('#createTeamButton').prop('disabled', true);
+                }
+            }
+
+            // Listen for changes in the team name and sports fields
+            $('#name, #sports').on('input', updateCreateTeamButtonState)
+
+            // Handle the "Create Team" button
+            $('#createTeamButton').click(function (e) {
+                e.preventDefault(e);
+                var selectedRows = $('#athleteTable tbody tr.selected');
+
+                if (selectedRows.length > 0) {
+                    // Fetch the coach_id using an AJAX request
+                    $.get("/getCoachId", function (data) {
+                        var coach_id = data.coach_id;
+
+                        if (coach_id) {
+                            // Create the team data with the fetched coach_id and athlete IDs to send to the server
+                            var teamData = {
+                                name: $('#name').val(),
+                                sport: $('#sports').val(),
+                                coach_id: coach_id,
+                                athlete_ids: selectedRows.map(function () {
+                                    return table.row(this).data().athlete_id;
+                                }).get()
+                            };
+
+                            // Single AJAX call to create a team and add team memberships
+                            $.ajax({
+                                type: 'POST',
+                                url: '/createTeamAndMemberships', // Update the URL to match your server-side route
+                                data: JSON.stringify(teamData),
+                                contentType: 'application/json'
+                            })
+                            .done(function (response) {
+                                console.log('AJAX call success:', response);
+                                if (response.message === 'Team created and athletes added successfully') {
+                                    // Team and memberships added successfully
+                                    alert('Team created and athletes added successfully.');
+                                    window.location.href = '/coachLanding';
+                                } else {
+                                    // Handle unexpected response
+                                    alert('Unexpected response. Please try again or contact support.');
+                                }
+                            })
+                            .fail(function (error) {
+                                // Handle errors
+                                console.error('An error occurred:', error);
+                                alert('An error occurred. Please try again.');
+                            });
+                        } else {
+                            // Handle the case where coach_id is not found
+                            alert('Coach ID not found. Please try again or contact support.');
+                        }
+                    });
+                } else {
+                    // No athlete selected, show a popup
+                    alert('No athlete selected. Please select an athlete before continuing.');
+                }
+            });
+
+
+
+            // Handle the "Return" button
+            $('#returnButton').click(function () {
+                // Check if an athlete is selected
+                var selectedRow = $('#athleteTable tbody tr.selected');
+                if (selectedRow.length > 0) {
+                    // Ask for confirmation
+                    var confirmReturn = confirm('You have selected an athlete. Do you still want to return?');
+                    if (!confirmReturn) {
+                        // User clicked "Cancel," so do nothing
+                        return;
+                    }
+                }
+
+                // Redirect to the previous page (workout-selection.html)
+                window.location.href = '/coachLanding';
+            });
+
+            $('#clearSelectionButton').click(function () {
+                // Iterate through the selectedRows array and deselect each row
+                for (var i = 0; i < selectedRows.length; i++) {
+                    var athleteName = selectedRows[i].name;
+                    
+                    // Find the row by athlete name
+                    var row = $('#athleteTable tbody tr').filter(function () {
+                        return $(this).find('td:first').text() === athleteName;
+                    });
+
+                    // Deselect the row
+                    row.removeClass('selected');
+                }
+
+                // Clear the selectedRows array
+                selectedRows = [];
+
+                // Update the "Create Team" button state
+                updateCreateTeamButtonState();
+            });
+
+
+            $.get("/getAllAthletes", function (data) {
+                var athletes = data.athletes;
+                var athleteTable = $("#athleteTable").DataTable();
+                athleteTable.clear().rows.add(athletes).draw();
+            });
+        });
+
+    </script>
+</body>
+</html>

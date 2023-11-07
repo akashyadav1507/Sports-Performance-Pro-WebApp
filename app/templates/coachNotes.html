@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Your existing head content -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Performance Pro - Welcome Coach TJ!</title>
+</head>
+<style>
+        body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background-color: #0077b5;
+        color: #fff;
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    nav {
+        background-color: #0077b5;
+        color: #fff;
+        padding: 10px 0;
+    }
+
+    nav ul {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    nav li {
+        margin: 0 20px;
+    }
+
+    nav a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: bold;
+        font-size: 16px;
+        transition: color 0.3s ease-in-out;
+        padding: 15px 25px;
+        border-radius: 15px;
+    }
+
+    nav a.current {
+        color: #fff;
+        background-color: #005599;
+        font-weight: bold;
+        border-radius: 15px;
+    }
+
+    nav a:hover,
+    nav a:focus {
+        color: #005599;
+        background-color: #fff;
+        border-radius: 15px;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 5px 0;
+        max-height: 100px;
+    }
+
+    .note-input {
+        margin-bottom: 20px;
+    }
+
+    textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 10px 0;
+    }
+
+    button {
+        background-color: #0077B5;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #00568d;
+    }
+
+    .note-history {
+        background-color: #f2f2f2;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+        max-height: 500px; /* Adjust this value as needed */
+        overflow-y: auto;
+    }
+
+    .note {
+        padding: 5px 0;
+        margin-bottom: 0px;
+        width: 100%; /* Increase the width to make it wider */
+        position: relative;
+        border-bottom: 1px solid #ccc;
+    }
+
+    #athleteNameHeading {
+        font-size: 24px;
+        color: #0077B5;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .modal-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(23, 15, 15, 0.7  );
+        z-index: 2; /* Ensure modal container is on top of other content */
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        width: 300px;
+        padding: 20px;
+        text-align: center;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column; /* Set the flex direction to column to center items vertically */
+    }
+
+    .modal-content textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 10px 0;
+    }
+
+    .modal-content input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 10px 0;
+    }
+
+    .modal-content button {
+        background-color: #0077B5;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .note-date {
+        text-align: right;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        font-size: 12px;
+        color: #555; /* You can adjust the color as needed */
+    }
+
+    #notesContainer {
+        max-height: 200%; /* Adjust this value as needed */
+    }
+
+
+    .highlight {
+        background-color: rgb(115, 203, 223);
+    }
+
+    .note-reply {
+    color: #fff; /* Blue color */
+    background-color: #0077B5; /* Light blue background */
+    padding: 5px;
+    border-radius: 3px;
+    margin-top: 5px;
+    }
+
+</style>
+<body>
+    <header>
+        <h1 class="title">Sports Performance Pro - Welcome Coach TJ!</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="/coachLanding">Home</a></li>
+            <li><a href="/workoutSelection">Assign Workouts</a></li>
+            <li><a href="/testSelection">Assign Tests</a></li>
+            <li><a href="/defineExercises">Create Exercises</a></li>
+            <li><a href="/coachNotes" class="current">Notes</a></li>
+            <li><a href="#">Notifications</a></li>
+            <li><a href="/coachProfile">My Profile</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="athlete-name">
+            <h2 id="athleteNameHeading">Send them notes and let them know about their progress!</h2>
+        </div>
+
+        <div class="note-input">
+            
+            <button id="addNote" type = "button"style="float: right;">Add Note</button>
+            <input type="text" id="searchBar" style="width: 250px; color: #000000; background-color: #f0f0f0;" placeholder="Search Notes...">
+
+
+            <div id="noteModalContainer" class="modal-container">
+                <div class="modal-content" style="position: relative;">
+                    <span id="closeModal" class="close-button" style="position: absolute; top: 10px; right: 10px; cursor: pointer; color: black;">&times;</span>
+                    <input type="text" id="noteSubject" placeholder="Subject" style="width: 250px;">
+
+                    <textarea id="noteText" placeholder="Add a note..." style="width: 250px;"></textarea>
+                    <button id="modalAddNote" style="width: 100px;">Add</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="note-history" id="noteHistory">
+            <!-- Notes will be displayed here -->
+            <div id="notesContainer">
+                <!-- Notes will be displayed here -->
+            </div>
+        </div>
+
+        <div id="modalOverlay" class="modal-overlay"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const addNoteButton = document.getElementById("addNote");
+            const noteModalContainer = document.getElementById("noteModalContainer");
+            const closeModal = document.getElementById("closeModal");
+            const modalAddNote = document.getElementById("modalAddNote");
+            const noteText = document.getElementById("noteText");
+            const noteSubject = document.getElementById("noteSubject");
+            const modalOverlay = document.getElementById("modalOverlay");
+            const notesContainer = document.getElementById("notesContainer");
+
+            // Function to filter and highlight notes
+            function filterNotes() {
+                const searchTerm = searchBar.value.trim().toLowerCase();
+                const notes = noteHistory.getElementsByClassName("note");
+
+                for (const note of notes) {
+                    const noteTextElement = note.querySelector(".note-text");
+                    const noteText = noteTextElement.textContent.toLowerCase();
+
+                    if (noteText.includes(searchTerm)) {
+                        const highlightedText = noteText.replace(new RegExp(searchTerm, 'gi'), match => `<span class="highlight">${match}</span>`);
+                        noteTextElement.innerHTML = highlightedText;
+                        note.style.display = "block";
+                    } else {
+                        noteTextElement.innerHTML = noteText;
+                        note.style.display = "none";
+                    }
+                }
+            }
+
+            // Event listener for the search input field
+            searchBar.addEventListener("input", filterNotes);
+
+            addNoteButton.addEventListener("click", function () {
+                noteModalContainer.style.display = "flex";
+                modalOverlay.style.display = "block";
+            });
+
+            closeModal.addEventListener("click", function () {
+                noteModalContainer.style.display = "none";
+                modalOverlay.style.display = "none";
+            });
+
+            modalAddNote.addEventListener("click", function () {
+                const subject = noteSubject.value.trim();
+                const text = noteText.value.trim();
+                if (subject !== "" && text !== "") {
+                    // Create a new note element
+                    const noteElement = document.createElement("div");
+                    noteElement.classList.add("note");
+
+                    // Subject line
+                    const subjectLine = document.createElement("p");
+                    subjectLine.classList.add("note-subject");
+                    subjectLine.innerHTML = `<strong>Subject:</strong> ${subject}`;
+
+                    // Note text
+                    const noteTextElement = document.createElement("p");
+                    noteTextElement.classList.add("note-text");
+                    noteTextElement.textContent = text;
+
+                    // Date (inside the note element)
+                    const date = document.createElement("p");
+                    date.classList.add("note-date");
+                    const currentDate = new Date();
+                    date.textContent = currentDate.toDateString();
+
+                    // Append subject, date, and note text to the note element
+                    noteElement.appendChild(subjectLine);
+                    noteElement.appendChild(date);
+                    noteElement.appendChild(noteTextElement);
+
+                    // Prepend the new note element to the beginning of the note history
+                    notesContainer.prepend(noteElement);
+
+                    // Clear input fields and hide the modal
+                    noteSubject.value = "";
+                    noteText.value = "";
+                    noteModalContainer.style.display = "none";
+                    modalOverlay.style.display = "none";
+
+                    // Call the API to post note
+                    const apiURL = "/addNote"; // Replace with your API URL
+                    const requestData = {
+                        coach_id: 1, // Replace with the appropriate coach ID
+                        athlete_id: 2, // Replace with the appropriate athlete ID
+                        date_created: new Date().toISOString(),
+                        subject: subject,
+                        coach_reply: text,
+                        athlete_reply: null,
+                    };
+
+                    fetch(apiURL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(requestData),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data); // Log the API response
+                    })
+                    .catch(error => {
+                        console.error(error); // Handle errors
+                    });
+                }
+            });
+             // Function to fetch and display notes
+             function fetchAndDisplayNotes() {
+            const apiURL = "/getNotes"; // Replace with your API URL
+            const coachId = 15; 
+            const athleteId = 12; 
+
+            // Make a GET request to fetch notes
+            fetch(`${apiURL}?coachId=${coachId}&athleteId=${athleteId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const notes = data.notes;
+
+                    // Clear existing notes
+                    notesContainer.innerHTML = "";
+
+                    // Loop through notes and display them in reverse order
+                    for (let i = notes.length - 1; i >= 0; i--) {
+                        const noteData = notes[i];
+                        const noteElement = document.createElement("div");
+                        noteElement.classList.add("note");
+
+                        // Create elements for note details (date, subject, text)
+                        const dateElement = document.createElement("p");
+                        dateElement.classList.add("note-date");
+                        dateElement.textContent = noteData.date_created;
+
+                        const subjectElement = document.createElement("p");
+                        subjectElement.classList.add("note-subject");
+                        subjectElement.innerHTML = `<strong>Subject:</strong> ${noteData.subject}`;
+
+                        const textElement = document.createElement("p");
+                        textElement.classList.add("note-text");
+                        textElement.textContent = noteData.coach_reply;
+
+                        // Append elements to the note
+                        noteElement.appendChild(dateElement);
+                        noteElement.appendChild(subjectElement);
+                        noteElement.appendChild(textElement);
+
+                         // Check for athlete reply and display it
+                        if (noteData.athlete_reply) {
+                            const replyElement = document.createElement("p");
+                            replyElement.classList.add("note-reply");
+                            replyElement.textContent = noteData.athlete_reply;
+                            replyElement.innerHTML = `<strong><span class="reply-label">Reply:</span></strong> ${noteData.athlete_reply}`;
+                            noteElement.appendChild(replyElement);
+                        }
+
+                        // Append the note to the beginning of the notes container
+                        notesContainer.prepend(noteElement);
+                    }
+                })
+                .catch(error => {
+                    console.error(error); // Handle errors
+                });
+        }
+
+        // Call the function to fetch and display notes when the page loads
+        fetchAndDisplayNotes();
+        // ... (existing code)
+        });
+    </script>
+</body>
+</html>
