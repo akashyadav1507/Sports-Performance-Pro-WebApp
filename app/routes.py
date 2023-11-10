@@ -258,10 +258,6 @@ def add_workout():
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
 
-
-# Add a new block
-@app.route('/addNewBlock', methods=['POST'])
-
 #Get athletes team wise for a particular coach
 @app.route('/getAthletes', methods=['GET'])
 def get_coach_with_teams_and_athletes():
@@ -883,15 +879,15 @@ def coach_login():
             message="Wrong coach username password!"
             return message
 
-@app.route('/coachLanding2')
-def coach_landing2():
-    # Retrieve the athlete_id from the session
-    coach_id = session.get('coach_id')
+# @app.route('/coachLanding2')
+# def coach_landing2():
+#     # Retrieve the athlete_id from the session
+#     coach_id = session.get('coach_id')
     
-    # Use athlete_id to query additional user-specific data from the database if needed
+#     # Use athlete_id to query additional user-specific data from the database if needed
 
-    # Render the landing page
-    return render_template('coach-landing-page.html', coach_id=coach_id)
+#     # Render the landing page
+#     return render_template('coach-landing-page.html', coach_id=coach_id)
 
 #Route for athlete login
 @app.route('/athleteLogin', methods=['POST'])
