@@ -345,9 +345,6 @@
             <li><a href="/adminLanding" class="current">Coaches</a></li>
             <li><a href="/adminAthlete">Athletes</a></li>
             <li><a href="/adminExercises">Exercises</a></li>
-            <li><a href="#">Notes</a></li>
-            <li><a href="#">Notifications</a></li>
-            <li><a href="coach-profile.html">My Profile</a></li>
             <li><a href="/logoutAdmin">Logout</a></li>
         </ul>
     </nav>
@@ -404,6 +401,53 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="updateCoachButton">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="addInstituteModal" tabindex="-1" role="dialog" aria-labelledby="addInstituteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addInstituteModalLabel">Add Institute</h5>
+                    <button type="button" id="close" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addInstituteForm">
+                        <div class="form-group">
+                            <label for="instituteName">Institute Name:</label>
+                            <input type="text" class="form-control" id="instituteName" name="name">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="addInstituteButton">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+    <div class="modal fade" id="addSportsModal" tabindex="-1" role="dialog" aria-labelledby="addSportsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addSportsModalLabel">Add Sports</h5>
+                    <button type="button" id="sportsclose" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addSportsForm">
+                        <div class="form-group">
+                            <label for="sportsName">Sports Name:</label>
+                            <input type="text" class="form-control" id="sportsName" name="name">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="addSportsButton">Add</button>
                 </div>
             </div>
         </div>

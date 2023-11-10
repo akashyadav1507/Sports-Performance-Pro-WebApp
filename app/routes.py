@@ -258,6 +258,10 @@ def add_workout():
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
 
+
+# Add a new block
+@app.route('/addNewBlock', methods=['POST'])
+
 #Get athletes team wise for a particular coach
 @app.route('/getAthletes', methods=['GET'])
 def get_coach_with_teams_and_athletes():
@@ -842,7 +846,9 @@ def get_notes():
     if not coach_id or not athlete_id:
         return jsonify({"error": "Both coachId and athleteId are required"}), 400
 
-    notes = Notes.query.filter_by(coach_id=coach_id, athlete_id=athlete_id).all()
+    notes = Notes.query.filter_by(coach_id=coach_id, athlete_id=athlete_id)\
+                       .order_by(Notes.date_created.desc(), Notes.note_id.desc())\
+                       .all()
 
     if not notes:
         return jsonify({"message": "No notes found for the given coach and athlete"})
@@ -879,15 +885,15 @@ def coach_login():
             message="Wrong coach username password!"
             return message
 
-# @app.route('/coachLanding2')
-# def coach_landing2():
-#     # Retrieve the athlete_id from the session
-#     coach_id = session.get('coach_id')
+@app.route('/coachLanding2')
+def coach_landing2():
+    # Retrieve the athlete_id from the session
+    coach_id = session.get('coach_id')
     
-#     # Use athlete_id to query additional user-specific data from the database if needed
+    # Use athlete_id to query additional user-specific data from the database if needed
 
-#     # Render the landing page
-#     return render_template('coach-landing-page.html', coach_id=coach_id)
+    # Render the landing page
+    return render_template('coach-landing-page.html', coach_id=coach_id)
 
 #Route for athlete login
 @app.route('/athleteLogin', methods=['POST'])
@@ -1031,6 +1037,15 @@ def admin_landing():
     else:
         return redirect(url_for('admin_login')) 
 
+#Route for succesful athlete login and landing page
+@app.route('/adminExercises')
+def admin_exercises():
+    if 'username' in session:
+        return render_template("admin-define-exercises.html")
+    else:
+        return redirect(url_for('admin_login')) 
+
+
 #Route for admin athlete view
 @app.route('/adminAthlete')
 def admin_athlete():
@@ -1039,10 +1054,6 @@ def admin_athlete():
     else:
         return redirect(url_for('admin_login')) 
 
-#Route for admin exercise view
-@app.route('/adminExercises')
-def admin_exercises():
-    return render_template("admin-exercises.html")
 
 #Route for coach landing
 @app.route('/coachLanding')
@@ -2194,6 +2205,8 @@ def logout_admin():
     # Clear the session to log the user out
     session.pop('username', None)
     return redirect(url_for('admin_login'))
+
+
 # route for athlete Profile
 @app.route('/get_athlete_data', methods=['GET'])
 def get_athlete_data():
@@ -2277,3 +2290,10 @@ def get_coach_name_by_id():
             return jsonify({'error': 'Coach not found'}), 404
     else:
         return jsonify({'error': 'No coach ID provided'}), 400
+
+
+
+
+@app.route('/notes_athlete')
+def athleteNotes():
+    return render_template('athleteNotes.html')
