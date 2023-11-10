@@ -3,10 +3,17 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="../static/css/athlete-styles.css" />
-        <!-- Include Bootstrap CSS -->
 
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.9/main.min.css" rel="stylesheet"/> 
+        <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+        <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/js/select2.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.9/index.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css"/>
+        <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+
+        <!-- <link rel="stylesheet" href="team-workout-styles.css" /> -->
+
         <style>
             header {
                 background-color: #0077B5;
@@ -58,7 +65,7 @@
             .footer {
                 position: fixed;
                 bottom: 0;
-                left: 50%; /* Align the footer to the horizontal center of the viewport */
+                left: 50%;
                 transform: translateX(-50%); /* Center the footer horizontally */
                 width: 100%;
                 background-color: #fff;
@@ -69,9 +76,81 @@
                 box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
             }
 
+            footer {
+              position: relative;
+              bottom: 0;
+              width: 100%;
+              background-color: #fff;
+              color: #333;
+              text-align: center;
+              padding: 10px 0;
+            }
+
             .footer-content {
                 max-width: 1400px;
                 margin: 0 auto;
+            }
+
+            body {
+              font-family: Arial, sans-serif;
+              background-color: #f3f2ef;
+              margin: 0;
+              padding: 0;
+              color: #333;
+            }
+
+            .container {
+              margin: 0 auto;
+              padding: 20px;
+              background-color: #fff;
+              box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+              border-radius: 5px;
+              text-align: center;
+            }
+
+            .login-forms {
+              display: grid;
+              grid-template-columns: 0.4fr 0.6fr;
+              justify-content: stretch; 
+              /* align-items: center;  */
+              flex-wrap: wrap;
+            }
+
+            .login-container-1 {
+              background-color: #fff;
+              box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+              border-radius: 8px;
+              padding: 30px;
+              text-align: center;
+              width: max-width;
+              margin: 20px; /* Added margin */
+            }
+
+            .login-container-2 {
+              background-color: #fff;
+              box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+              border-radius: 8px;
+              padding: 30px;
+              /* text-align: center; */
+              /* width: max-width; */
+              width: 850px;
+              margin: 20px; /* Added margin */
+            }
+
+
+            button {
+              background-color: #0077b5;
+              color: #fff;
+              border: none;
+              padding: 10px 20px;
+              font-size: 16px;
+              border-radius: 5px;
+              cursor: pointer;
+              transition: background-color 0.3s ease-in-out;
+            }
+
+            button:hover {
+              background-color: #005599;
             }
 
             h1 {
@@ -85,21 +164,30 @@
                 font-size: 28px;
                 margin-top: 20px;
                 margin-bottom: 30px;
-                color: #fff; /* White color */
+                color: #fff; 
             }
 
             h2 {
                 font-size: 24px;
-                margin-bottom: 20px;
+                margin-bottom: 30px;
                 color: #0077B5;
             }
 
-            #athlete-calendar .card table {
+            #team-calendar .card table {
                 width: 100%;
                 height: 100%;
                 margin-top: 20px;
                 margin-bottom: 20px;
                 /* Other CSS styles for the table here, if needed */
+            }
+
+            /* Add vertical spacing to calendar dates */
+            td {
+              padding: 30px;
+            }
+
+            #calendar td {
+              height: 60px; 
             }
 
             .today-date {
@@ -120,29 +208,28 @@
             }
 
             .form-inline {
-                display: flex; /* Use flexbox to make the buttons appear horizontally */
-                justify-content: space-between; /* Add space between the buttons */
+                display: flex; 
+                justify-content: space-between; 
                 width: 100%;
             }
 
             #previous {
-                margin-right: 5px; /* Add a small margin to the right of the "Previous" button */
+                margin-right: 5px;
             }
 
             /* Style for labels and select boxes */
             .form-inline label,
             .form-inline select {
-                flex: 1; /* Let each item take up an equal amount of space within the container */
-                margin-right: 10px; /* Add a small margin to the right of each item for spacing */
+                flex: 1; 
+                margin-right: 10px; 
             }
 
-            /* Additional styling for select boxes if needed */
             .form-inline select {
-                width: auto; /* You can adjust the width as needed */
+                width: auto; 
             }
 
             #month, #year {
-                font-size: 20px; /* Adjust the font size to your preference */
+                font-size: 20px;
             }
 
             .lead {
@@ -152,7 +239,77 @@
             #calendar th,
             #calendar td {
                 padding-top: 10px;
-                padding-bottom: 10px; /* Adjust the margin value as needed */
+                padding-bottom: 10px; 
+            }
+
+            .team-list-node {
+            list-style: none;
+            cursor: pointer;
+            color: #fff;
+            font-weight: bold;
+            margin-left: -40px;
+            margin-bottom: 10px;
+            border: 1px solid #d6d9da;
+            padding: 20px;
+            background-color: #0077b5;
+            text-align: center;
+            }
+
+            #block-tabs-container {
+                overflow-x: auto; 
+                white-space: nowrap; 
+            }
+
+            #block-tabs-container button {
+                display: inline-block; 
+                padding: 10px 20px; 
+                margin-right: 10px; 
+                font-size: 18px; 
+            }
+
+            #exercise-tabs-container {
+                overflow-x: auto;  
+                white-space: nowrap; 
+            }
+
+            #exercise-tabs-container button {
+                display: inline-block; 
+                padding: 10px 20px; 
+                margin-right: 10px; 
+                font-size: 18px; 
+            }
+
+            #block-tabs button, button#add-block-button,
+            #exercise-tabs button {
+                font-size: 16px;
+                padding: 30px 20px; 
+                margin: 5px;
+            }
+
+            #block-tabs button {
+                width: 200px; 
+            }
+
+            #exercise-tabs button {
+                width: 180px; 
+            }
+
+            #exercise-details{
+                margin: 20px;
+            }
+
+            #team-name {
+                min-width: 160px;
+                padding: 30px 25px;
+                border-radius: 5px;
+                color: #fff; 
+                background-color: #ff9408;
+            }
+
+            .team-container {
+                display: flex;
+                align-items: center; 
+                margin-bottom: 20px;
             }
 
         </style>
@@ -164,12 +321,13 @@
 
     <nav>
         <ul>
-            <li><a href="coach-landing-page.html">Home</a></li>
-            <li><a href="workout-selection.html">Create Workouts</a></li>
-            <li><a href="test-selection.html">Create Tests</a></li>
-            <li><a href="#">Notes</a></li>
+            <li><a href="/coachLanding">Home</a></li>
+            <li><a href="/workoutSelection">Assign Workouts</a></li>
+            <li><a href="/testSelection">Assign Tests</a></li>
+            <li><a href="/defineExercises">Create Exercises</a></li>
+            <li><a href="/notesLanding">Notes</a></li>
             <li><a href="#">Notifications</a></li>
-            <li><a href="coach-profile.html">My Profile</a></li>
+            <li><a href="/coachProfile">My Profile</a></li>
         </ul>
     </nav>
 
@@ -178,13 +336,13 @@
         <!-- Container for login forms -->
         <div class="login-forms">
             <div class="login-container-1" style="margin-right: 20px">
-                <div class="container mt-7">
-                    <h1 class="text-center">Team Workout</h1>
+                <!-- <div class="container mt-7"> -->
+                    <h1 class="text-center" style="margin-bottom: 10px;">Team Workout</h1>
                     <div class="row">
-                        <div class="col-md-7">
+                        <!-- <div class="col-md-7"> -->
                             <!-- Left side div for the calendar -->
-                            <!-- <div id="athlete-calendar"></div> -->
-                            <div class="container col-sm-4 col-md-7 col-lg-4 mt-5 d-flex justify-content-center" id="athlete-calendar">
+                            <!-- <div id="team-calendar"></div> -->
+                            <div class="container col-sm-4 col-md-7 col-lg-4 mt-5 d-flex justify-content-center" style="margin-top: 15px;" id="team-calendar">
                                 <div class="card">
                                     <h3 class="card-header" id="monthAndYear"></h3>
                                     <table class="table table-bordered table-responsive-sm" id="calendar">
@@ -270,171 +428,21 @@
                                     </form>
                                 </div>
                             </div>
-                        </div>
+                        <!-- </div> -->
                     <div class="col-md-6">
                 <!-- Right side div (vacant for now) -->
                 </div>
-            </div>
+            <!-- </div> -->
           </div>
         </div>
 
         <div class="login-container-2">
-            <h1 class="text-center">Lets get onto some training sessions!</h1>
-            <div class="search-bar">
-                <input type="text" id="team-search" placeholder="Search for a team">
-            </div>
-
-      
-            <ul id="treeview">
-                <div class="team-train-sessions">
-                <li class="team-nodes" visibility=0>
-              Team 1
-              <ul>
-                <li class="block-nodes hidden" visibility=0>
-                      Block 1
-                      <ul>
-                        <li class="exc_nodes hidden" visibility=0>Exercise 1</li>
-                        <li class="exc_nodes hidden" visibility=0>Exercise 2</li>
-                      </ul>
-                    </li>
-                </li>
-                <li class="block-nodes hidden" visibility=0>
-                  Block 2
-                  <ul>
-                    <li class="exc_nodes hidden" visibility=0>Exercise 3</li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-            <li class="team-nodes" visibility=0>
-              Team 2
-              <ul>
-                <li class="block-nodes hidden" visibility=0>
-                  Block 3
-                  <ul>
-                      <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-            <li class="team-nodes" visibility=0>
-                Team 3
-                <ul>
-                  <li class="block-nodes hidden" visibility=0>
-                    Block 3
-                    <ul>
-                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li class="team-nodes" visibility=0>
-                Team 4
-                <ul>
-                  <li class="block-nodes hidden" visibility=0>
-                    Block 3
-                    <ul>
-                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li class="team-nodes" visibility=0>
-                Team 5
-                <ul>
-                  <li class="block-nodes hidden" visibility=0>
-                    Block 3
-                    <ul>
-                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li class="team-nodes" visibility=0>
-                Team 6
-                <ul>
-                  <li class="block-nodes hidden" visibility=0>
-                    Block 3
-                    <ul>
-                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li class="team-nodes" visibility=0>
-                Team 7
-                <ul>
-                  <li class="block-nodes hidden" visibility=0>
-                    Block 3
-                    <ul>
-                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li class="team-nodes" visibility=0>
-                Team 8
-                <ul>
-                  <li class="block-nodes hidden" visibility=0>
-                    Block 3
-                    <ul>
-                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li class="team-nodes" visibility=0>
-                Team 9
-                <ul>
-                  <li class="block-nodes hidden" visibility=0>
-                    Block 3
-                    <ul>
-                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li class="team-nodes" visibility=0>
-                Team 10
-                <ul>
-                  <li class="block-nodes hidden" visibility=0>
-                    Block 3
-                    <ul>
-                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li class="team-nodes" visibility=0>
-                Team 11
-                <ul>
-                  <li class="block-nodes hidden" visibility=0>
-                    Block 3
-                    <ul>
-                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li class="team-nodes" visibility=0>
-                Team 12
-                <ul>
-                  <li class="block-nodes hidden" visibility=0>
-                    Block 1
-                    <ul>
-                        <li class="exc_nodes hidden" visibility=0>Exercise 4</li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-            </div>
-        <br>
-        
-      </div>
+               
+        </div>
 
       <div style="margin-top: 100px"></div>
-    </div>   
-
+    </div> 
+    
     <footer>
         <div class="footer">
             2023 Sports Performance Pro
@@ -442,7 +450,11 @@
     </footer>
 
     <!-- Your custom JavaScript code -->
-    <script src="../static/js/calendar.js"></script>
-    <script src="../static/js/team-workout.js" defer></script>
+    <script src="../static/js/calendar.js"></script> 
+
+    <script>
+        
+    </script>
+    
 </body>
 </html>

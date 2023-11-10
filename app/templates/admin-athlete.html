@@ -1,0 +1,557 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            /* background-color: #f3f2ef; */
+            margin: 0;
+            padding: 0;
+            /* color: #333; */
+        }
+
+        table.dataTable {
+            width: 99%; /* Set the table width to 80% */
+            margin: 0 auto; /* Center the table horizontally */
+        }
+
+
+
+        header {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav li {
+            margin: 0 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s ease-in-out;
+            padding: 15px 25px;
+            border-radius: 15px; /* Add rounded corners to the tab */
+        }
+
+        nav a.current {
+            color: #fff;
+            background-color: #005599;
+            font-weight: bold;
+            border-radius: 15px; /* Apply rounded corners to the selected tab */
+        }
+
+        nav a:hover, nav a:focus {
+            color: #005599;
+            background-color: #fff;
+            border-radius: 15px; /* Apply the same rounded corners on hover/focus */
+        }
+
+        .container {
+            width: 100%; 
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-bottom: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 60px); 
+            margin-bottom: 60px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 50%; /* Align the footer to the horizontal center of the viewport */
+            transform: translateX(-50%); /* Center the footer horizontally */
+            width: 100%;
+            background-color: #fff;
+            color: #333;
+            text-align: center;
+            padding: 10px 0;
+            z-index: 999;
+            box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #0077B5;
+        }
+
+        .title {
+            font-size: 28px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #fff; /* White color */
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #0077B5;
+        }
+
+        .todays-date {
+            text-align: center;
+        }
+
+        table.dataTable thead th, table.dataTable tbody td {
+            text-align: left;
+        }
+
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            color: #666;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: #333;
+        }
+
+        button {
+            background-color: #0077B5;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #005599;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: #fff;
+            color: #333;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        /* Added a style for the "Create one" link */
+        .create-account-link {
+            font-size: 16px;
+            color: #0077B5;
+            text-decoration: none;
+            margin-top: 30px; /* Added more margin-top */
+            display: block; /* Display as a block element */
+        }
+
+        .create-account-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Error message styling */
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #0077B5;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Styling for buttons */
+        button.delete, button.update {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-right: 5px;
+        }
+
+        button.update {
+            background-color: #4CAF50;
+        }
+
+        .ui-dialog {
+        width: auto;
+        padding: 20px;
+        }
+
+        /* Style for form labels */
+        .ui-dialog label {
+            font-weight: bold;
+            display: inline-block;
+            width: 100px; /* Adjust the width as needed */
+            margin-right: 10px; /* Add spacing between label and input */
+        }
+
+        /* Style for input text fields */
+        .ui-dialog input[type="text"],
+        .ui-dialog select {
+            width: 200px; /* Adjust the width as needed */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Style for validation messages */
+        .validation-message {
+            color: red;
+            margin-top: 5px;
+        }
+
+        /* Style for buttons in dialog boxes */
+        .ui-dialog-buttonpane {
+            text-align: center;
+            padding-top: 10px;
+        }
+
+        .ui-dialog-buttonset button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .ui-dialog-buttonset button:hover {
+            background-color: #005599;
+        }
+
+        /* Style for the success message dialog */
+        #successDialog {
+            text-align: center;
+        }
+        .ui-dialog .input-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        }
+        /* ... */
+    </style>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body>
+    <header>
+        <h1 class="title">Sports Performance Pro - Welcome Admin!</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/adminLanding" >Coaches</a></li>
+            <li><a href="/adminAthlete" class="current">Athletes</a></li>
+            <li><a href="/adminExercises">Exercises</a></li>
+            <li><a href="#">Notes</a></li>
+            <li><a href="#">Notifications</a></li>
+            <li><a href="coach-profile.html">My Profile</a></li>
+            <li><a href="/logoutAdmin">Logout</a></li>
+        </ul>
+    </nav>
+    <table id="athleteTable" class="display">
+        <h2 style="color: rgb(32, 145, 225);">Athletes</h2>
+        <input type="text" id="athleteSearchInput" placeholder="Search for an athlete">
+        <thead>
+            <tr>
+                <th>Athlete Name</th>
+                <th>Phone</th>  
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Sports</th>
+                <th>Institute</th>
+                <th>Teams</th>
+                <th>Email</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Table rows will be inserted here dynamically -->
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="updateAthleteModal" tabindex="-1" role="dialog" aria-labelledby="updateAthleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateAthleteModalLabel">Update Athlete Information</h5>
+                    <button type="button" id="closeModalButton" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateAthleteForm">
+                        <div class="form-group">
+                            <label for="phoneInput">Phone:</label>
+                            <input type="text" class="form-control" id="phoneInput" name="phone">
+                        </div>
+                            <input type="text" class="form-control" id="emailInput" name="email" style="display: none;">
+                        <div class="form-group">
+                            <label for="sportsInput">Sports:</label>
+                            <select multiple class="form-control" id="sportsInput" name="sports">
+                                <!-- Add options dynamically using JavaScript or load from the server -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="instituteInput">Institute:</label>
+                            <select class="form-control" id="instituteInput" name="institute">
+                                <!-- Add options dynamically using JavaScript or load from the server -->
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="updateAthleteButton" >Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+    <script>
+        $('#closeModalButton').on('click', function() {
+        $('#updateAthleteModal').modal('hide');
+    });
+function populateAthleteTable() {
+    $.get('/getAthletesForAdmin', function (data) {
+        if (data) {
+            const athleteTableBody = $('#athleteTable tbody');
+
+            // Clear existing table rows
+            athleteTableBody.empty();
+
+            data.athletes.forEach(function (athlete) {
+                const teamNames = athlete.teams.join(', ');
+
+                const newRow = `
+                    <tr>
+                        <td>${athlete.name}</td>
+                        <td>${athlete.phone}</td>
+                        <td>${athlete.age}</td>
+                        <td>${athlete.gender}</td>
+                        <td>${athlete.sports}</td>
+                        <td>${athlete.institute}</td>
+                        <td>${teamNames}</td>
+                        <td>${athlete.email}</td>
+                        <td>
+                            <button class="delete" data-coach-id="${athlete.email}">Delete</button>
+                            <button class="update" data-coach-id="${athlete.email}">Update</button>
+                        </td>
+                    </tr>
+                `;
+
+                athleteTableBody.append(newRow);
+
+                // Add a click event for the update button within the context of this athlete
+                const updateButton = athleteTableBody.find('.update').last();
+                updateButton.click(function () {
+                    populateUpdateAthleteFields(athlete);
+                });
+                
+            });
+            $('.delete').click(function () {
+                        console.log("Hi");
+                        const athEmail = $(this).data('coach-id');
+                        deleteAthlete(athEmail);
+                    });
+            $('#updateAthleteButton').click(function () {
+                    updateAthletes();
+                });
+            
+        } else {
+            // Handle error or no data
+            console.log('No athlete data found');
+        }
+    });
+}
+
+
+function populateUpdateAthleteFields(athlete){
+    // Set the phone value in the input field
+    $('#phoneInput').val(athlete.phone);
+    $('#emailInput').val(athlete.email);
+    $('#updateAthleteModal').modal('show');
+    // Split selectedSports and selectedInstitutes (comma-separated values)
+    const selectedSports = athlete.sports.split(', ');
+    const selectedInstitutes = athlete.institute.split(', ');
+
+    // Fetch all sports and institutions from the routes
+    $.get('/getAllSports', function (sportsData) {
+        $.get('/getAllInstitutes', function (institutesData) {
+            // Populate the Sports and Institutes dropdowns
+            const sportsInput = $('#sportsInput');
+            const instituteInput = $('#instituteInput');
+            sportsInput.empty();
+            instituteInput.empty();
+            const selectedSports = athlete.sports.split(', ');
+            const selectedOptions = [];
+            sportsData.sports.forEach(sport => {
+    // Create the option element and append it to the select element
+    const option = $('<option></option>')
+        .attr('value', sport)
+        .text(sport);
+
+    sportsInput.append(option);
+});
+sportsInput.val(selectedSports);
+
+
+            institutesData.institutes.forEach(institute => {
+                const selected = selectedInstitutes.includes(institute) ? 'selected' : '';
+                instituteInput.append(`<option value="${institute}" ${selected}>${institute}</option>`);
+            });
+        });
+    });
+}
+    populateAthleteTable();
+    function updateAthletes(){
+    // Get the updated phone, selected sports, and selected institutes
+    const updatedPhone = $('#phoneInput').val();
+    const athEmail = $('#emailInput').val();
+    const updatedSports = $('#sportsInput').val();
+    const updatedInstitutes = $('#instituteInput').val();
+
+    // Create an object to send in the update request
+    const updateData = {
+        email:athEmail,
+        phone: updatedPhone,
+        sports: updatedSports.join(', '),
+        institute: updatedInstitutes
+    };
+    const jsonData = JSON.stringify(updateData);
+    // Make an AJAX POST request to update the athlete
+    $.ajax({
+        type: 'POST',
+                url: '/updateAthlete', // Replace with the actual server route
+                data: jsonData,
+                contentType: 'application/json', // Set the content type to JSON
+                dataType: 'json', // Expect JSON response from the server
+        success: function (data) {
+            // Handle the response, e.g., close the modal
+            $('#updateAthleteModal').modal('hide');
+            location.reload();
+        },
+        error: function (error) {
+            // Handle the error
+            console.log(error);
+        }
+    });
+    }
+
+    function deleteAthlete(athleteEmail) {
+            $.ajax({
+                url: `/deleteAthlete?email=${athleteEmail}`,
+                type: 'DELETE',
+                success: function () {
+                    // Remove the row from the table
+                    $(`button.delete[data-coach-id="${athleteEmail}"]`).closest('tr').remove();
+                },
+                error: function () {
+                    console.log('Error deleting athlete');
+                }
+            });
+        }
+
+    const searchInput = document.getElementById('athleteSearchInput');
+    const athleteTable = document.getElementById('athleteTable');
+
+    // Add an event listener to the search input for real-time filtering
+    searchInput.addEventListener('input', function () {
+    const searchText = searchInput.value.toLowerCase();
+    const athleteRows = athleteTable.querySelectorAll('tbody tr');
+
+    athleteRows.forEach(function (row) {
+        const athleteName = row.querySelector('td:nth-child(1)').textContent.toLowerCase(); // Adjust the column index as needed
+
+        if (athleteName.includes(searchText)) {
+            row.style.display = ''; // Show the row if the name matches the search text
+        } else {
+            row.style.display = 'none'; // Hide the row if it doesn't match
+        }
+    });
+});
+    </script>   
+    
+</body>
+</html>
+
+
+
+

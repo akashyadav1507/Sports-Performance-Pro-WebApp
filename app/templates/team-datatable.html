@@ -192,11 +192,11 @@
         <ul>
             <li><a href="/coachLanding">Home</a></li>
             <li><a href="/workoutSelection">Create Workouts</a></li>
-            <li><a href="test-selection.html">Create Tests</a></li>
-            <li><a href="#">Create Exercises</a></li>
-            <li><a href="#">Notes</a></li>
+            <li><a href="/testSelection">Create Tests</a></li>
+            <li><a href="/defineExercises">Create Exercises</a></li>
+            <li><a href="/notesLanding">Notes</a></li>
             <li><a href="#">Notifications</a></li>
-            <li><a href="coach-profile.html">My Profile</a></li>
+            <li><a href="/coachProfile">My Profile</a></li>
         </ul>
     </nav>
 
@@ -269,7 +269,7 @@
                     var teamId = data.team_id; 
                     if (teamId) {
                         // Redirect to the next page (athleteWorkout) with athleteId and coachId as query parameters
-                        window.location.href = `/teamWorkout?athleteId=${teamId}&coachId=${coachId}`;
+                        window.location.href = `/coachTeamWorkout?teamId=${teamId}&coachId=${coachId}`;
                     }
                 } else {
                     // No athlete selected, show a popup

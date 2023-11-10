@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        
+        body {
+            font-family: Arial, sans-serif;
+            /* background-color: #f3f2ef; */
+            margin: 0;
+            padding: 0;
+            /* color: #333; */
+        }
+
+        table.dataTable {
+            width: 99%; /* Set the table width to 80% */
+            margin: 0 auto; /* Center the table horizontally */
+        }
+
+
+
+        header {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav li {
+            margin: 0 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s ease-in-out;
+            padding: 15px 25px;
+            border-radius: 15px; /* Add rounded corners to the tab */
+        }
+
+        nav a.current {
+            color: #fff;
+            background-color: #005599;
+            font-weight: bold;
+            border-radius: 15px; /* Apply rounded corners to the selected tab */
+        }
+
+        nav a:hover, nav a:focus {
+            color: #005599;
+            background-color: #fff;
+            border-radius: 15px; /* Apply the same rounded corners on hover/focus */
+        }
+
+        .container {
+            width: 100%; 
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-bottom: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 60px); 
+            margin-bottom: 60px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 50%; /* Align the footer to the horizontal center of the viewport */
+            transform: translateX(-50%); /* Center the footer horizontally */
+            width: 100%;
+            background-color: #fff;
+            color: #333;
+            text-align: center;
+            padding: 10px 0;
+            z-index: 999;
+            box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #0077B5;
+        }
+
+        .title {
+            font-size: 28px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #fff; /* White color */
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #0077B5;
+        }
+
+        .todays-date {
+            text-align: center;
+        }
+
+        table.dataTable thead th, table.dataTable tbody td {
+            text-align: left;
+        }
+
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            color: #666;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: #333;
+        }
+
+        button {
+            background-color: #0077B5;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #005599;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: #fff;
+            color: #333;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        /* Added a style for the "Create one" link */
+        .create-account-link {
+            font-size: 16px;
+            color: #0077B5;
+            text-decoration: none;
+            margin-top: 30px; /* Added more margin-top */
+            display: block; /* Display as a block element */
+        }
+
+        .create-account-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Error message styling */
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #0077B5;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Styling for buttons */
+        button.delete, button.update {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-right: 5px;
+        }
+
+        button.update {
+            background-color: #4CAF50;
+        }
+
+        .ui-dialog {
+        width: auto;
+        padding: 20px;
+        }
+
+        /* Style for form labels */
+        .ui-dialog label {
+            font-weight: bold;
+            display: inline-block;
+            width: 100px; /* Adjust the width as needed */
+            margin-right: 10px; /* Add spacing between label and input */
+        }
+
+        /* Style for input text fields */
+        .ui-dialog input[type="text"],
+        .ui-dialog select {
+            width: 200px; /* Adjust the width as needed */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Style for validation messages */
+        .validation-message {
+            color: red;
+            margin-top: 5px;
+        }
+
+        /* Style for buttons in dialog boxes */
+        .ui-dialog-buttonpane {
+            text-align: center;
+            padding-top: 10px;
+        }
+
+        .ui-dialog-buttonset button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .ui-dialog-buttonset button:hover {
+            background-color: #005599;
+        }
+
+        /* Style for the success message dialog */
+        #successDialog {
+            text-align: center;
+        }
+        .ui-dialog .input-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        }
+    
+
+
+
+    </style>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body>
+    <header>
+        <h1 class="title">Sports Performance Pro - Welcome Coach TJ!</h1>
+    </header>
+        
+
+    <nav>
+        <ul>
+            <li><a href="/adminLanding" >Coaches</a></li>
+            <li><a href="/adminAthlete">Athletes</a></li>
+            <li><a href="/adminExercises" class="current">Exercises</a></li>
+            <li><a href="#">Notes</a></li>
+            <li><a href="#">Notifications</a></li>
+            <li><a href="coach-profile.html">My Profile</a></li>
+        </ul>
+    </nav>
+<table id="exerciseTable" class="display">
+    <h2 style="color: rgb(32, 145, 225);">Exercises</h2>
+    <div id="buttonContainer" style="text-align: right; margin-bottom: 20px;">
+        <button id="addRow" style="margin-right: 10px;">Add Row</button>
+        <button id="addCategoryButton" style="margin-right: 10px;">Add Category</button>
+        <button id="addTypeButton">Add Sub-Category</button>
+    </div>
+    
+    <thead>
+        <tr>
+            <th>Exercise</th>
+            <th>Category</th>
+            <th>Sub-Category</th>
+            <th>Note</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        <tr>
+            <td>Running</td>
+            <td>Cardio</td>
+            <td>Endurance</td>
+            <td>Slow pace for beginners</td>
+            <td>
+                <button class="delete">Delete</button>
+                <button class="update">Update</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Bench Press</td>
+            <td>Strength Training</td>
+            <td>Weightlifting</td>
+            <td>3 sets of 10 reps</td>
+            <td>
+                <button class="delete">Delete</button>
+                <button class="update">Update</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Swimming</td>
+            <td>Cardio</td>
+            <td>Endurance</td>
+            <td>Freestyle and butterfly</td>
+            <td>
+                <button class="delete">Delete</button>
+                <button class="update">Update</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Squats</td>
+            <td>Strength Training</td>
+            <td>Weightlifting</td>
+            <td>4 sets of 8 reps</td>
+            <td>
+                <button class="delete">Delete</button>
+                <button class="update">Update</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Push-Ups</td>
+            <td>Strength Training</td>
+            <td>Endurance</td>
+            <td>3 sets of 15 reps</td>
+            <td>
+                <button class="delete">Delete</button>
+                <button class="update">Update</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Yoga</td>
+            <td>Strength Training</td>
+            <td>Endurance</td>
+            <td>Relaxation and meditation</td>
+            <td>
+                <button class="delete">Delete</button>
+                <button class="update">Update</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Deadlift</td>
+            <td>Strength Training</td>
+            <td>Weightlifting</td>
+            <td>5 sets of 5 reps</td>
+            <td>
+                <button class="delete">Delete</button>
+                <button class="update">Update</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Pilates</td>
+            <td>Cardio</td>
+            <td>Endurance</td>
+            <td>Slow pace for beginners</td>
+            <td>
+                <button class="delete">Delete</button>
+                <button class="update">Update</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Rowing</td>
+            <td>Strength Training</td>
+            <td>Weightlifting</td>
+            <td>3 sets of 12 reps</td>
+            <td>
+                <button class="delete">Delete</button>
+                <button class="update">Update</button>
+            </td>
+        </tr>
+        
+        
+        
+        <!-- Add more rows as needed -->
+    </tbody>
+</table>
+
+<div id="updateDialog" title="Update Exercise" style="display: none;">
+    <form id="updateForm">
+        <label for="updateExercise" style="color: rgb(56, 111, 194);">Exercise<span style="color: red;">*</span></label>
+        <input type="text" id="updateExercise" placeholder="Exercise">
+
+        <div id="exerciseValidation" style="color: red;"></div>
+        
+        <label for="updateCategory" style="color: rgb(56, 111, 194);">Category<span style="color: red;">*</span></label>
+        <select id="updateCategory">
+            <option value="">Select Category</option>
+            <option value="Cardio">Cardio</option>
+            <option value="Strength Training">Strength Training</option>
+            <!-- Add more categories as needed -->
+        </select>
+        <div id="categoryValidation" style="color: red;"></div>
+        
+        <label for="updateType" style="color: rgb(56, 111, 194);">Sub-Category<span style="color: red;">*</span></label>
+        <select id="updateType">
+            <option value="">Select Sub-Category</option>
+            <option value="Endurance">Endurance</option>
+            <option value="Weightlifting">Weightlifting</option>
+            <!-- Add more types as needed -->
+        </select>
+        <div id="typeValidation" style="color: red;"></div>
+        
+        <label for="updateNote" style="color: rgb(56, 111, 194);">Note</label>
+        <input type="text" id="updateNote" placeholder="Note">
+        <div id="noteValidation" style="color: red;"></div>
+        
+        <div id="formValidation" style="color: red;"></div>
+    </form>
+</div>
+
+<div id="addDialog" title="Add Exercise" style="display: none;">
+    <form id="addForm">
+        <label for="addExercise">Exercise<span style="color: red;">*</span></label>
+        <input type="text" id="addExercise" placeholder="Exercise">
+        <div id="addExerciseValidation" style="color: red;"></div>
+        
+        <label for="addCategory">Category<span style="color: red;">*</span></label>
+        <select id="addCategory">
+            <option value="">Select Category</option>
+            <option value="Cardio">Cardio</option>
+            <option value="Strength Training">Strength Training</option>
+            <!-- Add more categories as needed -->
+        </select>
+        <div id="addCategoryValidation" style="color: red;"></div>
+        
+        <label for="addType">Type<span style="color: red;">*</span></label>
+        <select id="addType">
+            <option value="">Select Sub-Category</option>
+            <option value="Endurance">Endurance</option>
+            <option value="Weightlifting">Weightlifting</option>
+            <!-- Add more types as needed -->
+        </select>
+        <div id="addTypeValidation" style="color: red;"></div>
+        
+        <label for="addNote">Note</label>
+        <input type="text" id="addNote" placeholder="Note">
+        
+    </form>
+</div>
+
+<div id="addCategoryDialog" title="Add Category" style="display: none;">
+    <form id="addCategoryForm">
+        <label for="newCategory">New Category<span style="color: red;">*</span></label>
+        <input type="text" id="newCategory" placeholder="New Category">
+        <div id="newCategoryValidation" style="color: red;"></div>
+        <div id="categoryExistsValidation" style="color: red;"></div>
+    </form>
+</div>
+
+<div id="addTypeDialog" title="Add Sub-Category" style="display: none;">
+    <form id="addTypeForm">
+        <label for="newType">New Sub-Category<span style="color: red;">*</span></label>
+        <input type="text" id="newType" placeholder="New Sub-Category">
+        <div id="newTypeValidation" style="color: red;"></div>
+        <div id="typeExistsValidation" style="color: red;"></div>
+    </form>
+</div>
+
+<div id="successDialog" title="Success" style="display: none;">
+    <p id="successMessage"></p>
+</div>
+
+<script>
+    $(document).ready(function() {
+        var table = $('#exerciseTable').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "pageLength": 34
+        });
+
+        $('#exerciseTable tbody').on('click', 'button.delete', function () {
+            var row = table.row($(this).parents('tr'));
+            
+
+            if (confirm("Are you sure you want to delete this exercise?")) {
+                // User clicked "OK" in the confirmation dialog, proceed with deletion
+                table.row(row).remove().draw();
+            } else {
+                // User clicked "Cancel" in the confirmation dialog, do nothing
+            }
+        });
+
+        $(document).ready(function() {
+            var exerciseInput = $('#addExercise');
+            var exerciseMessage = $('<div id="exerciseExistsMessage" style="color: red;"></div>');
+            exerciseInput.after(exerciseMessage);
+
+            // Add a keyup event listener to the exercise input field
+            exerciseInput.on('keyup', function() {
+                var exercise = exerciseInput.val().trim(); // Get the exercise input value
+                var exerciseExists = false;
+                var exerciseLocation = "";
+
+                // Loop through existing exercises and check if the input exercise matches
+                $('#exerciseTable tbody tr').each(function(index, row) {
+                    var existingExercise = $(row).find('td:first-child').text().trim();
+                    if (exercise.toLowerCase() === existingExercise.toLowerCase()) {
+                        exerciseExists = true;
+                        exerciseLocation = "Row " + (index + 1) + " on Page " + Math.floor(index / 34 + 1);
+                        return false; // Exit the loop
+                    }
+                });
+
+                if (exerciseExists) {
+                    exerciseMessage.text("This exercise already exists in " + exerciseLocation);
+                } else {
+                    exerciseMessage.text("");
+                }
+            });
+        });
+
+
+
+
+
+        $('#exerciseTable tbody').on('click', 'button.update', function () {
+            var row = table.row($(this).parents('tr'));
+            var data = row.data();
+            var originalExercise = data[0];
+            var originalCategory = data[1];
+            var originalType = data[2];
+            var originalNote = data[3];
+
+            $('#updateExercise').val(data[0]);
+            $('#updateCategory').val(data[1]);
+            $('#updateType').val(data[2]);
+            $('#updateNote').val(data[3]);
+
+            $("#updateDialog").dialog({
+                modal: true,
+                buttons: {
+                    "Update": function() {
+                        var exercise = $('#updateExercise').val();
+                        var category = $('#updateCategory').val();
+                        var type = $('#updateType').val();
+                        var note = $('#updateNote').val();
+                        var validationMessage = '';
+
+                        if (!exercise) {
+                            $('#exerciseValidation').text('Exercise is required');
+                        } else {
+                            $('#exerciseValidation').text('');
+                        }
+
+                        if (!category) {
+                            $('#categoryValidation').text('Category is required');
+                        } else {
+                            $('#categoryValidation').text('');
+                        }
+
+                        if (!type) {
+                            $('#typeValidation').text('Type is required');
+                        } else {
+                            $('#typeValidation').text('');
+                        }
+
+
+                        if (!exercise || !category || !type || !note) {
+                            return;
+                        }
+
+                        // Check if the user made any changes to the data
+                        if (
+                            exercise.toLowerCase() === originalExercise.toLowerCase() &&
+                            category.toLowerCase() === originalCategory.toLowerCase() &&
+                            type.toLowerCase() === originalType.toLowerCase() &&
+                            note.toLowerCase() === originalNote.toLowerCase()
+                        ) {
+                            // No changes were made, so we can just close the dialog
+                            $(this).dialog("close");
+                            return;
+                        }
+
+                        // Check if a row with the same data already exists
+                        var duplicateExists = false;
+                        table.rows().every(function(index, element) {
+                            var rowData = this.data();
+                            if (
+                                rowData[0].toLowerCase() === exercise.toLowerCase() &&
+                                rowData[1].toLowerCase() === category.toLowerCase() &&
+                                rowData[2].toLowerCase() === type.toLowerCase() &&
+                                rowData[3].toLowerCase() === note.toLowerCase()
+                            ) {
+                                duplicateExists = true;
+                                return false;
+                            }
+                        });
+
+                        if (duplicateExists) {
+                            alert("Row with the same data already exists!");
+                            return;
+                        }
+
+                        data[0] = exercise;
+                        data[1] = category;
+                        data[2] = type;
+                        data[3] = note;
+                        row.data(data).draw();
+                        $(this).dialog("close");
+                    },
+                    "Cancel": function() {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        });
+
+        $('#addRow').click(function () {
+            // Reset the input fields in the add dialog
+            $('#addExercise').val('');
+            $('#addCategory').val('');
+            $('#addType').val('');
+            $('#addNote').val('');
+
+            $("#addDialog").dialog({
+                modal: true,
+                buttons: {
+                    "Add": function() {
+                        var exercise = $('#addExercise').val();
+                        var category = $('#addCategory').val();
+                        var type = $('#addType').val();
+                        var note = $('#addNote').val();
+                        var validationMessage = '';
+
+                        if (!exercise) {
+                            $('#addExerciseValidation').text('Exercise is required');
+                        } else {
+                            $('#addExerciseValidation').text('');
+                        }
+
+                        if (!category) {
+                            $('#addCategoryValidation').text('Category is required');
+                        } else {
+                            $('#addCategoryValidation').text('');
+                        }
+
+                        if (!type) {
+                            $('#addTypeValidation').text('Type is required');
+                        } else {
+                            $('#addTypeValidation').text('');
+                        }
+
+                        if (!exercise || !category || !type) {
+                            return;
+                        }
+                        
+                        // Check if a row with the same data already exists
+                        var duplicateExists = false;
+                        table.rows().every(function(index, element) {
+                            var rowData = this.data();
+                            if (
+                                rowData[0].toLowerCase() === exercise.toLowerCase() &&
+                                rowData[1].toLowerCase() === category.toLowerCase() &&
+                                rowData[2].toLowerCase() === type.toLowerCase() &&
+                                rowData[3].toLowerCase() === note.toLowerCase()
+                            ) {
+                                duplicateExists = true;
+                                return false;
+                            }
+                        });
+
+                        if (duplicateExists) {
+                            alert("Row with the same data already exists!");
+                            return;
+                        }
+
+                        table.row.add([exercise, category, type, note, '<button class="delete">Delete</button><button class="update">Update</button>']).draw();
+
+                        // Show the success message
+                        $("#successMessage").text("New exercise added in " + category + " category");
+                        $("#successDialog").dialog({
+                            modal: true,
+                            buttons: {
+                                "OK": function() {
+                                    $(this).dialog("close");
+                                }
+                            }
+                        });
+
+                        $(this).dialog("close");
+                    },
+                    "Cancel": function() {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        });
+
+        $('#addCategoryButton').click(function () {
+            // Reset the input field in the add category dialog
+            $('#newCategory').val('');
+
+            $("#addCategoryDialog").dialog({
+                modal: true,
+                buttons: {
+                    "Add": function() {
+                        var newCategory = $('#newCategory').val();
+
+                        if (!newCategory) {
+                            $('#newCategoryValidation').text('Category is required');
+                        } else {
+                            $('#newCategoryValidation').text('');
+                            if (categoryExists(newCategory)) {
+                                $('#categoryExistsValidation').text('Category already exists');
+                                return;
+                            } else {
+                                $('#categoryExistsValidation').text('');
+                            }
+                            // Add the new category to both the "Add Row" and "Update" dialogs
+                            $('#addCategory, #updateCategory').append($('<option>', {
+                                value: newCategory,
+                                text: newCategory
+                            }));
+
+                            // Show the success message
+                            $("#successMessage").text(newCategory + " category is added");
+                            $("#successDialog").dialog({
+                                modal: true,
+                                buttons: {
+                                    "OK": function() {
+                                        $(this).dialog("close");
+                                    }
+                                }
+                            });
+
+                            $(this).dialog("close");
+                        }
+                    },
+                    "Cancel": function() {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        });
+
+        $('#addTypeButton').click(function () {
+            // Reset the input field in the add type dialog
+            $('#newType').val('');
+
+            $("#addTypeDialog").dialog({
+                modal: true,
+                buttons: {
+                    "Add": function() {
+                        var newType = $('#newType').val();
+
+                        if (!newType) {
+                            $('#newTypeValidation').text('Type is required');
+                        } else {
+                            $('#newTypeValidation').text('');
+                            if (typeExists(newType)) {
+                                $('#typeExistsValidation').text('Type already exists');
+                                return;
+                            } else {
+                                $('#typeExistsValidation').text('');
+                            }
+                            // Add the new type to both the "Add Row" and "Update" dialogs
+                            $('#addType, #updateType').append($('<option>', {
+                                value: newType,
+                                text: newType
+                            }));
+
+                            // Show the success message
+                            $("#successMessage").text(newType + " sub-category is added");
+                            $("#successDialog").dialog({
+                                modal: true,
+                                buttons: {
+                                    "OK": function() {
+                                        $(this).dialog("close");
+                                    }
+                                }
+                            });
+
+                            $(this).dialog("close");
+                        }
+                    },
+                    "Cancel": function() {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        });
+
+
+
+
+        
+
+        function categoryExists(newCategory) {
+            return $('#addCategory option').filter(function() {
+                return this.value.toLowerCase() === newCategory.toLowerCase();
+            }).length > 0;
+        }
+
+        function typeExists(newType) {
+            return $('#addType option').filter(function() {
+                return this.value.toLowerCase() === newType.toLowerCase(); 
+            }).length > 0;
+        }
+    });
+</script>
+</body>
+</html>

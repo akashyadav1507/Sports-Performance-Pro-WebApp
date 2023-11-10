@@ -109,10 +109,9 @@
             }
 
             .login-forms {
-              display: grid;
+              display: flex;
               grid-template-columns: 0.4fr 0.6fr;
               justify-content: stretch; 
-              /* align-items: center;  */
               flex-wrap: wrap;
             }
 
@@ -131,10 +130,9 @@
               box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
               border-radius: 8px;
               padding: 30px;
-              /* text-align: center; */
-              /* width: max-width; */
-              width: 850px;
-              margin: 20px; /* Added margin */
+              width: max-width;
+              flex-grow: 1;
+              margin: 20px; 
             }
 
 
@@ -303,16 +301,15 @@
                 padding: 30px 25px;
                 border-radius: 5px;
                 color: #fff; 
+                font-size: 18px;
                 background-color: #ff9408;
             }
 
-            .athlete-container {
-                display: flex;
-                align-items: center; 
-                margin-bottom: 20px;
+            #athlete-name {
+                margin: 20px 0px;
             }
 
-            ul#athlete-list,
+            #athlete-list,
             h1,
             span#athlete-name,
             button#selectAthleteButton {
@@ -381,6 +378,10 @@
                 background-color: #0056b3;
             }
 
+            #add-exercise-button {
+                display: none;
+            }
+
         </style>
     </head>
     <body>
@@ -393,8 +394,8 @@
             <li><a href="/coachLanding">Home</a></li>
             <li><a href="/workoutSelection">Assign Workouts</a></li>
             <li><a href="/testSelection">Assign Tests</a></li>
-            <li><a href="#">Create Exercises</a></li>
-            <li><a href="/coachNotes">Notes</a></li>
+            <li><a href="/defineExercises">Create Exercises</a></li>
+            <li><a href="/notesLanding">Notes</a></li>
             <li><a href="#">Notifications</a></li>
             <li><a href="/coachProfile">My Profile</a></li>
         </ul>
@@ -508,10 +509,11 @@
         <div class="login-container-2">
                 <!-- Search for an athlete -->
             <div class="athlete-container">
-                <ul id="athlete-list"></ul>
                 <h1>Assign training sessions to : </h1> 
-                <span id="athlete-name">[Athlete Name]</span>
-                <button id="selectAthleteButton">Select another Athlete</button>
+                <span><button id="selectAthleteButton">Select another Athlete</button></span>
+                <!-- <ul id="athlete-list"></ul> -->
+                <div id="athlete-name">[Athlete Name]</div> 
+                
             </div>
             
             <!-- Tabs for blocks and exercises -->
@@ -551,26 +553,7 @@
                 window.location.href = '/athleteSelection';
             });
 
-            const athleteData = [
-                // {
-                //     name: "Jason",
-                //     blocks: [
-                //         {
-                //             id: 1,
-                //             exercises: ["Crunches", "Push Ups", "Squats"]
-                //         },
-                //         {
-                //             id: 2,
-                //             exercises: ["Jogging", "Fencing"]
-                //         },
-                //         {
-                //             id: 3,
-                //             exercises: ["Swimming", "Football"]
-                //         }
-                //     ]
-                // }
-                // Add more athlete data as needed
-            ];
+            const athleteData = [];
 
             const blockTabs = document.getElementById("block-tabs");
             const exerciseTabs = document.getElementById("exercise-tabs");
@@ -592,6 +575,7 @@
             const athleteId = urlParams.get("athleteId");
             const coachId = urlParams.get("coachId");
             // const selectedDate = urlParams.get("selectedDate");
+            selectedDate = '2023-11-08'
             console.log(selectedDate)
 
             // Define the API endpoint URL to fetch athlete's name
@@ -610,29 +594,49 @@
             // Define the API endpoint URL
             const apiUrl = "/get_blocks";
 
-            // Make the AJAX GET request
-            $.get(apiUrl, { athleteId, coachId, selectedDate }, function (data) {
-                // Handle the response data
-                displayBlocks(data);
-            });
+            // // Make the AJAX GET request
+            // $.get(apiUrl, { athleteId, coachId, selectedDate }, function (data) {
+            //     // Handle the response data
+            //     displayBlocks(data);
+            // });
+            if (athleteId && coachId && selectedDate) {
+                const apiUrl = `/get_blocks?athleteId=${athleteId}&coachId=${coachId}&selectedDate=${selectedDate}`;
+                $.get(apiUrl, function (data) {
+                    displayBlocks(data);
+                });
+            } else {
+                alert("Athlete ID or Coach ID is missing.");
+            }
 
             // Function to display blocks
             function displayBlocks(data) {
+
+                console.log("Displaying blocks...")
+                console.log("Received data:", data);
                 // Clear any existing blockTabs content
                 const blockTabs = document.getElementById("block-tabs");
                 blockTabs.innerHTML = '';
-
-                // Iterate through the blocks and populate the blockTabs
-                data.forEach(function (block) {
-                    const blockButton = document.createElement('button');
-                    blockButton.innerText = block.name;
-                    blockButton.addEventListener('click', function () {
-                        // Handle block click event to display exercises
-                        displayExercises(block.exercises);
+                // Check if data is an array and not undefined
+                if (Array.isArray(data) && data.length > 0) {
+                    // Iterate through the blocks and populate the blockTabs
+                    data.forEach(function (block) {
+                        console.log(`Creating block button for: ${block.name}`);
+                        const blockButton = document.createElement('button');
+                        blockButton.innerText = block.name;
+                        blockButton.addEventListener('click', function () {
+                            // Handle block click event to display exercises
+                            // displayExercises(block.exercises); 
+                            console.log("Here to display exercises")
+                        });
+                        blockTabs.appendChild(blockButton);
                     });
-                    blockTabs.appendChild(blockButton);
-                });
-
+                } else {
+                    // Handle the case where data is not valid
+                    blockTabs.innerHTML = 'No data available for this athlete.';
+                    return;
+                }
+                
+                console.log("Finished executing display block")
                 // Add an "Add Block" button if needed
                 const addBlockButton = document.createElement('button');
                 addBlockButton.innerText = 'Add a new Block';
@@ -641,174 +645,199 @@
                     addNewBlock();
                 });
                 blockTabs.appendChild(addBlockButton);
-
-                // Function to add a new block
-                function addNewBlock() {
-                    // give ajax call to add new block
-                }
             }
 
-            // // Function to add a block for the selected athlete
-            // function addBlock(athlete) {
-            //     const newBlockId = athlete.blocks.length + 1;
-            //     athlete.blocks.push({ id: newBlockId, exercises: [] });
-            //     displayBlocks(athlete);
+            // Function to add a new block
+            function addNewBlock() {
+                // Prompt the user for a block name
+                const blockName = prompt("Enter the name of the new block:");
+                
+                if (blockName === null || blockName.trim() === "") {
+                    alert("Block name cannot be empty.");
+                    return;
+                }
+
+                // Make an AJAX POST request to add the new block to the database
+                const apiUrl = "/add_block"; // Replace with the actual API endpoint URL
+                const requestData = JSON.stringify({
+                    "athleteId":athleteId, // Get athleteId from your code
+                    "coachId": coachId,     // Get coachId from your code
+                    "selectedDate": selectedDate, // Get the selectedDate from your code
+                    "blockName": blockName,
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: apiUrl,
+                    contentType: "application/json", // Set the Content-Type header to JSON
+                    data: requestData,
+                    success: function (response) {
+                        if (response.success) {
+                            // The block was added successfully
+                            alert("New block added successfully!");
+                        } else {
+                            // Handle the case where adding the block failed
+                            alert("Failed to add a new block.");
+                        }
+                    },
+                    error: function (error) {
+                        console.log("Error:", error);
+                    },
+                });
+                const getBlocksApiUrl = `/get_blocks?athleteId=${athleteId}&coachId=${coachId}&selectedDate=${selectedDate}`;
+                $.get(getBlocksApiUrl, function (data) {
+                    console.log(data)
+                    displayBlocks(data);
+                });
+            }
+
+            // // Function to display exercises for the selected block
+            // function displayExercises(exercises) {
+            //     exerciseTabs.innerHTML = '';
+            //     addExerciseButton.style.display = "block";
+            //     exerciseDetails.innerHTML = 'Select an exercise to view details';
+            //     currentBlock = exercises; // Update currentBlock
+
+            //     exercises.forEach((exercise, index) => {
+            //         const exerciseButton = document.createElement('button');
+            //         exerciseButton.innerText = exercise.name;
+            //         exerciseButton.addEventListener('click', () => displayExerciseDetails(exercise));
+            //         exerciseTabs.appendChild(exerciseButton);
+            //     });
+
+            //     if (exercises.length > 0) {
+            //         // Show "Add an Exercise" button if there are exercises
+            //         const addExerciseButton = document.createElement('button');
+            //         addExerciseButton.style.display = "block";
+            //         addExerciseButton.innerText = 'Add an Exercise';
+            //         addExerciseButton.addEventListener('click', () => addExercise(currentBlock));
+            //         exerciseTabs.appendChild(addExerciseButton);
+            //     }
             // }
 
-            // Function to display exercises for the selected block
-            function displayExercises(exercises) {
-                exerciseTabs.innerHTML = '';
-                exerciseDetails.innerHTML = 'Select an exercise to view details';
-                currentBlock = exercises; // Update currentBlock
+            // // Add event listeners for the "Add a Block" and "Add an Exercise" buttons
+            // addBlockButton.addEventListener('click', () => addBlock(selectedAthlete));
+            // addExerciseButton.addEventListener('click', () => addExercise(currentBlock));
 
-                exercises.forEach((exercise, index) => {
-                    const exerciseButton = document.createElement('button');
-                    exerciseButton.innerText = exercise.name;
-                    exerciseButton.addEventListener('click', () => displayExerciseDetails(exercise));
-                    exerciseTabs.appendChild(exerciseButton);
-                });
+            // function displayExerciseDetails(exercise) {
+            //     exerciseDetails.innerHTML = '';
 
-                // Show "Add an Exercise" button
-                const addExerciseButton = document.createElement('button');
-                addExerciseButton.innerText = 'Add an Exercise';
-                addExerciseButton.addEventListener('click', () => addExercise(currentBlock));
-                exerciseTabs.appendChild(addExerciseButton);
-            }
+            //     // Create a DataTable for the exercise
+            //     const table = document.createElement('table');
+            //     table.id = 'exercise-datatable';
+            //     exerciseDetails.appendChild(table);
 
+            //     // Initialize the DataTable
+            //     const dataTable = $('#exercise-datatable').DataTable({
+            //         columns: [
+            //             { title: 'Set' },
+            //             { title: 'Reps' },
+            //             { title: 'Loads' },
+            //             { title: 'Action' },
+            //         ],
+            //         // Additional DataTable options can be added here
+            //     });
 
-            // Call the function to display blocks for the default selected athlete (Jason) on page load
-            displayBlocks(selectedAthlete);
+            //     exercise.sets = exercise.sets || 1; // Default to 1 set if not provided
 
-            // Function to add an exercise for the selected block
-            function addExercise(block) {
-                const newExerciseId = block.exercises.length + 1;
-                block.exercises.push(`Exercise ${newExerciseId}`);
-                displayExercises(block);
-            }
+            //     for (let i = 1; i <= exercise.sets; i++) {
+            //         const setNumber = i;
+            //         let repsInput; // Declare repsInput variable
+            //         let loadsInput; // Declare loadsInput variable
 
-            // Add event listeners for the "Add a Block" and "Add an Exercise" buttons
-            addBlockButton.addEventListener('click', () => addBlock(selectedAthlete));
-            addExerciseButton.addEventListener('click', () => addExercise(currentBlock));
+            //         // Check if "coach" key exists in loads_reps and it's an array
+            //         if (exercise.loads_reps.coach && Array.isArray(exercise.loads_reps.coach)) {
+            //             // Access the correct load and reps values within the "coach" array
+            //             const setData = exercise.loads_reps.coach[i - 1]; // Get data for this set
+            //             if (setData) {
+            //                 repsInput = document.createElement('input');
+            //                 repsInput.type = 'number';
+            //                 repsInput.placeholder = 'Reps';
+            //                 repsInput.style.padding = '10px';
+            //                 repsInput.value = setData.reps; // Get reps for this set
 
-            function displayExerciseDetails(exercise) {
-                exerciseDetails.innerHTML = '';
+            //                 loadsInput = document.createElement('input');
+            //                 loadsInput.type = 'number';
+            //                 loadsInput.placeholder = 'Loads';
+            //                 loadsInput.style.padding = '10px';
+            //                 loadsInput.value = setData.load; // Get load for this set
+            //             }
+            //         }
 
-                // Create a DataTable for the exercise
-                const table = document.createElement('table');
-                table.id = 'exercise-datatable';
-                exerciseDetails.appendChild(table);
+            //         const deleteButton = document.createElement('button');
+            //         deleteButton.innerText = 'Delete';
+            //         deleteButton.className = 'delete-button';
 
-                // Initialize the DataTable
-                const dataTable = $('#exercise-datatable').DataTable({
-                    columns: [
-                        { title: 'Set' },
-                        { title: 'Reps' },
-                        { title: 'Loads' },
-                        { title: 'Action' },
-                    ],
-                    // Additional DataTable options can be added here
-                });
-
-                exercise.sets = exercise.sets || 1; // Default to 1 set if not provided
-
-                for (let i = 1; i <= exercise.sets; i++) {
-                    const setNumber = i;
-                    const loads = exercise.loads_reps.load;
-                    const reps = exercise.loads_reps.reps;
-
-                    const repsInput = document.createElement('input');
-                    repsInput.type = 'number';
-                    repsInput.placeholder = 'Reps';
-                    repsInput.style.padding = '10px';
-                    repsInput.value = reps;
-
-                    const loadsInput = document.createElement('input');
-                    loadsInput.type = 'number';
-                    loadsInput.placeholder = 'Loads';
-                    loadsInput.style.padding = '10px';
-                    loadsInput.value = loads;
-
-                    const deleteButton = document.createElement('button');
-                    deleteButton.innerText = 'Delete';
-                    deleteButton.className = 'delete-button';
-
-                    // Create a new row with input fields for reps and loads, and a delete button
-                    const newRow = dataTable.row.add([setNumber, repsInput.value, loadsInput.value, deleteButton.outerHTML]).draw(false);
-                }
-
-                // Add a "Add Set" button
-                const addSetButton = document.createElement('button');
-                addSetButton.id = 'add-set-button';
-                addSetButton.innerText = 'Add Set';
-                addSetButton.addEventListener('click', () => addSet(dataTable));
-                exerciseDetails.appendChild(addSetButton);
-
-                // Assign exercise button
-                const assignExerciseButton = document.createElement('button');
-                assignExerciseButton.id = 'assign-exercise-button';
-                assignExerciseButton.innerText = 'Assign Exercise';
-                assignExerciseButton.addEventListener('click', () => assignExercise(exercise, dataTable)); // You can define assignExercise later
-                exerciseDetails.appendChild(assignExerciseButton);
-            }
+            //         // Create a new row with input fields for reps and loads, and a delete button
+            //         const newRow = dataTable.row.add([setNumber, repsInput ? repsInput.value : '', loadsInput ? loadsInput.value : '', deleteButton.outerHTML]).draw(false);
+            //     }
 
 
+            //     // Add a "Add Set" button
+            //     const addSetButton = document.createElement('button');
+            //     addSetButton.id = 'add-set-button';
+            //     addSetButton.innerText = 'Add Set';
+            //     addSetButton.addEventListener('click', () => addSet(dataTable));
+            //     exerciseDetails.appendChild(addSetButton);
 
-            // Function to add a new row (set) to the DataTable
-            function addSet(dataTable) {
-                const table = document.getElementById('exercise-datatable');
-                const rows = table.getElementsByTagName('tr');
+            //     // Assign exercise button
+            //     const assignExerciseButton = document.createElement('button');
+            //     assignExerciseButton.id = 'assign-exercise-button';
+            //     assignExerciseButton.innerText = 'Assign Exercise';
+            //     assignExerciseButton.addEventListener('click', () => assignExercise(exercise, dataTable)); // You can define assignExercise later
+            //     exerciseDetails.appendChild(assignExerciseButton);
+            // }
 
-                // Find the maximum 'Set' value currently in the table
-                let maxSet = 0;
-                for (let i = 1; i < rows.length; i++) { // Start from 1 to skip the header row
-                    const row = rows[i];
-                    const setCell = row.cells[0];
-                    const setValue = parseInt(setCell.innerText);
-                    if (!isNaN(setValue) && setValue > maxSet) {
-                        maxSet = setValue;
-                    }
-                }
+            // // Function to add a new row (set) to the DataTable
+            // function addSet(dataTable) {
+            //     const table = document.getElementById('exercise-datatable');
+            //     const rows = table.getElementsByTagName('tr');
 
-                // Increment the maxSet to get the next 'Set' value
-                const newSetValue = (maxSet + 1).toString();
+            //     // Find the maximum 'Set' value currently in the table
+            //     let maxSet = 0;
+            //     for (let i = 1; i < rows.length; i++) { // Start from 1 to skip the header row
+            //         const row = rows[i];
+            //         const setCell = row.cells[0];
+            //         const setValue = parseInt(setCell.innerText);
+            //         if (!isNaN(setValue) && setValue > maxSet) {
+            //             maxSet = setValue;
+            //         }
+            //     }
 
-                // Create input elements for 'Reps' and 'Loads'
-                const repsInput = document.createElement('input');
-                repsInput.type = 'text';
-                repsInput.placeholder = 'Reps';
-                repsInput.style.padding = '10px';
+            //     // Increment the maxSet to get the next 'Set' value
+            //     const newSetValue = (maxSet + 1).toString();
 
-                const loadsInput = document.createElement('input');
-                loadsInput.type = 'text';
-                loadsInput.placeholder = 'Loads';
-                loadsInput.style.padding = '10px';
+            //     // Create input elements for 'Reps' and 'Loads'
+            //     const repsInput = document.createElement('input');
+            //     repsInput.type = 'text';
+            //     repsInput.placeholder = 'Reps';
+            //     repsInput.style.padding = '10px';
 
-                // Create a delete button
-                const deleteButton = document.createElement('button');
-                deleteButton.innerText = 'Delete';
-                // deleteButton.innerHTML = `
-                //     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                //         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                //         <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                //     </svg>
-                // `;
-                deleteButton.className = 'delete-button';
+            //     const loadsInput = document.createElement('input');
+            //     loadsInput.type = 'text';
+            //     loadsInput.placeholder = 'Loads';
+            //     loadsInput.style.padding = '10px';
 
-                // Create a new row with input fields and the delete button
-                const newRow = dataTable.row.add([newSetValue, repsInput.outerHTML, loadsInput.outerHTML, deleteButton.outerHTML]).draw();
+            //     // Create a delete button
+            //     const deleteButton = document.createElement('button');
+            //     deleteButton.innerText = 'Delete';
+            //     deleteButton.className = 'delete-button';
 
-                // Clear input values after adding a new row
-                repsInput.value = '';
-                loadsInput.value = '';
+            //     // Create a new row with input fields and the delete button
+            //     const newRow = dataTable.row.add([newSetValue, repsInput.outerHTML, loadsInput.outerHTML, deleteButton.outerHTML]).draw();
 
-                // Attach the click event listener for the delete button
-                table.querySelector('tbody').addEventListener('click', function (event) {
-                    if (event.target && event.target.nodeName === 'BUTTON') {
-                        const row = event.target.parentElement.parentElement;
-                        dataTable.row(row).remove().draw(false);
-                    }
-                });
-            }
+            //     // Clear input values after adding a new row
+            //     repsInput.value = '';
+            //     loadsInput.value = '';
+
+            //     // Attach the click event listener for the delete button
+            //     table.querySelector('tbody').addEventListener('click', function (event) {
+            //         if (event.target && event.target.nodeName === 'BUTTON') {
+            //             const row = event.target.parentElement.parentElement;
+            //             dataTable.row(row).remove().draw(false);
+            //         }
+            //     });
+            // }
         });
     </script>
     

@@ -19,7 +19,7 @@
       href="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/css/select2.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../static/css/athlete_landing-page.css" />
+    <link rel="stylesheet" href="../static/css/coach-athlete-training.css" />
     <script
       src="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/js/select2.min.js"
       defer
@@ -33,13 +33,16 @@
 
     <nav>
       <ul>
-        <li><a href="/athleteLanding">Home</a></li>
-        <li><a href="test-selection.html">Athlete Tests</a></li>
-        <li><a id="notesLink" href="/notes_athlete">Notes</a></li>
+        <li><a href="/coachLanding">Home</a></li>
+        <li><a href="/workoutSelection">Assign Workouts</a></li>
+        <li><a href="/testSelection">Assign Tests</a></li>
+        <li><a href="/defineExercises">Create Exercises</a></li>
+        <li><a href="/notesLanding">Notes</a></li>
         <li><a href="#">Notifications</a></li>
-        <li><a href="/athleteProfile">My Profile</a></li>
+        <li><a href="/coachProfile">My Profile</a></li>
       </ul>
     </nav>
+
     <div class="container">
       <h1>Athlete training sessions!</h1>
       <p id="user_id" data-user-email="{{athlete_username}}"></p>
@@ -189,10 +192,12 @@
             </div> -->
 
             <div class="team-list">
+              <h1>Athlete: {Athlete Name}</h1>
               <table id="trainingTable">
                 <thead>
                   <tr>
-                    <th>My Training Sessions</th>
+                    <!-- FIXME: PUT athletes username here -->
+                    <th>{ PUT ATHLETE USERNAME } Sessions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -267,36 +272,10 @@
                           id="header-input"
                           style="text-align: center; color: white"
                         >
-                          input_load
-                        </th>
-                        <th
-                          id="header-actions"
-                          style="text-align: center; color: white"
-                        >
-                          Actions
+                          athletes_load
                         </th>
                       </thead>
-                      <tbody class="create-exercise-rows">
-                        <div id="buttonContainer">
-                          <button
-                            type="submit"
-                            id="submitExercise"
-                            class="btn btn-primary"
-                          >
-                            Submit
-                          </button>
-                          <!-- <button
-                            id="modifyButton"
-                            class="btn btn-secondary"
-                            disabled
-                          >
-                            Modify
-                          </button> -->
-                          <!-- <button id="returnButton" class="btn btn-secondary">
-                            Return
-                          </button> -->
-                        </div>
-                      </tbody>
+                      <tbody class="create-exercise-rows"></tbody>
                     </table>
                     <div id="error-message" style="color: red"></div>
                     <div id="success-message" style="color: green"></div>
@@ -320,30 +299,25 @@
     <footer>
       <div class="footer">2023 Sports Performance Pro</div>
     </footer>
+    <script defer>
+      window.addEventListener("DOMContentLoaded", (event) => {
+        const athleteId = 2; // Set athlete ID
+        const coachId = 223; // Set coach ID
 
-    <script src="../static/js/calendar.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
-    <script src="../static/js/athlete_landing-page.js" defer></script>
-    <script>
-      // Wait for the DOM to load
-      document.addEventListener("DOMContentLoaded", function () {
+        // Select the specific anchor element for "Notes"
         const notesLink = document.querySelector('a[href="/notes_athlete"]');
         if (notesLink) {
           // Update the href attribute with the variables
-          // notesLink.href = `/notes_athlete?coachId=${encodeURIComponent(coachId)}&athleteId=${encodeURIComponent(athleteId)}`;
-
-          // Add an event listener to the link
-          notesLink.addEventListener("click", function (event) {
-            // Call your function here
-            onNotesClick(event);
-          });
+          notesLink.href = `/notes_athlete?coachId=${encodeURIComponent(
+            coachId
+          )}&athleteId=${encodeURIComponent(athleteId)}`;
         }
       });
     </script>
+    <script src="../static/js/calendar.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+    <script src="../static/js/coach-athlete-training.js" defer></script>
 
-    <!-- Your custom JavaScript code -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.9/index.min.js"></script> -->
-    <!-- <script src="calendar.js"></script> -->
   </body>
 </html>

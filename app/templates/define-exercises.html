@@ -7,9 +7,13 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
     <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 
     <style>
         header {
@@ -214,6 +218,61 @@
             background-color: #00568d; 
         }
 
+        .ui-dialog {
+        width: auto;
+        padding: 20px;
+        }
+
+        /* Style for form labels */
+        .ui-dialog label {
+            font-weight: bold;
+            margin: 10px; 
+        }
+
+        /* Style for input text fields */
+        .ui-dialog input[type="text"],
+        .ui-dialog select {
+            width: 200px; /* Adjust the width as needed */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Style for validation messages */
+        .validation-message {
+            color: red;
+            margin-top: 5px;
+        }
+
+        /* Style for buttons in dialog boxes */
+        .ui-dialog-buttonpane {
+            text-align: center;
+            padding-top: 10px;
+        }
+
+        .ui-dialog-buttonset button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .ui-dialog-buttonset button:hover {
+            background-color: #005599;
+        }
+
+        /* Style for the success message dialog */
+        #successDialog {
+            text-align: center;
+        }
+        .ui-dialog .input-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -257,6 +316,46 @@
         
     </div>
 
+    <div id="addExerciseDialog" title="Add a new Exercise" style="display: none;">
+        <form id="addExerciseForm">
+            <label for="newExerciseName">New Exercise Name<span style="color: red;">*</span></label>
+            <input type="text" id="newExerciseName" placeholder="New Exercise Name">
+            
+            <label for="categoryDropdown">Category<span style="color: red;">*</span></label>
+            <select id="categoryDropdown"></select>
+            
+            <label for="typeDropdown">Exercise Type<span style="color: red;">*</span></label>
+            <select id="typeDropdown"></select>
+    
+            <div id="newExerciseValidation" style="color: red;"></div>
+        </form>
+    </div>
+
+    <div id="addCategoryDialog" title="Add Category" style="display: none;">
+        <form id="addCategoryForm">
+            <label for="newCategory">New Category<span style="color: red;">*</span></label>
+            <input type="text" id="newCategory" placeholder="New Category">
+            <div id="newCategoryValidation" style="color: red;"></div>
+            <div id="categoryExistsValidation" style="color: red;"></div>
+        </form>
+    </div>
+
+    <div id="addExerciseTypeDialog" title="Add Exercise-type" style="display: none;">
+        <form id="addTypeForm">
+            <label for="newExerciseType">New Exercise type<span style="color: red;">*</span></label>
+            <input type="text" id="newType" placeholder="New Exercise-type">
+            <div id="newTypeValidation" style="color: red;"></div>
+            <div id="typeExistsValidation" style="color: red;"></div>
+    
+            <label for="categoryDropdown">Category<span style="color: red;">*</span></label>
+            <select id="categoryDropdown" placeholder="Select Category"></select>
+        </form>
+    </div>
+
+    <div id="successDialog" title="Success" style="display: none;">
+        <p id="successMessage"></p>
+    </div>
+
     <footer>
         <div class="footer">
             2023 Sports Performance Pro
@@ -283,11 +382,7 @@
                         title: 'Actions',
                         render: function (data, type, row, meta) {
                             return `
-                                <button class="edit-button" data-id="${meta.row}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
-                                        <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
-                                    </svg>
-                                </button>
+                                
                                 <button class="delete-button" data-id="${meta.row}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
@@ -307,7 +402,7 @@
                         className: 'new-exercise-button'
                     },
                     {
-                        text: 'Add a new Catgory',
+                        text: 'Add a new Category',
                         action: function () {
                             // Handle the "New Category" action here
                         },
@@ -324,7 +419,7 @@
             });
 
             // AJAX call to fetch exercises
-            $.get('/api/exercises', function (data) {
+            $.get('/exercises', function (data) {
                 if (data && data.exercises) {
                     // Populate DataTable with fetched data
                     table.clear().rows.add(data.exercises).draw();
@@ -350,7 +445,7 @@
                         // Send an AJAX request to the server to delete the exercise
                         $.ajax({
                             method: 'DELETE',
-                            url: '/api/exercises/' + exerciseId,
+                            url: '/exercises/' + exerciseId,
                             success: function (data) {
                                 // remove it from the DataTable and reload the table
                                 table.row($(this).parents('tr')).remove().draw();
@@ -367,9 +462,253 @@
                     }
                 }
             });
-            
-        });
 
+            // Add a new category
+            $('.new-category-button').click(function () {
+                console.log('new category button clicked')
+                // Reset the input field in the add category dialog
+                $('#newCategory').val('');
+                $('#newCategoryValidation').text('');
+                $('#categoryExistsValidation').text('');
+
+                // Show the add category dialog
+                $("#addCategoryDialog").dialog({
+                    modal: true,
+                    buttons: {
+                        "Add": function () {
+                            var newCategory = $('#newCategory').val();
+
+                            if (!newCategory) {
+                                $('#newCategoryValidation').text('Category is required');
+                                return;
+                            } else {
+                                $('#newCategoryValidation').text('');
+                            }
+
+                            // Make an AJAX request to the Flask API endpoint
+                            $.ajax({
+                                type: 'POST',
+                                url: '/add_category',
+                                contentType: 'application/json',
+                                data: JSON.stringify({ name: newCategory }),
+                                success: function (data) {
+                                    // Close the dialog and show the success message
+                                    $("#addCategoryDialog").dialog("close");
+
+                                    // Show the success message in the success dialog
+                                    $("#successMessage").text(newCategory + " category is added");
+
+                                    // Open the success dialog
+                                    $("#successDialog").dialog({
+                                        modal: true,
+                                        buttons: {
+                                            "OK": function() {
+                                                $(this).dialog("close");
+                                                location.reload();
+                                                // Clear the input field
+                                                $('#newCategory').val('');
+                                            }
+                                        }
+                                    });
+                                    
+                                },
+                                error: function (error) {
+                                    $('#categoryExistsValidation').text('Category already exists');
+                                    // alert('Error adding category: ' + error.responseJSON.error);
+                                }
+                            });
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+            });
+
+
+            // Function to fetch and populate categories in the dropdown
+            function fetchCategoriesAndPopulateDropdown() {
+                $.get('/categories', function (data) {
+                    if (data && data.categories) {
+                        // Populate the dropdown with fetched categories
+                        var dropdown = $('#categoryDropdown');
+                        dropdown.empty();
+                        $.each(data.categories, function (index, category) {
+                            dropdown.append($('<option></option>').attr('value', category.id).text(category.name));
+                        });
+                    }
+                });
+            }
+
+            // Call the function to fetch and populate categories
+            fetchCategoriesAndPopulateDropdown();
+
+            // Open the add exercise type dialog when the button is clicked
+            $('.new-exercise-type-button').click(function () {
+                console.log('new exercise-type button clicked')
+                // Reset the input fields and validations in the add exercise type dialog
+                $('#newType').val('');
+                $('#newTypeValidation').text('');
+                $('#typeExistsValidation').text('');
+
+                // Show the add exercise type dialog
+                $("#addExerciseTypeDialog").dialog({
+                    modal: true,
+                    buttons: {
+                        "Add": function () {
+                            var newExerciseType = $('#newType').val();
+                            var category_id = $('#categoryDropdown').val(); // Get the selected category ID from the dropdown
+
+                            if (!newExerciseType) {
+                                $('#newTypeValidation').text('Exercise type is required');
+                                return;
+                            } else {
+                                $('#newTypeValidation').text('');
+                            }
+
+                            // Make an AJAX request to the Flask API endpoint
+                            $.ajax({
+                                type: 'POST',
+                                url: '/add_exercise_type',
+                                contentType: 'application/json',
+                                data: JSON.stringify({ name: newExerciseType, category_id: category_id }),
+                                success: function (data) {
+                                    // Close the dialog and show the success message
+                                    $("#addExerciseTypeDialog").dialog("close");
+
+                                    // Show the success message in the success dialog
+                                    $("#successMessage").text(newExerciseType + " exercise type is added");
+
+                                    // Open the success dialog
+                                    $("#successDialog").dialog({
+                                        modal: true,
+                                        buttons: {
+                                            "OK": function () {
+                                                $(this).dialog("close");
+                                                location.reload();
+                                                // Clear the input field and dropdown
+                                                $('#newType').val('');
+                                                $('#categoryDropdown').val('');
+                                            }
+                                        }
+                                    });
+                                },
+                                error: function (error) {
+                                    $('#typeExistsValidation').text('Exercise type already exists');
+                                    // alert('Error adding exercise type: ' + error.responseJSON.error);
+                                }
+                            });
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+            });
+
+            // Variable to store the selected category ID
+            var selectedCategoryId;
+            // Event listener for category dropdown change
+            $('#categoryDropdown').change(function () {
+                // var categoryId = $(this).val();
+                selectedCategoryId = $(this).val();
+
+                // Make an AJAX request to get exercise types based on the selected category
+                $.get('/exercise-types', { category_id: selectedCategoryId }, function (data) {
+                    var typeDropdown = $('#typeDropdown');
+                    typeDropdown.empty();
+
+                    $.each(data.exercise_types, function (index, exerciseType) {
+                        typeDropdown.append($('<option>').text(exerciseType.name).attr('value', exerciseType.id));
+                    });
+                });
+                console.log("inside get category", selectedCategoryId)
+            });
+
+            // Initial load of exercise types based on the default selected category
+            var defaultCategoryId = $('#categoryDropdown').val();
+            $.get('/exercise-types', { category_id: defaultCategoryId }, function (data) {
+                var typeDropdown = $('#typeDropdown');
+                typeDropdown.empty();
+
+                $.each(data.exercise_types, function (index, exerciseType) {
+                    typeDropdown.append($('<option>').text(exerciseType.name).attr('value', exerciseType.id));
+                });
+            });
+
+            // Event listener for the "Add a new Exercise" button
+            $('.new-exercise-button').click(function () {
+                // Reset the input fields in the add exercise dialog
+                $('#newExerciseName').val('');
+                $('#newExerciseValidation').text('');
+
+                // Show the add exercise dialog
+                $("#addExerciseDialog").dialog({
+                    modal: true,
+                    buttons: {
+                        "Add": function () {
+                            var newName = $('#newExerciseName').val();
+                            // var categoryId = $('#categoryDropdown').val();
+                            var categoryId = selectedCategoryId;
+                            var typeId = $('#typeDropdown').val();
+
+                            // Log the values to the console for debugging
+                            console.log("Name:", newName);
+                            console.log("CategoryID:", categoryId);
+                            console.log("TypeID:", typeId);
+
+                            // Validate and make an AJAX request to add the exercise
+                            if (!newName || !categoryId || !typeId) {
+                                $('#newExerciseValidation').text('Name, Category, and Type are required');
+                                return;
+                            } else {
+                                $('#newExerciseValidation').text('');
+                            }
+
+                            // Make an AJAX request to the Flask API endpoint
+                            $.ajax({
+                                type: 'POST',
+                                url: '/add-exercise',
+                                contentType: 'application/json',
+                                data: JSON.stringify({ name: newName, type_id: typeId }),
+                                success: function (data) {
+                                    // Close the dialog and show the success message
+                                    $("#addExerciseDialog").dialog("close");
+
+                                    // Show the success message in the success dialog
+                                    $("#successMessage").text(newName + " exercise is added");
+
+                                    // Open the success dialog
+                                    $("#successDialog").dialog({
+                                        modal: true,
+                                        buttons: {
+                                            "OK": function () {
+                                                $(this).dialog("close");
+                                                location.reload();
+                                                // Clear the input fields
+                                                $('#newExerciseName').val('');
+                                            }
+                                        }
+                                    });
+                                },
+                                error: function (error) {
+                                    alert('Error adding exercise: ' + error.responseJSON.error);
+                                }
+                            });
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
+
+<!-- <button class="edit-button" data-id="${meta.row}">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+        <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+    </svg>
+</button> -->

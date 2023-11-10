@@ -200,11 +200,11 @@
         <ul>
             <li><a href="/coachLanding">Home</a></li>
             <li><a href="/workoutSelection">Assign Workouts</a></li>
-            <li><a href="/testSelection">Assign Tests</a></li>
+            <li><a href="/testSelection">Create Tests</a></li>
             <li><a href="/defineExercises">Create Exercises</a></li>
-            <li><a href="/coachNotes" class="current">Notes</a></li>
+            <li><a href="/notesLanding" class="current">Notes</a></li>
             <li><a href="#">Notifications</a></li>
-            <li><a href="/coachProfile">My Profile</a></li>
+            <li><a href="/coachProfile" class="current">My Profile</a></li>
         </ul>
     </nav>
 
@@ -241,6 +241,14 @@
     </div>
 
     <script>
+            function getQueryParams() {
+                const queryParams = new URLSearchParams(window.location.search);
+                return {
+                    coach_id: queryParams.get('coachId'),
+                    athlete_id: queryParams.get('athleteId')
+                };
+            }
+        
         document.addEventListener("DOMContentLoaded", function () {
             const addNoteButton = document.getElementById("addNote");
             const noteModalContainer = document.getElementById("noteModalContainer");
@@ -250,6 +258,8 @@
             const noteSubject = document.getElementById("noteSubject");
             const modalOverlay = document.getElementById("modalOverlay");
             const notesContainer = document.getElementById("notesContainer");
+            const queryParams = getQueryParams();
+
 
             // Function to filter and highlight notes
             function filterNotes() {
@@ -283,6 +293,8 @@
                 noteModalContainer.style.display = "none";
                 modalOverlay.style.display = "none";
             });
+
+
 
             modalAddNote.addEventListener("click", function () {
                 const subject = noteSubject.value.trim();
@@ -325,9 +337,9 @@
                     // Call the API to post note
                     const apiURL = "/addNote"; // Replace with your API URL
                     const requestData = {
-                        coach_id: 1, // Replace with the appropriate coach ID
-                        athlete_id: 2, // Replace with the appropriate athlete ID
-                        date_created: new Date().toISOString(),
+                        coach_id: queryParams.coach_id, // Replace with the appropriate coach ID
+                        athlete_id: queryParams.athlete_id, // Replace with the appropriate athlete ID
+                        date_created: new Date().toISOString().replace('T', ' ').substring(0, 19),
                         subject: subject,
                         coach_reply: text,
                         athlete_reply: null,
@@ -352,8 +364,8 @@
              // Function to fetch and display notes
              function fetchAndDisplayNotes() {
             const apiURL = "/getNotes"; // Replace with your API URL
-            const coachId = 15; 
-            const athleteId = 12; 
+            const coachId = queryParams.coach_id; // Replace with the appropriate coach ID
+            const athleteId = queryParams.athlete_id; // Replace with the appropriate athlete ID
 
             // Make a GET request to fetch notes
             fetch(`${apiURL}?coachId=${coachId}&athleteId=${athleteId}`)

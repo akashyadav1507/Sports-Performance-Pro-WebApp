@@ -49,7 +49,7 @@ nav a:focus {
 .footer {
   position: fixed;
   bottom: 0;
-  left: 50%; /* Align the footer to the horizontal center of the viewport */
+  left: 50%;
   transform: translateX(-50%); /* Center the footer horizontally */
   width: 100%;
   background-color: #fff;
@@ -58,6 +58,16 @@ nav a:focus {
   padding: 10px 0;
   z-index: 999;
   box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+}
+
+footer {
+position: relative;
+bottom: 0;
+width: 100%;
+background-color: #fff;
+color: #333;
+text-align: center;
+padding: 10px 0;
 }
 
 .footer-content {
@@ -91,6 +101,15 @@ h2 {
   margin-top: 20px;
   margin-bottom: 20px;
   /* Other CSS styles for the table here, if needed */
+}
+
+ /* Add vertical spacing to calendar dates */
+td {
+  padding: 30px;
+}
+
+#calendar td {
+  height: 60px; 
 }
 
 .today-date {
@@ -257,7 +276,7 @@ nav li {
 /* Added a container for login forms */
 .login-forms {
   display: grid;
-  grid-template-columns: 0.4fr 0.6fr;
+  grid-template-columns: 0.4fr 1fr;
   justify-content: stretch; /* Center horizontally */
   /*align-items: center; /* Center vertically */
   flex-wrap: wrap; /* Wrap login containers if the screen is narrow */
@@ -281,12 +300,6 @@ nav li {
   /* text-align: center; */
   width: max-width;
   margin: 20px; /* Added margin */
-}
-
-h1 {
-  font-size: 28px;
-  margin-bottom: 20px;
-  color: #fff;
 }
 
 h2 {

@@ -3,27 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <link rel="stylesheet" href="athlete-styles.css" /> -->
-    <!-- Include Bootstrap CSS -->
 
-    <!-- <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.9.0/main.min.css"
-      rel="stylesheet"
-    /> -->
-
-    <link
-      rel="stylesheet"
-      href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/css/select2.min.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="../static/css/athlete_landing-page.css" />
-    <script
-      src="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/js/select2.min.js"
-      defer
-    ></script>
+    <link rel="stylesheet" href="../static/css/coach-team-training.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/js/select2.min.js" defer></script>
   </head>
 
   <body>
@@ -33,21 +17,25 @@
 
     <nav>
       <ul>
-        <li><a href="/athleteLanding">Home</a></li>
-        <li><a href="test-selection.html">Athlete Tests</a></li>
-        <li><a id="notesLink" href="/notes_athlete">Notes</a></li>
+        <li><a href="/coachLanding">Home</a></li>
+        <li><a href="/workoutSelection">Assign Workouts</a></li>
+        <li><a href="/testSelection">Assign Tests</a></li>
+        <li><a href="/defineExercises">Create Exercises</a></li>
+        <li><a href="/notesLanding">Notes</a></li>
         <li><a href="#">Notifications</a></li>
-        <li><a href="/athleteProfile">My Profile</a></li>
+        <li><a href="/coachProfile">My Profile</a></li>
       </ul>
     </nav>
+
     <div class="container">
-      <h1>Athlete training sessions!</h1>
-      <p id="user_id" data-user-email="{{athlete_username}}"></p>
+      <h1>Team training sessions!</h1>
+      <!-- <p id="user_id" data-user-email="{{athlete_username}}"></p> -->
       <!-- Container for login forms -->
       <div class="login-forms">
+
         <div class="login-container-1" style="margin-right: 20px">
           <div class="container mt-7">
-            <h1 class="text-center">Athlete Workout</h1>
+            <h1 class="text-center">Teams</h1>
             <div class="row">
               <div class="col-md-7">
                 <!-- Left side div for the calendar -->
@@ -178,21 +166,12 @@
 
         <div class="login-container-2">
           <div class="container">
-            <!-- Search for an athlete -->
-            <!-- <div class="search-container">
-              <input
-                type="text"
-                id="athlete-search"
-                placeholder="Search the exercise"
-              />
-              <button id="search-button">Search</button>
-            </div> -->
-
+            <h1>Team: {Team Name}</h1>
             <div class="team-list">
               <table id="trainingTable">
                 <thead>
                   <tr>
-                    <th>My Training Sessions</th>
+                    <th>Team Athletes</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -200,11 +179,6 @@
                 </tbody>
               </table>
             </div>
-
-            <!-- This is a test-->
-            <!-- <ul class="appendingTest">
-              <li>This is a test to check appending</li>
-            </ul> -->
 
             <div id="my-training">
               <!-- Generate dynamically my training session from the databas -->
@@ -267,24 +241,19 @@
                           id="header-input"
                           style="text-align: center; color: white"
                         >
-                          input_load
-                        </th>
-                        <th
-                          id="header-actions"
-                          style="text-align: center; color: white"
-                        >
-                          Actions
+                          athletes_load
                         </th>
                       </thead>
+
                       <tbody class="create-exercise-rows">
                         <div id="buttonContainer">
-                          <button
+                          <!-- <button
                             type="submit"
                             id="submitExercise"
                             class="btn btn-primary"
                           >
                             Submit
-                          </button>
+                          </button> -->
                           <!-- <button
                             id="modifyButton"
                             class="btn btn-secondary"
@@ -311,39 +280,15 @@
     </div>
 
     <div style="margin-top: 100px"></div>
-    <div
-      id="athlete-username"
-      data-username="{{ username }}"
-      style="display: none"
-    ></div>
+    <!-- <div id="athlete-username" data-username="{{ username }}" style="display: none"></div> -->
 
     <footer>
       <div class="footer">2023 Sports Performance Pro</div>
     </footer>
-
     <script src="../static/js/calendar.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
-    <script src="../static/js/athlete_landing-page.js" defer></script>
-    <script>
-      // Wait for the DOM to load
-      document.addEventListener("DOMContentLoaded", function () {
-        const notesLink = document.querySelector('a[href="/notes_athlete"]');
-        if (notesLink) {
-          // Update the href attribute with the variables
-          // notesLink.href = `/notes_athlete?coachId=${encodeURIComponent(coachId)}&athleteId=${encodeURIComponent(athleteId)}`;
 
-          // Add an event listener to the link
-          notesLink.addEventListener("click", function (event) {
-            // Call your function here
-            onNotesClick(event);
-          });
-        }
-      });
-    </script>
-
-    <!-- Your custom JavaScript code -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.9/index.min.js"></script> -->
-    <!-- <script src="calendar.js"></script> -->
+    <script src="../static/js/coach-team-training.js" defer></script>
   </body>
 </html>

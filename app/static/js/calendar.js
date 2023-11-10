@@ -13,6 +13,7 @@ function updateCurrentDate() {
   currentMonth = today.getMonth();
   currentYear = today.getFullYear();
 }
+
 selectYear = document.getElementById("year");
 selectMonth = document.getElementById("month");
 months = [
@@ -32,10 +33,14 @@ months = [
 
 monthAndYear = document.getElementById("monthAndYear");
 updateCurrentDate();
+
 selectedDate = `${currentYear}-${currentMonth + 1}-${currentDay}`;
 showCalendar(currentMonth, currentYear);
 
 function next() {
+  blockTabs.innerHTML = "";
+  exerciseDetails.innerHTML = "";
+  exerciseTabs.innerHTML = "";
   currentYear = currentMonth === 11 ? currentYear + 1 : currentYear;
   currentMonth = (currentMonth + 1) % 12;
   showCalendar(currentMonth, currentYear);
@@ -43,6 +48,10 @@ function next() {
 }
 
 function previous() {
+  blockTabs.innerHTML = "";
+  exerciseDetails.innerHTML = "";
+  exerciseTabs.innerHTML = "";
+
   currentYear = currentMonth === 0 ? currentYear - 1 : currentYear;
   currentMonth = currentMonth === 0 ? 11 : currentMonth - 1;
   showCalendar(currentMonth, currentYear);
@@ -50,6 +59,10 @@ function previous() {
 }
 
 function jump() {
+  blockTabs.innerHTML = "";
+  exerciseDetails.innerHTML = "";
+  exerciseTabs.innerHTML = "";
+
   currentYear = parseInt(selectYear.value);
   currentMonth = parseInt(selectMonth.value);
   showCalendar(currentMonth, currentYear);
@@ -66,7 +79,10 @@ function highlightCurrentDate() {
   const cells = document.querySelectorAll("td");
 
   cells.forEach((cell) => {
-    if (cell.innerHTML === currentDay.toString() && cell.classList.contains("bg-info")) {
+    if (
+      cell.innerHTML === currentDay.toString() &&
+      cell.classList.contains("bg-info")
+    ) {
       // Highlight the current date
       cell.classList.add("today-date");
     }
@@ -126,7 +142,9 @@ function showCalendar(month, year) {
     // Add a click event listener to the date cell
     cell.addEventListener("click", function () {
       // Remove the "clicked-date" class from all cells
-      tbl.querySelectorAll("td.clicked-date").forEach((c) => c.classList.remove("clicked-date"));
+      tbl
+        .querySelectorAll("td.clicked-date")
+        .forEach((c) => c.classList.remove("clicked-date"));
       // Apply the "clicked-date" class to the clicked cell
       cell.classList.add("clicked-date");
     });
@@ -141,41 +159,56 @@ function daysInMonth(iMonth, iYear) {
   return 32 - new Date(iYear, iMonth, 32).getDate();
 }
 
-
 function handleDateSelection() {
-// Select the calendar table
-const tbl = document.querySelector("#calendar");
+  // Select the calendar table
+  const tbl = document.querySelector("#calendar");
 
-// Loop through all the date cells in the calendar
-tbl.querySelectorAll("td").forEach((cell) => {
-  // Extract the date from the cell
-  const cellDate = parseInt(cell.innerHTML);
+  // Loop through all the date cells in the calendar
+  tbl.querySelectorAll("td").forEach((cell) => {
+    // Extract the date from the cell
+    const cellDate = parseInt(cell.innerHTML);
 
-  // Check if the cell date matches today's date
-  if (cellDate === currentDay && currentMonth === month && currentYear === year) {
-    cell.classList.add("today-date"); // Add a class to highlight today's date
-  }
+    // Check if the cell date matches today's date
+    if (
+      cellDate === currentDay &&
+      currentMonth === month &&
+      currentYear === year
+    ) {
+      cell.classList.add("today-date"); // Add a class to highlight today's date
+    }
 
-  // Add a click event listener to the date cell
-  cell.addEventListener("click", function () {
-    // Remove the "clicked-date" class from all cells
-    tbl.querySelectorAll("td.clicked-date").forEach((c) => c.classList.remove("clicked-date"));
-    // Apply the "clicked-date" class to the clicked cell
-    cell.classList.add("clicked-date");
+    // Add a click event listener to the date cell
+    cell.addEventListener("click", function () {
+      // Clear the tables
+      blockTabs.innerHTML = "";
+      exerciseDetails.innerHTML = "";
+      exerciseTabs.innerHTML = "";
 
-    // Get the selected date
-    const selectedDay = cellDate; // Use the date from the cell
-    const selectedMonth = parseInt(selectMonth.value); // Use selectMonth.value
-    const selectedYear = parseInt(selectYear.value); // Use selectYear.value
+      // Remove the "clicked-date" class from all cells
+      tbl
+        .querySelectorAll("td.clicked-date")
+        .forEach((c) => c.classList.remove("clicked-date"));
+      // Apply the "clicked-date" class to the clicked cell
+      cell.classList.add("clicked-date");
 
-    // Format the date as "dd-m-yyyy"
-    const selectedDate = `${selectedDay}-${selectedMonth + 1}-${selectedYear}`;
+      // Get the selected date
+      const selectedDay = cellDate; // Use the date from the cell
+      const selectedMonth = parseInt(selectMonth.value); // Use selectMonth.value
+      const selectedYear = parseInt(selectYear.value); // Use selectYear.value
 
-    // Log the selected date for testing
-    console.log("Selected Date:", selectedDate);
+      // Format the date as "dd-m-yyyy"
+      const selectedDate = `${selectedYear}-${
+        selectedMonth + 1
+      }-${selectedDay}`;
+
+      // Log the selected date for testing
+      console.log("Selected Date:", selectedDate);
+
+      currentDate = selectedDate;
+
+      main();
+    });
   });
-});
 }
 
 document.addEventListener("DOMContentLoaded", handleDateSelection);
-

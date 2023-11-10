@@ -149,6 +149,10 @@
             background-color: #f5f5f5;
         }
 
+        /* #athleteTable_filter input[type="search"] {
+            padding-right: 100px;
+        } */
+
         #athleteTable_filter {
             margin-bottom: 20px;
         }
@@ -193,8 +197,8 @@
             <li><a href="/coachLanding">Home</a></li>
             <li><a href="/workoutSelection">Assign Workouts</a></li>
             <li><a href="/testSelection">Create Tests</a></li>
-            <li><a href="/definedExercises">Create Exercises</a></li>
-            <li><a href="/notesLanding">Notes</a></li>
+            <li><a href="/defineExercises">Create Exercises</a></li>
+            <li><a href="/notesLanding" class="current">Notes</a></li>
             <li><a href="#">Notifications</a></li>
             <li><a href="/coachProfile">My Profile</a></li>
         </ul>
@@ -230,9 +234,9 @@
 
     <script>
         $(document).ready(function () {
+            // Create athlete data
             var coachEmail = "{{ session['username'] }}";
             var coachId;
-            // Create athlete data
             var athletes = [];
 
             // Initialize DataTable
@@ -244,6 +248,7 @@
                     { data: 'institute' }
                 ]
             });
+            console.log(coachEmail);
 
             $('#athleteTable tbody').on('click', 'tr', function () {
                 var data = table.row(this).data();
@@ -263,13 +268,14 @@
             $('#continueButton').click(function () {
                 var selectedRow = $('#athleteTable tbody tr.selected');
                 if (selectedRow.length > 0) {
-                    var data = table.row(selectedRow).data(); 
-                    console.log(data)
-                    var athleteId = data.athlete_id; 
+                    var data = table.row(selectedRow).data(); // Use 'table' instead of 'athleteTable'
+                    var athleteId = data.athlete_id; // Replace 'team_id' with the actual property name
+
+                    // Assuming coachId is fixed to 12
 
                     if (athleteId) {
                         // Redirect to the next page (athleteWorkout) with athleteId and coachId as query parameters
-                        window.location.href = `/coachAthleteWorkout?athleteId=${athleteId}&coachId=${coachId}`;
+                        window.location.href = `/coachNotes?athleteId=${athleteId}&coachId=${coachId}`;
                     }
                 } else {
                     // No athlete selected, show a popup
@@ -291,15 +297,17 @@
                 }
 
                 // Redirect to the previous page (workout-selection.html)
-                window.location.href = '/workoutSelection';
+                window.location.href = 'workout-selection.html';
             });
 
+            // Fetch athlete data
             $.get("/getAllCoaches?email=" + coachEmail, function (data) {
                     if (data.error) {
                         // Handle the case where coach is not found (e.g., redirect to a login page)
                         window.location.href = '/coachAthleteHome';
                     } else {
                         coachId = data.coach_id;
+                        console.log(coachId)
 
                         // Use coachId to fetch athlete and team data
                         $.get("/getAllAthletes?coach_id=" + coachId, function (athleteData) {
