@@ -5,12 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- <link rel="stylesheet" href="athlete-styles.css" /> -->
     <!-- Include Bootstrap CSS -->
+    <!--Page Title-->
+    <title>Sports Performance Pro - All your records in one place</title>
+
+    <!--Favicon-->
+    <link
+      rel="shortcut icon"
+      href="../static/images/favicon.ico"
+      title="Favicon"
+    />
 
     <!-- <link
       href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.9.0/main.min.css"
       rel="stylesheet"
     /> -->
-
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+    />
     <link
       rel="stylesheet"
       href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css"
@@ -29,25 +41,71 @@
   <body>
     <header>
       <h1 class="title">Sports Performance Pro</h1>
-    </header>
+      <div class="menu-toggle" id="mobile-menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
 
-    <nav>
-      <ul>
-        <li><a href="/athleteLanding">Home</a></li>
-        <li><a href="test-selection.html">Athlete Tests</a></li>
-        <li><a id="notesLink" href="/notes_athlete">Notes</a></li>
-        <li><a href="#">Notifications</a></li>
-        <li><a href="/athleteProfile">My Profile</a></li>
-      </ul>
-    </nav>
+      <nav class="mobile-menu">
+        <ul>
+          <li><a href="/athleteLanding" class="current">Home</a></li>
+          <li><a href="/testsAthleteLanding">Athlete Tests</a></li>
+          <li><a id="notesLink" href="/notes_athlete">Notes</a></li>
+          <li><a href="/athleteeNotifications">Notifications</a></li>
+          <li><a href="/athleteProfile">My Profile</a></li>
+        </ul>
+      </nav>
+    </header>
     <div class="container">
-      <h1>Athlete training sessions!</h1>
-      <p id="user_id" data-user-email="{{athlete_username}}"></p>
+      <h1>Team and Athlete training sessions!</h1>
+      <h3 id="user_id" data-user-email="{{athlete_username}}"></h3>
       <!-- Container for login forms -->
       <div class="login-forms">
+        <div class="login-container-3" style="margin-right: 20px">
+          <div class="container mt-7">
+            <h1 class="text-center">Workout Calendar</h1>
+            <div class="row">
+              <div class="col-md-7">
+                <!-- Left side div for the date picker -->
+                <div
+                  class="container col-sm-4 col-md-7 col-lg-4 mt-5 d-flex justify-content-center"
+                  id="athlete-calendar"
+                >
+                  <div class="card">
+                    <h3 class="card-header">Pick a Date</h3>
+                    <div class="card-body">
+                      <input
+                        type="text"
+                        id="selectedDate"
+                        class="form-control"
+                        placeholder="Select a date"
+                        readonly
+                      />
+                      <button
+                        class="btn btn-primary mt-3"
+                        onclick="openDatePicker()"
+                      >
+                        Open Date Picker
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <!-- Right side div (workout display) -->
+                <div id="workout-display" class="mt-5" style="display: none">
+                  <!-- Display workout for selected date here -->
+                  <h2>Workout for Selected Date:</h2>
+                  <div id="selectedDateWorkout"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="login-container-1" style="margin-right: 20px">
           <div class="container mt-7">
-            <h1 class="text-center">Athlete Workout</h1>
+            <h1 class="text-center">Workout Calendar</h1>
             <div class="row">
               <div class="col-md-7">
                 <!-- Left side div for the calendar -->
@@ -212,6 +270,12 @@
               <!-- Generate dynamically from the databas -->
               <!-- Tabs for blocks and exercises -->
               <div class="tab-container">
+                <div class="horizontal-tabs" id="workout-tabs">
+                  <!-- <button id="add-block-button" class="add-block-btn-hide">
+                    Add a Block
+                  </button> -->
+                </div>
+
                 <div class="horizontal-tabs" id="block-tabs">
                   <!-- <button id="add-block-button" class="add-block-btn-hide">
                     Add a Block
@@ -269,32 +333,22 @@
                         >
                           input_load
                         </th>
-                        <th
+                        <!-- <th
                           id="header-actions"
                           style="text-align: center; color: white"
                         >
                           Actions
-                        </th>
+                        </th> -->
                       </thead>
                       <tbody class="create-exercise-rows">
-                        <div id="buttonContainer">
+                        <div id="exSubmit">
                           <button
                             type="submit"
                             id="submitExercise"
                             class="btn btn-primary"
                           >
-                            Submit
+                            Save
                           </button>
-                          <!-- <button
-                            id="modifyButton"
-                            class="btn btn-secondary"
-                            disabled
-                          >
-                            Modify
-                          </button> -->
-                          <!-- <button id="returnButton" class="btn btn-secondary">
-                            Return
-                          </button> -->
                         </div>
                       </tbody>
                     </table>
@@ -323,11 +377,31 @@
 
     <script src="../static/js/calendar.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
-    <script src="../static/js/athlete_landing-page.js" defer></script>
+    <script src="../static/js/athlete_landing-page_v2.js" defer></script>
     <script>
       // Wait for the DOM to load
       document.addEventListener("DOMContentLoaded", function () {
+        $("#mobile-menu-toggle").click(function () {
+          $("nav.mobile-menu").toggleClass("active");
+        });
+
+        // Close the mobile menu when a link is clicked
+        $("nav.mobile-menu a").click(function () {
+          $("nav.mobile-menu").removeClass("active");
+        });
+
+        // Close the mobile menu when clicking outside the menu
+        $(document).click(function (event) {
+          // Check if the clicked element is not part of the mobile menu
+          if (
+            !$(event.target).closest("#mobile-menu-toggle, nav.mobile-menu")
+              .length
+          ) {
+            $("nav.mobile-menu").removeClass("active");
+          }
+        });
         const notesLink = document.querySelector('a[href="/notes_athlete"]');
         if (notesLink) {
           // Update the href attribute with the variables
@@ -340,6 +414,27 @@
           });
         }
       });
+
+      // Function to open the date picker
+      function openDatePicker() {
+        $("#selectedDate").datepicker({
+          dateFormat: "mm/dd/yy",
+          onSelect: function (dateText, inst) {
+            // When a date is selected, you can load the workout for that date here
+            var selectedDate = dateText;
+            console.log("selectedDatte: ", selectedDate);
+            // For demonstration, we'll just display the selected date's workout
+            $("#selectedDateWorkout").text(
+              "Workout for " + selectedDate + " will be displayed here."
+            );
+            // Display the workout section
+            $("#workout-display").show();
+          },
+        });
+
+        // Show the date picker
+        $("#selectedDate").datepicker("show");
+      }
     </script>
 
     <!-- Your custom JavaScript code -->

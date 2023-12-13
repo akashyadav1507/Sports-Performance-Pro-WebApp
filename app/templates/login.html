@@ -4,7 +4,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LinkedIn-like Login</title>
+    <!--Page Title-->
+    <title>Sports Performance Pro - All your records in one place</title>
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="../static/images/favicon.ico" title="Favicon"/>
+
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -37,6 +42,18 @@
         display: inline;
         margin: 0 20px;
       }
+
+      .login-link {
+            font-size: 16px;
+            color: #0077B5;
+            text-decoration: none;
+            margin-top: 20px;
+            display: block;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+        }
 
       .container {
         max-width: 1400px;
@@ -111,14 +128,23 @@
         background-color: #005599;
       }
 
-      footer {
-        position: absolute;
+      .footer {
+        position: fixed;
         bottom: 0;
+        left: 50%; /* Align the footer to the horizontal center of the viewport */
+        transform: translateX(-50%); /* Center the footer horizontally */
         width: 100%;
         background-color: #fff;
         color: #333;
         text-align: center;
         padding: 10px 0;
+        z-index: 999;
+        box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+      }
+
+      .footer-content {
+        max-width: 1400px;
+        margin: 0 auto;
       }
 
       /* Added a style for the "Create one" link */
@@ -152,7 +178,6 @@
         <li>Game On: Elevate Your Sports Experience with Our App!</li>
       </ul>
     </nav>
-
     <div class="container">
       <!-- Container for login forms -->
       <div class="login-forms">
@@ -174,9 +199,7 @@
           />
           <button id="signin_coach" type="button">Sign In</button>
           <div id="coachEmailError" class="error-message"></div>
-          <a class="create-account-link" href="/registerCoach"
-        >Don't have an account yet? Create one</a
-      >
+          <a class="create-account-link" href="/registerCoach">Don't have an account yet? Create one</a>
         </div>
 
         <div class="login-container">
@@ -196,18 +219,15 @@
           />
           <button id="signin_athlete" type="button">Sign In</button>
           <div id="athleteEmailError" class="error-message"></div>
-          <a class="create-account-link" href="/registerAthlete"
-        >Don't have an account yet? Create one</a
-      >
+          <a class="create-account-link" href="/registerAthlete">Don't have an account yet? Create one</a>
         </div>
       </div>
-
-      <div style="margin-top: 100px"></div>
-
-      
+      <a class="login-link" href="/" style="margin-bottom: 50px;">Go to Homepage</a>
     </div>
 
-    <footer>2023 Sports Performance Pro</footer>
+    <footer>
+      <div class="footer">2023 Sports Performance Pro</div>
+    </footer>
 
     <script>
       const signInCoach = document.getElementById("signin_coach");
@@ -231,6 +251,8 @@
           $.post("/coachLogin", JSON.stringify(coachLoginData), function (response) {
             if (response === 'Successful') {
               window.location.href = "/coachLanding";
+            }else if(response=== 'session'){
+              window.location.href = "/sessionError";
             } else {
               coachEmailError.textContent = response;
           }
@@ -260,6 +282,8 @@
           $.post("/athleteLogin", JSON.stringify(athleteLoginData), function (response) {
             if (response === 'Successful') {
               window.location.href = "/athleteLanding";
+            }else if(response=== 'session'){
+              window.location.href = "/sessionError";
             } else {
               document.getElementById('athleteEmailError').textContent = response;
           }
@@ -269,6 +293,28 @@
           
         }
       }
+      function handleKeyPress(e, userType) {
+        if (e.keyCode === 13) { // 13 is the keycode for the Enter key
+          if (userType === 'coach') {
+            validateCoachEmailPassword();
+          } else if (userType === 'athlete') {
+            validateAthleteEmailPassword();
+          }
+        }
+      }
+
+      document.getElementsByName("coach_username")[0].addEventListener('keypress', function(e) {
+        handleKeyPress(e, 'coach');
+      });
+      document.getElementsByName("coach_password")[0].addEventListener('keypress', function(e) {
+        handleKeyPress(e, 'coach');
+      });
+      document.getElementsByName("athlete_username")[0].addEventListener('keypress', function(e) {
+        handleKeyPress(e, 'athlete');
+      });
+      document.getElementsByName("athlete_password")[0].addEventListener('keypress', function(e) {
+        handleKeyPress(e, 'athlete');
+      });
 
       signInAthlete.addEventListener("click", function (e) {
         validateAthleteEmailPassword();

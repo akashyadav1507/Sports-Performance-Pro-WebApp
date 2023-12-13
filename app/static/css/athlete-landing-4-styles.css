@@ -6,6 +6,17 @@
   /* Other CSS styles for the table here, if needed */
 }
 
+.info-box {
+  position: absolute;
+  background-color: black;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add a subtle box shadow */
+  z-index: 1000; /* Ensure the modal appears above other elements */
+}
+
+
 .today-date {
   background-color: #9308cf;
   color: #fff;

@@ -4,11 +4,25 @@
 const urlParams = new URLSearchParams(window.location.search);
 const teamId = urlParams.get("teamId");
 const coachId = urlParams.get("coachId");
+const teamName = urlParams.get("teamName");
+const assignExerciseBtn = document.getElementById("assign-session");
 
+// Set the Team name
+document.querySelector("#trainingTable th").textContent = `Team : ${teamName}`;
+
+assignExerciseBtn.addEventListener("click", function (e) {
+  e.preventDefault();
+});
+
+// Redirect to new page on clicking Assign exercise
+assignExerciseBtn.addEventListener("click", function (e) {
+  e.preventDefault();
+  window.location.href = `/assignExercise?coachId=${coachId}&teamId=${teamId}&teamName=${teamName}&date=${currentDate}`;
+});
 
 // let myAthleteId = 2; // Should be ideally fetched from the sessionStorage
 let currentTeamId = teamId;
-let currentCoachId = coachId; // FIXME: change to selectedDate later
+let currentCoachId = coachId; // FIXME: change to coachId later
 let currentWorkout;
 let currentBlocks;
 let currentExercises;
@@ -94,7 +108,7 @@ async function fetchWorkoutsByAthleteDirect(athlete_id, coachId, selectedDate) {
 
 async function fetchAthletesForTeam(coachId, teamId) {
   const response = await fetch(
-    `/getAthletesForTeam?coachId=${coachId}&teamId=${teamId}}`
+    `/getAthletesForTeam?coachId=${coachId}&teamId=${teamId}`
   );
   const data = await response.json();
   console.log("These are the Athletes  assigned for coach: ", data);
@@ -192,6 +206,10 @@ blockTabs.addEventListener("click", (e) => {
   if (e.target.tagName == "BUTTON") {
     e.preventDefault();
     e.stopPropagation();
+    $(e.target).siblings("button").css("background-color", "");
+
+    // Add the "highlight" class to the clicked element
+    $(e.target).css("background-color", "green");
     exerciseTabs.innerHTML = "";
     exerciseDetails.innerHTML = "Select an Exercise to view details.";
     successMessage.innerText = "";
@@ -236,6 +254,10 @@ function displayExercises2(blockEvent, block) {
 
 exerciseTabs.addEventListener("click", (e) => {
   if (e.target.tagName == "BUTTON") {
+    $(e.target).siblings("button").css("background-color", "");
+
+    // Add the "highlight" class to the clicked element
+    $(e.target).css("background-color", "green");
     e.preventDefault();
     e.stopPropagation();
     currentExerciseId = Number(e.target.id); // Setting id for retrival
@@ -352,7 +374,11 @@ async function initialData() {
     //
 
     console.log("This is the teamId", teamId);
+    console.log("This is my coachId :", coachId);
+    console.log("This is my TeamName :", teamName);
+
     console.log("Im inside Initial Data");
+
     // athleteId = await fetchAthleteID(userEmail); // Fetch athlete UserEmail
     // athleteTeams = await fetchAthleteTeams(athleteId); // Fetch Athlete Teams
     const teamsAthletes = await fetchAthletesForTeam(coachId, teamId); // Fetch Teams for the coach
@@ -395,6 +421,7 @@ async function initialData() {
 // Main Function which has all details:
 async function main() {
   try {
+    highlightWorkoutDatesForCoaches(coachId)
     const data = await initialData(); // Gets all the initial Data
   } catch (error) {
     console.error("An error occured", error);

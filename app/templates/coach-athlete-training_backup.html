@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link rel="stylesheet" href="athlete-styles.css" /> -->
+    <!-- Include Bootstrap CSS -->
+
+    <!-- <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.9.0/main.min.css"
+      rel="stylesheet"
+    /> -->
+      <!--Page Title-->
+    <title>Sports Performance Pro - All your records in one place</title>
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="../static/images/favicon.ico" title="Favicon"/>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/css/select2.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../static/css/coach-team-training.css" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/js/select2.min.js"
+      defer
+    ></script>
+  </head>
+<style>
+    /* Remove default list styles and padding for UL */
+    #trainingTable tr.expanded {
+  height: 150px; /* Or however tall you want it to be when expanded */
+
+
+  
+}
+
+ul, #myUL, .nested {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Style for the caret symbol */
+.caret::before {
+  content: "\25B6";  /* Unicode character for a right-pointing triangle */
+  color: black;       /* Caret color */
+  display: inline-block;
+  margin-right: 6px;  /* Space between the caret and the text */
+  cursor: pointer;
+}
+
+/* Rotate the caret symbol when the list item is expanded */
+.caret-down::before {
+  transform: rotate(90deg);
+}
+
+/* Style for list items */
+li {
+  padding: 5px 0;
+  cursor: pointer; /* Change cursor for the entire list item if clickable */
+}
+
+/* Style for nested items - initially hidden */
+.nested {
+  display: none;
+}
+
+/* Style for active nested items */
+.nested.active {
+  display: block;
+}
+li {
+  text-align: left; /* Align text to the left */
+}
+li {
+  padding-left: 0; /* Remove padding on the left */
+  margin-left: 0;  /* Remove margin on the left */
+}
+.caret-rotate {
+  transform: rotate(90deg); /* Adjust as needed for your design */
+}
+/* General styles for the workout container */
+/* General styles for the workout container */
+#workoutTree {
+  background-color: #0077B5; /* A shade of blue */
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  color: white; /* White text */
+}
+
+/* Style for each workout item */
+#workoutTree li {
+  padding: 5px;
+  margin: 5px 0;
+  border-radius: 3px;
+  list-style-type: none;
+  cursor: pointer;
+  position: relative;
+  background-color: #0077B5; /* A darker shade of blue for contrast */
+  color: white; /* Ensure text inside the list is white */
+}
+
+/* Style for the caret */
+#workoutTree .caret {
+  cursor: pointer;
+  user-select: none;
+  padding-right: 5px;
+  color: white; /* White caret symbol */
+}
+
+
+/* Style for nested items (blocks and exercises) */
+#workoutTree .nested {
+  display: none;
+  margin-left: 15px;
+}
+
+/* Style when a caret item is clicked to rotate down */
+#workoutTree .caret-down::before {
+  transform: rotate(90deg);
+}
+
+/* Styles for when nested items are active */
+#workoutTree .active {
+  display: block;
+}
+
+/* Highlight the current selection */
+#workoutTree .selected {
+  background-color: #e7f4e4;
+}
+
+/* Style for buttons within blockTabs */
+#block-tabs button {
+  background-color: #e0e0e0;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Hover effect for buttons */
+#block-tabs button:hover {
+  background-color: #d0d0d0;
+}
+
+/* Highlight for selected button */
+#block-tabs button.active {
+  background-color: #beb;
+}
+
+/* General style for the details and dropdown */
+/* #exercise-details, #dropdown-container {
+  background-color: #f0f0f0;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+} */
+
+/* Style for the exercise table */
+.your-table-class {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.your-table-class th, .your-table-class td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.your-table-class tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Style for input fields */
+input[type="number"].my-input {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+/* Add additional styles as needed */
+
+
+
+
+
+
+
+
+  </style>
+
+  <body>
+    <header>
+      <h1 class="title">Sports Performance Pro</h1>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="/coachLanding">Home</a></li>
+        <li><a href="/workoutSelection">Assign Workouts</a></li>
+        <li><a href="/testSelection">Assign Tests</a></li>
+        <li><a href="/defineExercises">Create Exercises</a></li>
+        <li><a href="/notesLanding">Notes</a></li>
+        <li><a href="/coachhNotifications">Notifications</a></li>
+        <li><a href="/coachProfile">My Profile</a></li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <h1>Athlete training sessions!</h1>
+      <p id="user_id" data-user-email="{{athlete_username}}"></p>
+      <!-- Container for login forms -->
+      <div class="login-forms">
+        <div class="login-container-1" style="margin-right: 20px">
+          <div class="container mt-7">
+            <h1 class="text-center">Athlete Workout</h1>
+            <div class="row">
+              <div class="col-md-7">
+                <!-- Left side div for the calendar -->
+                <!-- <div id="athlete-calendar"></div> -->
+                <div
+                  class="container col-sm-4 col-md-7 col-lg-4 mt-5 d-flex justify-content-center"
+                  id="athlete-calendar"
+                >
+                  <div class="card">
+                    <h3 class="card-header" id="monthAndYear"></h3>
+                    <table
+                      class="table table-bordered table-responsive-sm"
+                      id="calendar"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Sun</th>
+                          <th>Mon</th>
+                          <th>Tue</th>
+                          <th>Wed</th>
+                          <th>Thu</th>
+                          <th>Fri</th>
+                          <th>Sat</th>
+                        </tr>
+                      </thead>
+                      <tbody id="calendar-body"></tbody>
+                    </table>
+                    <div class="form-inline" style="width: 100%">
+                      <button
+                        class="btn btn-outline-primary"
+                        style="width: 50%"
+                        id="previous"
+                        onclick="previous()"
+                      >
+                        Previous
+                      </button>
+                      <button
+                        class="btn btn-outline-primary"
+                        style="width: 50%"
+                        id="next"
+                        onclick="next()"
+                      >
+                        Next
+                      </button>
+                    </div>
+                    <br />
+                    <form class="form-inline" style="width: 100%">
+                      <label class="lead mr-2" for="month">Jump To:</label>
+                      <select
+                        class="form-control col-sm-6"
+                        name="month"
+                        id="month"
+                        onchange="jump()"
+                      >
+                        <option value="0">Jan</option>
+                        <option value="1">Feb</option>
+                        <option value="2">Mar</option>
+                        <option value="3">Apr</option>
+                        <option value="4">May</option>
+                        <option value="5">Jun</option>
+                        <option value="6">Jul</option>
+                        <option value="7">Aug</option>
+                        <option value="8">Sep</option>
+                        <option value="9">Oct</option>
+                        <option value="10">Nov</option>
+                        <option value="11">Dec</option>
+                      </select>
+
+                      <label for="year"></label>
+                      <select
+                        class="form-control col-sm-6"
+                        name="year"
+                        id="year"
+                        onchange="jump()"
+                      >
+                        <option value="1990">1990</option>
+                        <option value="1991">1991</option>
+                        <option value="1992">1992</option>
+                        <option value="1993">1993</option>
+                        <option value="1994">1994</option>
+                        <option value="1995">1995</option>
+                        <option value="1996">1996</option>
+                        <option value="1997">1997</option>
+                        <option value="1998">1998</option>
+                        <option value="1999">1999</option>
+                        <option value="2000">2000</option>
+                        <option value="2001">2001</option>
+                        <option value="2002">2002</option>
+                        <option value="2003">2003</option>
+                        <option value="2004">2004</option>
+                        <option value="2005">2005</option>
+                        <option value="2006">2006</option>
+                        <option value="2007">2007</option>
+                        <option value="2008">2008</option>
+                        <option value="2009">2009</option>
+                        <option value="2010">2010</option>
+                        <option value="2011">2011</option>
+                        <option value="2012">2012</option>
+                        <option value="2013">2013</option>
+                        <option value="2014">2014</option>
+                        <option value="2015">2015</option>
+                        <option value="2016">2016</option>
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                        <option value="2021">2021</option>
+                        <option value="2022">2022</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                        <option value="2028">2028</option>
+                        <option value="2029">2029</option>
+                        <option value="2030">2030</option>
+                      </select>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <!-- Right side div (vacant for now) -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="login-container-2">
+          <div class="container">
+            <h1 style="color: black">My Athlete</h1>
+            <button
+              type="button"
+              id="assign-session"
+              style="position: relative"
+            >
+              Assign Exercise
+            </button>
+            <div class="team-list">
+              <h1>Athlete: {Athlete Name}</h1>
+              <table id="trainingTable">
+                <thead>
+                  <tr>
+                    <!-- FIXME: PUT athletes username here -->
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Dynamically fill in the team names here -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- This is a test-->
+            <!-- <ul class="appendingTest">
+              <li>This is a test to check appending</li>
+            </ul> -->
+
+            <div id="my-training">
+              <!-- Generate dynamically my training session from the databas -->
+              <!-- On clicking a particular team , should generate the below and add it to the specific team -->
+              <!-- Generate dynamically from the databas -->
+              <!-- Tabs for blocks and exercises -->
+              <!-- Tree View Container -->
+                <ul id="workoutTree"></ul>
+
+                <!-- Single layer items will be inserted here dynamically -->
+            </div>
+
+                  <!-- <button id="add-workout-button" class="add-workout-btn-hide">
+                    Add a Block
+                  </button> -->
+                </div>
+                <div class="horizontal-tabs" id="block-tabs">
+                  <!-- <button id="add-block-button" class="add-block-btn-hide">
+                    Add a Block
+                  </button> -->
+                </div>
+                <div class="vertical-tabs" id="exercise-tabs">
+                  <!-- PUTTING THIS OUT FOR A CHANGE-->
+                  <!-- <button id="add-exercise-button" class="add-exercise-btn-hide">
+                  Add an Exercise
+                </button> -->
+                </div>
+              </div>
+
+              <!-- <button id="add-exercise-button" class="add-exercise-btn-hide">
+                Add an Exercise
+              </button> -->
+              <!-- Display exercise details -->
+              <div id="exercise-details">
+                Select an exercise to view details.
+                <div id="table-container" class="create-exercise-table-hide">
+                  <!-- MOVED FROM HERE -->
+
+                  <button id="addSet-btn" class="add-Set--btns">Add SET</button>
+                  <form
+                    action="demo.html"
+                    method="GET"
+                    id="create-exercise-form"
+                  >
+                    <div id="dropdown-container">
+                      <!-- Dropdowns will be created here -->
+                    </div>
+                    <table id="create-exercise">
+                      <thead id="create-exercise-heads">
+                        <th
+                          id="header-set"
+                          style="text-align: center; color: white"
+                        >
+                          SET
+                        </th>
+                        <th
+                          id="header-load"
+                          style="text-align: center; color: white"
+                        >
+                          LOAD
+                        </th>
+                        <th
+                          id="header-reps"
+                          style="text-align: center; color: white"
+                        >
+                          REPS
+                        </th>
+                        <th
+                          id="header-input"
+                          style="text-align: center; color: white"
+                        >
+                          athletes_load
+                        </th>
+                      </thead>
+                      <tbody class="create-exercise-rows"></tbody>
+                    </table>
+                    <div id="error-message" style="color: red"></div>
+                    <div id="success-message" style="color: green"></div>
+                  </form>
+                  <!-- Table will be generated here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 100px"></div>
+    <div
+      id="athlete-username"
+      data-username="{{ username }}"
+      style="display: none"
+    ></div>
+
+    <footer>
+      <div class="footer">2023 Sports Performance Pro</div>
+    </footer>
+    <script defer>
+      window.addEventListener("DOMContentLoaded", (event) => {
+        const athleteId = 2; // Set athlete ID
+        const coachId = 223; // Set coach ID
+
+        // Select the specific anchor element for "Notes"
+        const notesLink = document.querySelector('a[href="/notes_athlete"]');
+        if (notesLink) {
+          // Update the href attribute with the variables
+          notesLink.href = `/notes_athlete?coachId=${encodeURIComponent(
+            coachId
+          )}&athleteId=${encodeURIComponent(athleteId)}`;
+        }
+      });
+    </script>
+    <script src="../static/js/calendar.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+    <!-- <script src="../static/js/coach-athlete-training.js" defer></script> -->
+    <script src="../static/js/coach-athlete-training_v2.js" defer></script>
+  </body>
+</html>

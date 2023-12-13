@@ -4,7 +4,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Login</title>
+    <!--Page Title-->
+    <title>Sports Performance Pro - All your records in one place</title>
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="../static/images/favicon.ico" title="Favicon"/>
+
     <style>
       /* Your existing CSS styles here */
       body {
@@ -33,6 +38,18 @@
         list-style-type: none;
         padding: 0;
       }
+
+      .login-link {
+            font-size: 16px;
+            color: #0077B5;
+            text-decoration: none;
+            margin-top: 20px;
+            display: block;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+        }
 
       nav li {
         display: inline;
@@ -112,14 +129,23 @@
         background-color: #005599;
       }
 
-      footer {
-        position: absolute;
+      .footer {
+        position: fixed;
         bottom: 0;
+        left: 50%; /* Align the footer to the horizontal center of the viewport */
+        transform: translateX(-50%); /* Center the footer horizontally */
         width: 100%;
         background-color: #fff;
         color: #333;
         text-align: center;
         padding: 10px 0;
+        z-index: 999;
+        box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+      }
+
+      .footer-content {
+        max-width: 1400px;
+        margin: 0 auto;
       }
 
       /* Added a style for the "Create one" link */
@@ -190,6 +216,7 @@
           required
         />
         <button type="button" id="admin_signin">Sign In</button>
+        <a class="login-link" href="/">Go to Homepage</a>
         <div id="adminEmailError" class="error-message"></div>
       </div>
 
@@ -198,7 +225,9 @@
       <a class="create-account-link" href="registration.html"></a>
     </div>
 
-    <footer>2023 Sports Performance Pro</footer>
+    <footer>
+      <div class="footer">2023 Sports Performance Pro</div>
+    </footer>
 
     <script>
       const adminSignIn = document.getElementById("admin_signin");
@@ -226,6 +255,14 @@
           });
         }
       }
+      function handleAdminKeyPress(e) {
+        if (e.keyCode === 13) { // 13 is the keycode for the Enter key
+          validateAdminEmail();
+        }
+      }
+      document.getElementsByName("admin_username")[0].addEventListener('keypress', handleAdminKeyPress);
+      document.getElementsByName("admin_password")[0].addEventListener('keypress', handleAdminKeyPress);
+
 
       adminSignIn.addEventListener("click", function (e) {
         validateAdminEmail();

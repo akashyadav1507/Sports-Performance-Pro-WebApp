@@ -1,0 +1,82 @@
+[
+  {
+    "blocks": [
+      {
+        "block_id": 1,
+        "exercises": [
+          {
+            "exercise_id": 1,
+            "loads_reps": {
+              "coach": [
+                {
+                  "load": 25,
+                  "reps": 2
+                },
+                {
+                  "load": 50,
+                  "reps": 1
+                }
+              ]
+            },
+            "name": "FootBall-dribble-fast",
+            "sets": 2
+          },
+          {
+            "exercise_id": 2,
+            "loads_reps": {
+              "coach": [
+                {
+                  "load": 25,
+                  "reps": 2
+                }
+              ]
+            },
+            "name": "FootBall-dribble-slow",
+            "sets": 1
+          }
+        ],
+        "name": "FootBall-dribble"
+      },
+      {
+        "block_id": 2,
+        "exercises": [
+          {
+            "exercise_id": 3,
+            "loads_reps": {
+              "coach": [
+                {
+                  "load": 30,
+                  "reps": 3
+                }
+              ]
+            },
+            "name": "FootBall-freestyle-move1",
+            "sets": 1
+          },
+          {
+            "exercise_id": 4,
+            "loads_reps": {
+              "coach": [
+                {
+                  "load": 40,
+                  "reps": 2
+                },
+                {
+                  "load": 60,
+                  "reps": 1
+                }
+              ]
+            },
+            "name": "FootBall-freestyle-move2",
+            "sets": 2
+          }
+        ],
+        "name": "FootBall-freestyle"
+      }
+    ],
+    "coach_id": 3,
+    "date_added": "Fri, 11 Nov 2022 00:00:00 GMT",
+    "name": "FootBall_Wk1",
+    "workout_id": 1
+  }
+]

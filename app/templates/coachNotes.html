@@ -4,24 +4,35 @@
     <!-- Your existing head content -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sports Performance Pro - Welcome Coach TJ!</title>
+    <!--Page Title-->
+    <title>Sports Performance Pro - All your records in one place</title>
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="../static/images/favicon.ico" title="Favicon"/>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 </head>
 <style>
-        body {
+    body {
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
     }
 
     header {
-        background-color: #0077b5;
+        background-color: #0077B5;
         color: #fff;
         padding: 20px 0;
         text-align: center;
     }
 
     nav {
-        background-color: #0077b5;
+        background-color: #0077B5;
         color: #fff;
         padding: 10px 0;
     }
@@ -44,28 +55,76 @@
         font-size: 16px;
         transition: color 0.3s ease-in-out;
         padding: 15px 25px;
-        border-radius: 15px;
+        border-radius: 15px; /* Add rounded corners to the tab */
     }
 
     nav a.current {
         color: #fff;
         background-color: #005599;
         font-weight: bold;
-        border-radius: 15px;
+        border-radius: 15px; /* Apply rounded corners to the selected tab */
     }
 
-    nav a:hover,
-    nav a:focus {
+    nav a:hover, nav a:focus {
         color: #005599;
         background-color: #fff;
-        border-radius: 15px;
+        border-radius: 15px; /* Apply the same rounded corners on hover/focus */
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 50%; /* Align the footer to the horizontal center of the viewport */
+        transform: translateX(-50%); /* Center the footer horizontally */
+        width: 100%;
+        background-color: #fff;
+        color: #333;
+        text-align: center;
+        padding: 10px 0;
+        z-index: 999;
+        box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+    }
+
+    .footer-content {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        font-size: 30px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        color: #0077B5;
+    }
+
+    .title {
+        font-size: 30px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        color: #fff; /* White color */
+    }
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #0077B5;
     }
 
     .container {
-        max-width: 900px;
+        width: 100%; 
+        max-width: 1400px;
         margin: 0 auto;
-        padding: 5px 0;
-        max-height: 100px;
+        padding-bottom: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        background-color: #fff;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 60px); 
+        margin-bottom: 60px;
+        margin-top: 60px;
     }
 
     .note-input {
@@ -83,8 +142,9 @@
     button {
         background-color: #0077B5;
         color: #fff;
+        font-size: 15px;
         border: none;
-        padding: 10px 20px;
+        padding: 15px 30px;
         border-radius: 5px;
         cursor: pointer;
     }
@@ -96,10 +156,13 @@
     .note-history {
         background-color: #f2f2f2;
         border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 5px;
+        padding: 30px;
         max-height: 500px; /* Adjust this value as needed */
         overflow-y: auto;
+
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 15px;
     }
 
     .note {
@@ -175,7 +238,7 @@
     }
 
     #notesContainer {
-        max-height: 200%; /* Adjust this value as needed */
+        max-height: 200%;
     }
 
 
@@ -184,17 +247,136 @@
     }
 
     .note-reply {
-    color: #fff; /* Blue color */
-    background-color: #0077B5; /* Light blue background */
-    padding: 5px;
-    border-radius: 3px;
-    margin-top: 5px;
+        color: #fff; /* Blue color */
+        background-color: #0077B5; /* Light blue background */
+        padding: 20px;
+        border-radius: 5px;
+        margin-top: 5px;
+        margin-right: 20px;
+        margin-left: 20px;
+    }
+    
+    .athlete-details {
+        background-color: #0077b5; /* Background color for highlight */
+        color: #fff; /* Text color */
+        padding: 10px;
+        border-radius: 8px;
+        margin: 20px 0;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1)
     }
 
+    .athlete-details h2 {
+        margin: 0;
+        color: #ffd700; /* Gold color for the athlete's name */
+        font-size: 1.5em;
+    }
+
+    .athlete-details p {
+        margin: 5px 0;
+        font-size: 1.1em;
+    }
+
+    #searchBar {
+        padding: 10px;
+        width: 300px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        outline: none;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+
+    #searchBar:focus {
+        border-color: #0077B5; /* Change border color on focus */
+        box-shadow: 0 0 5px rgba(0, 119, 181, 0.5); /* Add a subtle box shadow on focus */
+    }
+
+    /* Style for athlete details */
+    #athleteDetails {
+        margin-bottom: 30px;
+        background-color: #f2f2f2;
+        border: 1px solid #ccc;
+        padding: 15px;
+        padding-top:25px;
+        max-height: 500px; /* Adjust this value as needed */
+        overflow-y: auto;
+
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 15px;
+    }
+
+    #selectAnotherAthlete {
+        background-color: #00b52d; 
+        color: #fff; 
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px; 
+        width: 200px;
+        height: 50px;
+        margin-bottom: 20px;
+        margin-top: 10px; 
+        margin-left: auto; 
+        display: block;
+        font-size: 16px;
+    }
+
+    #selectAnotherAthlete:hover {
+        background-color: #0d6605; /* Adjust hover background color as needed */
+    }
+
+    /* Custom CSS for the modal */
+    .modal-container {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 300px;
+    }
+
+    .close-button {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close-button:hover,
+    .close-button:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .modal-title {
+        margin-bottom: 20px;
+    }
+
+    /* Added some basic styles for the input and textarea */
+    .form-control {
+        margin-bottom: 10px;
+        width: 100%;
+    }
 </style>
 <body>
     <header>
-        <h1 class="title">Sports Performance Pro - Welcome Coach TJ!</h1>
+        <h1 class="title">Sports Performance Pro</h1>
     </header>
     <nav>
         <ul>
@@ -203,29 +385,31 @@
             <li><a href="/testSelection">Create Tests</a></li>
             <li><a href="/defineExercises">Create Exercises</a></li>
             <li><a href="/notesLanding" class="current">Notes</a></li>
-            <li><a href="#">Notifications</a></li>
-            <li><a href="/coachProfile" class="current">My Profile</a></li>
+            <li><a href="/coachhNotifications">Notifications</a></li>
+            <li><a href="/coachProfile">My Profile</a></li>
         </ul>
     </nav>
 
     <div class="container">
-        <div class="athlete-name">
-            <h2 id="athleteNameHeading">Send them notes and let them know about their progress!</h2>
-        </div>
+        <h1 style="text-align: center;">Notes</h1>
+
+
+        <button id="selectAnotherAthlete">Select Another Athlete</button>
+        <div id="athleteDetails"></div>
 
         <div class="note-input">
-            
-            <button id="addNote" type = "button"style="float: right;">Add Note</button>
-            <input type="text" id="searchBar" style="width: 250px; color: #000000; background-color: #f0f0f0;" placeholder="Search Notes...">
-
-
+            <button id="addNote" type="button" style="float: right; margin-top: 10px;">Add Note</button>
+            <input type="text" id="searchBar" placeholder="Search for a note">
+        
             <div id="noteModalContainer" class="modal-container">
-                <div class="modal-content" style="position: relative;">
-                    <span id="closeModal" class="close-button" style="position: absolute; top: 10px; right: 10px; cursor: pointer; color: black;">&times;</span>
-                    <input type="text" id="noteSubject" placeholder="Subject" style="width: 250px;">
-
-                    <textarea id="noteText" placeholder="Add a note..." style="width: 250px;"></textarea>
-                    <button id="modalAddNote" style="width: 100px;">Add</button>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" style="padding-top: 20px;">Add Note</h2>
+                        <span id="closeModal" class="close-button" style="display: inline;">&times;</span>
+                    </div>
+                    <input type="text" id="noteSubject" placeholder="Subject" class="form-control">
+                    <textarea id="noteText" placeholder="Add a note..." class="form-control"></textarea>
+                    <button id="modalAddNote" class="btn btn-primary" style="margin-top: 15px;">Add</button>
                 </div>
             </div>
         </div>
@@ -239,6 +423,17 @@
 
         <div id="modalOverlay" class="modal-overlay"></div>
     </div>
+
+    <!-- Your HTML code with confirmation dialog -->
+    <div id="confirmReturnDialog" title="Confirm Return" style="display: none;">
+        <p>Are you sure you want to return and select another athlete?</p>
+    </div>
+
+    <footer>
+        <div class="footer">
+            2023 Sports Performance Pro
+        </div>
+    </footer>
 
     <script>
             function getQueryParams() {
@@ -259,6 +454,81 @@
             const modalOverlay = document.getElementById("modalOverlay");
             const notesContainer = document.getElementById("notesContainer");
             const queryParams = getQueryParams();
+
+            function fetchAthleteDetails() {
+                const apiURL = "/getAthleteById"; // Your API endpoint
+                fetch(`${apiURL}?athlete_id=${queryParams.athlete_id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            athleteNameHeading.textContent = "Athlete details not found.";
+                        } else {
+                            athleteNameHeading.textContent = `Athlete: ${data.name}, Institute: ${data.institute}, Sports: ${data.sports}, Team: ${data.team}`;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching athlete details:', error);
+                        athleteNameHeading.textContent = "Error fetching athlete details.";
+                    });
+            }
+
+            function fetchAthleteDetails() {
+                const apiURL = "/getAthleteById"; // Your API endpoint
+                fetch(`${apiURL}?athlete_id=${queryParams.athlete_id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        displayAthleteDetails(data);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching athlete details:', error);
+                        displayAthleteDetails({ error: true });
+                    });
+            }
+
+            fetchAthleteDetails();
+
+            function displayAthleteDetails(data) {
+                const athleteDetailsContainer = document.getElementById("athleteDetails");
+
+                if (data.error) {
+                    athleteDetailsContainer.textContent = "Athlete details not found.";
+                } else {
+                    // Create an unordered list element
+                    const detailsList = document.createElement("ul");
+
+                    // Add list items for each piece of information
+                    const nameItem = createListItem("Name", data.name);
+                    const instituteItem = createListItem("Institute", data.institute);
+                    const sportsItem = createListItem("Sports", data.sports);
+
+                    if (data.team == null) {
+                        data.team = "Athlete does not have a team";
+                    }
+                    const teamItem = createListItem("Team", data.team);
+
+                    // Append list items to the unordered list
+                    detailsList.appendChild(nameItem);
+                    detailsList.appendChild(instituteItem);
+                    detailsList.appendChild(sportsItem);
+                    detailsList.appendChild(teamItem);
+
+                    // Replace the content of the athleteDetailsContainer with the unordered list
+                    athleteDetailsContainer.innerHTML = '';
+                    athleteDetailsContainer.appendChild(detailsList);
+                }
+            }
+
+            // Helper function to create a list item with a specified label and value
+            function createListItem(label, value) {
+                const listItem = document.createElement("li");
+                listItem.innerHTML = `<strong>${label}:</strong> ${value}`;
+
+                // Apply CSS styles
+                listItem.style.fontSize = "16px"; // Adjust the font size as needed
+                listItem.style.marginBottom = "8px"; // Add some margin between list items
+
+                return listItem;
+            }
 
 
             // Function to filter and highlight notes
@@ -362,7 +632,7 @@
                 }
             });
              // Function to fetch and display notes
-             function fetchAndDisplayNotes() {
+            function fetchAndDisplayNotes() {
             const apiURL = "/getNotes"; // Replace with your API URL
             const coachId = queryParams.coach_id; // Replace with the appropriate coach ID
             const athleteId = queryParams.athlete_id; // Replace with the appropriate athlete ID
@@ -373,54 +643,87 @@
                 .then(data => {
                     const notes = data.notes;
 
+                    console.log(notes); // Log the API response
+
                     // Clear existing notes
                     notesContainer.innerHTML = "";
 
-                    // Loop through notes and display them in reverse order
-                    for (let i = notes.length - 1; i >= 0; i--) {
-                        const noteData = notes[i];
-                        const noteElement = document.createElement("div");
-                        noteElement.classList.add("note");
+                    if (data.message === 'No notes found for the given coach and athlete') {
+                        console.log("No notes found."); // Log a message
+                        // Display a message when no notes are found
+                        const noNotesMessage = document.createElement("p");
+                        noNotesMessage.textContent = "No notes added for this athlete.";
+                        notesContainer.appendChild(noNotesMessage);
+                        
+                    } else {
+                        // Loop through notes and display them in reverse order
+                        for (let i = notes.length - 1; i >= 0; i--) {
+                            const noteData = notes[i];
+                            const noteElement = document.createElement("div");
+                            noteElement.classList.add("note");
 
-                        // Create elements for note details (date, subject, text)
-                        const dateElement = document.createElement("p");
-                        dateElement.classList.add("note-date");
-                        dateElement.textContent = noteData.date_created;
+                            // Create elements for note details (date, subject, text)
+                            const dateElement = document.createElement("p");
+                            dateElement.classList.add("note-date");
+                            dateElement.textContent = noteData.date_created;
 
-                        const subjectElement = document.createElement("p");
-                        subjectElement.classList.add("note-subject");
-                        subjectElement.innerHTML = `<strong>Subject:</strong> ${noteData.subject}`;
+                            const subjectElement = document.createElement("p");
+                            subjectElement.classList.add("note-subject");
+                            subjectElement.innerHTML = `<strong>Subject:</strong> ${noteData.subject}`;
 
-                        const textElement = document.createElement("p");
-                        textElement.classList.add("note-text");
-                        textElement.textContent = noteData.coach_reply;
+                            const textElement = document.createElement("p");
+                            textElement.classList.add("note-text");
+                            textElement.textContent = noteData.coach_reply;
 
-                        // Append elements to the note
-                        noteElement.appendChild(dateElement);
-                        noteElement.appendChild(subjectElement);
-                        noteElement.appendChild(textElement);
+                            // Append elements to the note
+                            noteElement.appendChild(dateElement);
+                            noteElement.appendChild(subjectElement);
+                            noteElement.appendChild(textElement);
 
-                         // Check for athlete reply and display it
-                        if (noteData.athlete_reply) {
-                            const replyElement = document.createElement("p");
-                            replyElement.classList.add("note-reply");
-                            replyElement.textContent = noteData.athlete_reply;
-                            replyElement.innerHTML = `<strong><span class="reply-label">Reply:</span></strong> ${noteData.athlete_reply}`;
-                            noteElement.appendChild(replyElement);
+                            // Check for athlete reply and display it
+                            if (noteData.athlete_reply) {
+                                const replyElement = document.createElement("p");
+                                replyElement.classList.add("note-reply");
+                                replyElement.innerHTML = `<strong><span class="reply-label">Reply:</span></strong> ${noteData.athlete_reply}`;
+                                noteElement.appendChild(replyElement);
+                            }
+
+                            // Append the note to the beginning of the notes container
+                            notesContainer.prepend(noteElement);
                         }
-
-                        // Append the note to the beginning of the notes container
-                        notesContainer.prepend(noteElement);
                     }
                 })
                 .catch(error => {
                     console.error(error); // Handle errors
                 });
-        }
 
-        // Call the function to fetch and display notes when the page loads
-        fetchAndDisplayNotes();
-        // ... (existing code)
+            }
+
+            // Call the function to fetch and display notes when the page loads
+            fetchAndDisplayNotes();
+
+
+            // Handle the "Select Another athlete" button
+            $('#selectAnotherAthlete').click(function (e) {
+                e.preventDefault(e);
+
+                $("#confirmReturnDialog").dialog({
+                    resizable: false,
+                    height: "auto",
+                    width: 400,
+                    modal: true,
+                    buttons: {
+                        "Yes": function () {
+                            // Redirect to the previous page (workout-selection.html)
+                            window.location.href = '/notesLanding';
+                            $(this).dialog("close");
+                        },
+                        "No": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+            });
         });
     </script>
 </body>

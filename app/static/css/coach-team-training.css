@@ -49,7 +49,7 @@ nav a:focus {
 .footer {
   position: fixed;
   bottom: 0;
-  left: 50%;
+  left: 50%; /* Align the footer to the horizontal center of the viewport */
   transform: translateX(-50%); /* Center the footer horizontally */
   width: 100%;
   background-color: #fff;
@@ -58,16 +58,6 @@ nav a:focus {
   padding: 10px 0;
   z-index: 999;
   box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
-}
-
-footer {
-position: relative;
-bottom: 0;
-width: 100%;
-background-color: #fff;
-color: #333;
-text-align: center;
-padding: 10px 0;
 }
 
 .footer-content {
@@ -103,16 +93,24 @@ h2 {
   /* Other CSS styles for the table here, if needed */
 }
 
- /* Add vertical spacing to calendar dates */
-td {
-  padding: 30px;
-}
-
-#calendar td {
-  height: 60px; 
+.info-box {
+  white-space: pre-line;
+  position: absolute;
+  background-color: black;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add a subtle box shadow */
+  z-index: 1000; /* Ensure the modal appears above other elements */
 }
 
 .today-date {
+  background-color: #28a745;
+  color: #fff;
+  border-radius: 12px;
+}
+
+.workout-date {
   background-color: #9308cf;
   color: #fff;
   border-radius: 12px;
@@ -172,12 +170,12 @@ td {
 .active > a {
   color: #bc204b !important;
 }
-.active {
-  border-bottom: 1px solid #bc204b;
-}
-.tab-button li:hover {
-  border-bottom: 1px solid #bc204b;
-}
+/* .active {
+    border-bottom: 1px solid #bc204b;
+} */
+/* .tab-button li:hover {
+  border-bottom: 1px solid #c1b7ba;
+} */
 
 a:hover {
   text-decoration: none;
@@ -276,7 +274,7 @@ nav li {
 /* Added a container for login forms */
 .login-forms {
   display: grid;
-  grid-template-columns: 0.4fr 1fr;
+  grid-template-columns: 0.4fr 0.6fr;
   justify-content: stretch; /* Center horizontally */
   /*align-items: center; /* Center vertically */
   flex-wrap: wrap; /* Wrap login containers if the screen is narrow */
@@ -300,6 +298,12 @@ nav li {
   /* text-align: center; */
   width: max-width;
   margin: 20px; /* Added margin */
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #fff;
 }
 
 h2 {
@@ -444,7 +448,7 @@ footer {
   border-radius: 3px;
 }
 
-#block-tabs {
+#workout-tabs {
   display: flex;
   justify-content: flex-start;
   background-color: offwhite;
@@ -453,13 +457,22 @@ footer {
   flex-wrap: wrap;
 }
 
+#block-tabs {
+  display: flex;
+  justify-content: flex-start;
+  background-color: offwhite;
+  padding: 10px;
+  border-collapse: collapse;
+  flex-wrap: wrap;
+}
+/*
 #exercise-tabs {
   display: flex;
   justify-content: flex-start;
   background-color: offwhite;
   padding: 10px;
   border-collapse: collapse;
-}
+} */
 .create-exercise-table-hide {
   display: none;
 }
@@ -511,13 +524,13 @@ footer {
   cursor: not-allowed;
 }
 
-#addSet-btn {
+/* #addSet-btn {
   position: relative;
 }
 
 .add-Set--btns {
   display: none;
-}
+} */
 #dropdown-container {
   display: flex;
   flex-wrap: wrap; /* Allow items to wrap to the next line */

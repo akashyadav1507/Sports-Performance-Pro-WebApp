@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--Page Title-->
+    <title>Sports Performance Pro - All your records in one place</title>
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="../static/images/favicon.ico" title="Favicon"/>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Include jQuery and jQuery UI -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+      /* Styles are kept similar to your example */
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+
+    header {
+        background-color: #0077B5;
+        color: #fff;
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    nav {
+        background-color: #0077B5;
+        color: #fff;
+        padding: 10px 0;
+    }
+
+    nav ul {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    nav li {
+        margin: 0 20px;
+    }
+
+    nav a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: bold;
+        font-size: 16px;
+        transition: color 0.3s ease-in-out;
+        padding: 15px 25px;
+        border-radius: 15px; /* Add rounded corners to the tab */
+    }
+
+    nav a.current {
+        color: #fff;
+        background-color: #005599;
+        font-weight: bold;
+        border-radius: 15px; /* Apply rounded corners to the selected tab */
+    }
+
+    nav a:hover, nav a:focus {
+        color: #005599;
+        background-color: #fff;
+        border-radius: 15px; /* Apply the same rounded corners on hover/focus */
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 50%; /* Align the footer to the horizontal center of the viewport */
+        transform: translateX(-50%); /* Center the footer horizontally */
+        width: 100%;
+        background-color: #fff;
+        color: #333;
+        text-align: center;
+        padding: 10px 0;
+        z-index: 999;
+        box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+    }
+
+    .footer-content {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        font-size: 30px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        color: #0077B5;
+    }
+
+    .title {
+        font-size: 30px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        color: #fff; /* White color */
+    }
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #0077B5;
+    }
+
+      .container {
+        width: 80%; /* Set the container width to half of the page */
+        margin: auto;
+        padding: 40px;
+        /* max-height: 600px; */
+        overflow-y: auto;
+      }
+
+      .notification-section {
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        border-radius: 10px;
+        /* max-height: 600px;  */
+        overflow-y: auto;
+      }
+
+      .section-title {
+        color: #0077b5;
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 24px;
+      }
+
+      .title {
+        font-size: 28px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        color: #fff; /* White color */
+      }
+
+      .notification-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        max-height: 500px;
+        overflow-y: auto;
+      }
+
+      .notification-list li {
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+        position: relative;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .notification-list li:hover {
+        background-color: #0077b5;
+        color: #fff;
+      }
+      /* Styles are kept similar to your example */
+      .new-notification-dot {
+        height: 20px;
+        width: 20px;
+        background-color: red;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 10px;
+        margin-left: 10px;
+      }
+      /* Existing styles */
+      .notification-list li {
+        display: flex; /* Add this to make the contents of li align in a row */
+        align-items: center; /* Add this to vertically center the items */
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+        position: relative;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .footer {
+        position: fixed;
+        bottom: 0;
+        left: 50%; /* Align the footer to the horizontal center of the viewport */
+        transform: translateX(-50%); /* Center the footer horizontally */
+        width: 100%;
+        background-color: #fff;
+        color: #333;
+        text-align: center;
+        padding: 10px 0;
+        z-index: 999;
+        box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+      }
+
+      .footer-content {
+          max-width: 1400px;
+          margin: 0 auto;
+      }
+      /* Additional styles for modal and close button */
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 class="title">Sports Performance Pro</h1>
+    </header>
+      <nav>
+
+        <ul>
+            <li><a href="/coachLanding">Home</a></li>
+            <li><a href="/workoutSelection">Assign Workouts</a></li>
+            <li><a href="/testSelection">Create Tests</a></li>
+            <li><a href="/defineExercises">Create Exercises</a></li>
+            <li><a href="/notesLanding" >Notes</a></li>
+            <li><a href="/coachhNotifications" class="current">Notifications</a></li>
+            <li><a href="/coachProfile">My Profile</a></li>
+        </ul>
+      </nav>
+
+    <div class="container">
+      <div
+        id="notificationModal"
+        style="
+          display: none;
+          position: fixed;
+          z-index: 100;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          background-color: white;
+          padding: 20px;
+          border-radius: 5px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        "
+      >
+        <div style="text-align: right">
+          <button
+            onclick="closeModal()"
+            style="border: none; background: none; font-size: 16px"
+          >
+            &times;
+          </button>
+        </div>
+
+        <h3>Notification Details</h3>
+        <p id="notificationContent"></p>
+        <button onclick="closeModal()">Close</button>
+      </div>
+      <div class="notification-section" id="coachNotifications">
+        <h2 class="section-title">Notifications</h2>
+        <p id="user_id" data-user-email="{{athlete_username}}"></p>
+        <ul class="notification-list">
+          <!-- Modal Structure -->
+          <!-- Coach notifications will be listed here -->
+        </ul>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer">
+          2023 Sports Performance Pro
+      </div>
+  </footer>
+
+    <script>
+      function storeLastNotificationId(notificationId) {
+        localStorage.setItem("lastNotificationId", notificationId.toString());
+        console.log("Last notification id stored:", notificationId);
+      }
+
+      // Check if a notification is new based on the notification id
+      function isNewNotification(notificationId) {
+        const lastNotificationId = localStorage.getItem("lastNotificationId");
+        const isNew =
+          !lastNotificationId ||
+          parseInt(notificationId) > parseInt(lastNotificationId);
+        console.log(
+          `Is new notification? ID: ${notificationId}, Last ID: ${lastNotificationId}, Is new: ${isNew}`
+        );
+        return isNew;
+      }
+      function updateNotificationStatus(notificationId) {
+        $.ajax({
+          url: `/notifications/update/coach${notificationId}`,
+          type: "PUT",
+          success: function (response) {
+            console.log(response.message);
+            // Refresh notifications to reflect the change
+            // fetchNotifications(athleteId);
+            var listItem = $("li").filter(function () {
+              return $(this).data("notification-id") === notificationId;
+            });
+            listItem.css("font-weight", "normal"); // Update the list item style
+          },
+          error: function (xhr, status, error) {
+            console.error("Error updating notification status:", error);
+          },
+        });
+      }
+      async function fetchNotifications(coachId) {
+        try {
+          const response = await $.ajax({
+            url: `/notificationsCoach?coach_id=${coachId}`,
+            type: "GET",
+          });
+          let maxNotificationId = 0;
+          const notifications = response;
+          const list = $("#coachNotifications .notification-list");
+          list.empty(); // Clear existing list items
+
+          for (const notification of notifications) {
+            maxNotificationId = Math.max(
+              maxNotificationId,
+              notification.notification_id
+            ); // Update max id
+            console.log("Athlete ID:", notification.athlete_id);
+            const coachResponse = await $.ajax({
+              url: `/getAthleteName?athlete_id=${notification.athlete_id}`,
+              type: "GET",
+            });
+
+            const workoutResponse = await $.ajax({
+              url: `/getWorkoutName/${notification.workout_id}`,
+              type: "GET",
+            });
+            console.log("Athlete response:", coachResponse);
+            console.log("Workout response:", workoutResponse);
+
+            const athleteName = coachResponse.athlete_name;
+            const workoutName = workoutResponse.workout_name;
+            const message = `Athlete ${athleteName} has submitted the ${workoutName} workout on ${notification.date}`;
+
+            const listItem = $("<li>")
+              .text(message)
+              .data("notification-id", notification.notification_id)
+              .appendTo(list);
+
+            if (isNewNotification(notification.notification_id)) {
+              console.log("Adding new notification dot for:", notification);
+              // Append the 'New' dot directly to the list item
+              $("<span>")
+                .addClass("new-notification-dot")
+                .text("New")
+                .appendTo(listItem);
+            }
+
+            if (notification.status === "unopened") {
+              listItem.css("font-weight", "bold");
+            } else {
+              listItem.css("font-weight", "normal");
+            }
+
+            listItem.on("click", function () {
+              var id = $(this).data("notification-id");
+              updateNotificationStatus(id);
+              openModal(message);
+            });
+            storeLastNotificationId(maxNotificationId);
+          }
+        } catch (error) {
+          console.error("Error fetching notifications:", error);
+        }
+      }
+
+      function openModal(content) {
+        document.getElementById("notificationContent").innerText = content;
+        document.getElementById("notificationModal").style.display = "block";
+      }
+
+      function closeModal() {
+        document.getElementById("notificationModal").style.display = "none";
+      }
+
+      var coachId;
+      var coachEmail;
+      $(document).ready(function () {
+        // Create athlete data
+        coachEmail = "{{ session['username'] }}";
+        console.log(coachEmail);
+
+        function fetchcoachId(email) {
+          $.ajax({
+            url: "/getCoachIdd",
+            type: "GET",
+            data: { coachUsername: email },
+            success: function (response) {
+              console.log("Coach ID:", response.coach_id);
+              coachId = response.coach_id;
+              fetchNotifications(coachId);
+            },
+            error: function (xhr, status, error) {
+              console.error("Error fetching coach ID:", error);
+            },
+          });
+        }
+        if (coachEmail) {
+          fetchcoachId(coachEmail);
+        } else {
+          console.error("Coach email not provided.");
+        }
+      });
+    </script>
+  </body>
+</html>

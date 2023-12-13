@@ -1,0 +1,347 @@
+header {
+  background-color: #0077b5;
+  color: #fff;
+  padding: 20px 0;
+  text-align: center;
+}
+
+nav {
+  background-color: #0077b5;
+  color: #fff;
+  padding: 10px 0;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+nav li {
+  margin: 0 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  transition: color 0.3s ease-in-out;
+  padding: 15px 25px;
+  border-radius: 15px; /* Add rounded corners to the tab */
+}
+
+nav a.current {
+  color: #fff;
+  background-color: #005599;
+  font-weight: bold;
+  border-radius: 15px; /* Apply rounded corners to the selected tab */
+}
+
+nav a:hover,
+nav a:focus {
+  color: #005599;
+  background-color: #fff;
+  border-radius: 15px; /* Apply the same rounded corners on hover/focus */
+}
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 60px);
+  margin-bottom: 60px;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 50%; /* Align the footer to the horizontal center of the viewport */
+  transform: translateX(-50%); /* Center the footer horizontally */
+  width: 100%;
+  background-color: #fff;
+  color: #333;
+  text-align: center;
+  padding: 10px 0;
+  z-index: 999;
+  box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+}
+
+.footer-content {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 30px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  color: #0077b5;
+}
+
+.title {
+  font-size: 30px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  color: #fff; /* White color */
+}
+
+h2 {
+  font-size: 24px;
+  color: #0077b5;
+}
+
+/* Basic styling for the DataTable */
+#athleteTable {
+  font-family: Arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#athleteTable th,
+#athleteTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+#athleteTable th {
+  background-color: #f2f2f2;
+}
+
+/* Style for Edit and Delete buttons */
+.edit-button,
+.delete-button {
+  background-color: #0077b5;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.edit-button:hover,
+.delete-button:hover {
+  background-color: #00568d;
+}
+
+/* Hover effect for table rows */
+#athleteTable tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* #athleteTable_filter input[type="search"] {
+            padding-right: 100px;
+        } */
+
+#athleteTable_filter {
+  margin-bottom: 20px;
+}
+
+#athleteTable tbody tr.selected {
+  background-color: #0077b5;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Style for the button container */
+#buttonContainer {
+  text-align: center; /* Center align the buttons */
+  margin-top: 20px; /* Add spacing between the buttons and the table */
+}
+
+/* Style for the "Save Team" button */
+#saveChangesButton {
+  margin-right: 20px;
+  padding: 10px;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+/* Style for the "Return" button */
+#returnButton {
+  margin-left: 20px;
+  padding: 10px;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+#deleteTeamButton {
+  padding: 10px;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.new-athlete-button {
+  background-color: #0077b5; /* Button background color */
+  color: #fff; /* Button text color */
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  position: relative;
+  top: 35px;
+  left: 200px;
+}
+
+/* Hover effect for the button */
+.new-athlete-button:hover {
+  background-color: #00568d; /* Button background color on hover */
+}
+
+block-tabs {
+  display: flex;
+  justify-content: flex-start;
+  background-color: offwhite;
+  padding: 10px;
+  border-collapse: collapse;
+  flex-wrap: wrap;
+}
+
+#exercise-tabs {
+  display: flex;
+  justify-content: flex-start;
+  background-color: offwhite;
+  padding: 10px;
+  border-collapse: collapse;
+}
+.create-exercise-table-hide {
+  display: none;
+}
+
+/* .show-exercise-category {
+  display: block;
+} */
+
+#create-exercise-heads th {
+  background: #f3f3f3; /* Slightly darker off-white background for header */
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  margin: 10px 10px;
+}
+
+.create-exercise-rows tr {
+  background: #f7f7f7;
+}
+
+.create-exercise-rows td {
+  padding: 5px;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.create-exercise-rows td input {
+  padding: 2px;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+  width: 100%; /* Set the width to 100% to fill the td */
+  padding: 10px; /* Add padding for spacing */
+  box-sizing: border-box;
+}
+#block-name .form-control {
+  display: block;
+  width: 50%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
+  background-clip: padding-box;
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  appearance: none;
+  border-radius: var(--bs-border-radius);
+}
+
+.form-control b {
+  width: 100%;
+}
+
+#create-exercise {
+  margin: 0;
+  background: rgba(
+    255,
+    255,
+    255,
+    0.95
+  ); /* Almost white background with a subtle light shadow */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border-collapse: collapse;
+}
+button {
+  background-color: #0077b5;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: #005599;
+}
+
+/* Modals styles for add block and add Exercise */
+
+/* Styles for the modal container */
+.block-modal-cls {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.4
+  ); /* Black with a little bit of transparency */
+}
+
+/* Styles for the modal content */
+.block-modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* Center the modal on the screen */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40%; /* Set the width of the modal */
+}
+
+/* Style for the close button */
+.block-close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* Style for the close button on hover */
+.block-close:hover,
+.block-close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.add-block-btn-hide {
+  display: none;
+}
+
+.add-exercise-btn-hide {
+  display: none;
+}

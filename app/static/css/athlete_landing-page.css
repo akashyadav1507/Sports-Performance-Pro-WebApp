@@ -1,3 +1,4 @@
+/* Common styles for header and navigation */
 header {
   background-color: #0077b5;
   color: #fff;
@@ -5,10 +6,20 @@ header {
   text-align: center;
 }
 
+#exSubmit {
+  padding: 10px; /* You can adjust the value according to your preference */
+}
+
 nav {
   background-color: #0077b5;
   color: #fff;
+  text-align: center;
   padding: 10px 0;
+}
+
+nav li {
+  display: inline;
+  margin: 0 20px;
 }
 
 nav ul {
@@ -18,10 +29,6 @@ nav ul {
   justify-content: center;
 }
 
-nav li {
-  margin: 0 20px;
-}
-
 nav a {
   text-decoration: none;
   color: #fff;
@@ -29,7 +36,8 @@ nav a {
   font-size: 16px;
   transition: color 0.3s ease-in-out;
   padding: 15px 25px;
-  border-radius: 15px; /* Add rounded corners to the tab */
+  border-radius: 15px;
+  display: block;
 }
 
 nav a.current {
@@ -44,6 +52,60 @@ nav a:focus {
   color: #005599;
   background-color: #fff;
   border-radius: 15px; /* Apply the same rounded corners on hover/focus */
+}
+
+/* Media query for mobile screens */
+@media (max-width: 767px) {
+  nav ul {
+    flex-direction: column; /* Stack the links vertically on smaller screens */
+  }
+
+  nav li {
+    margin: 0; /* Remove horizontal margin for stacked links */
+  }
+
+  /* Mobile menu styles */
+  header {
+    padding: 20px 0;
+  }
+
+  .menu-toggle {
+    display: block; /* Show the menu toggle on smaller screens */
+    cursor: pointer;
+    margin-left: 20px;
+  }
+
+  .menu-toggle span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    margin: 5px 0;
+    transition: 0.4s;
+  }
+
+  nav {
+    display: none; /* Hide the menu on larger screens */
+  }
+
+  nav.active {
+    display: flex; /* Show the menu when active */
+    flex-direction: column;
+    position: absolute;
+    top: 90px; /* Adjust the top property to add space between header and menu */
+    left: 0;
+    width: 100%;
+    background-color: #0077b5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+    border-radius: 10px; /* Add border-radius for rounded corners */
+  }
+
+  nav a {
+    color: #fff;
+    text-align: center;
+    padding: 15px 20px; /* Adjusted padding for better spacing */
+    border-radius: 5px;
+  }
 }
 
 .footer {
@@ -66,14 +128,14 @@ nav a:focus {
 }
 
 h1 {
-  font-size: 28px;
+  font-size: 30px;
   margin-top: 20px;
   margin-bottom: 30px;
   color: #0077b5;
 }
 
 .title {
-  font-size: 28px;
+  font-size: 30px;
   margin-top: 20px;
   margin-bottom: 30px;
   color: #fff; /* White color */
@@ -93,7 +155,23 @@ h2 {
   /* Other CSS styles for the table here, if needed */
 }
 
+.info-box {
+  position: absolute;
+  background-color: black;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add a subtle box shadow */
+  z-index: 1000; /* Ensure the modal appears above other elements */
+}
+
 .today-date {
+  background-color: #28a745;
+  color: #fff;
+  border-radius: 12px;
+}
+
+.workout-date {
   background-color: #9308cf;
   color: #fff;
   border-radius: 12px;
@@ -224,7 +302,7 @@ h2 {
 header {
   background-color: #0077b5;
   color: #fff;
-  padding: 20px 0;
+  padding-top: 10px;
   text-align: center;
 }
 
@@ -263,6 +341,27 @@ nav li {
   flex-wrap: wrap; /* Wrap login containers if the screen is narrow */
 }
 
+/* Hide login container 3 on larger screens */
+@media (min-width: 768px) {
+  .login-container-3 {
+    display: none;
+  }
+}
+
+/* Media query for mobile screens */
+@media (max-width: 767px) {
+  .login-forms {
+    display: contents;
+  }
+  .login-container-1 {
+    display: none; /* Hide login container 1 on mobile screens */
+  }
+
+  .login-container-2,
+  .login-container-3 {
+    display: block; /* Display login containers 2 and 3 on mobile screens */
+  }
+}
 .login-container-1 {
   background-color: #fff;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -272,7 +371,15 @@ nav li {
   width: max-width;
   margin: 20px; /* Added margin */
 }
-
+.login-container-3 {
+  background-color: #fff;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  width: max-width;
+  margin: 20px;
+}
 .login-container-2 {
   background-color: #fff;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -281,18 +388,6 @@ nav li {
   /* text-align: center; */
   width: max-width;
   margin: 20px; /* Added margin */
-}
-
-h1 {
-  font-size: 28px;
-  margin-bottom: 20px;
-  color: #fff;
-}
-
-h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #333;
 }
 
 p {
@@ -431,6 +526,15 @@ footer {
   border-radius: 3px;
 }
 
+#workout-tabs {
+  display: flex;
+  justify-content: flex-start;
+  background-color: offwhite;
+  padding: 10px;
+  border-collapse: collapse;
+  flex-wrap: wrap;
+}
+
 #block-tabs {
   display: flex;
   justify-content: flex-start;
@@ -491,6 +595,7 @@ footer {
   ); /* Almost white background with a subtle light shadow */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   border-collapse: collapse;
+  color: black;
 }
 
 .disabled-button {
@@ -546,3 +651,54 @@ footer {
 #create-exercise thead th {
   background-color: #175e97;
 }
+
+#workoutDropdown {
+  padding: 8px;
+  width: 800px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+#workoutDropdown:hover {
+  border-color: #333;
+}
+
+/* Style for dropdown options */
+#workoutDropdown option {
+  font-size: 14px;
+}
+
+/* Optional: Style for the selected option */
+#workoutDropdown option:checked {
+  background-color: #007bff; /* Change to your preferred color */
+  color: #fff;
+}
+
+#blockDropdown {
+  padding: 8px;
+  width: 800px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+#blockDropdown:hover {
+  border-color: #333;
+}
+
+/* Style for dropdown options */
+#blockDropdown option {
+  font-size: 14px;
+}
+
+/* Optional: Style for the selected option */
+#blockDropdown option:checked {
+  background-color: #007bff; /* Change to your preferred color */
+  color: #fff;
+}
+

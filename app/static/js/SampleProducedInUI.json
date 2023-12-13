@@ -1,0 +1,98 @@
+{
+  "name": "123123",
+  "date_added": "2023-11-16",
+  "coach_id": "2",
+  "blocks": [
+    {
+      "block_id": "block-asdasd",
+      "name": "asdasd",
+      "exercises": [
+        {
+          "exercise_id": "asdasd-exercise-1",
+          "name": "asdasd-ex-1",
+          "exercise_class": "exercise-buttons",
+          "sets": null,
+          "loads_reps": {
+            "coach": []
+          },
+          "exCat": null,
+          "exType": null
+        }
+      ]
+    },
+    {
+      "block_id": "block-qweqweqwe",
+      "name": "qweqweqwe",
+      "exercises": [
+        {
+          "exercise_id": "qweqweqwe-exercise-1",
+          "name": "Knee raise plank",
+          "exercise_class": "exercise-buttons",
+          "sets": 2,
+          "loads_reps": {
+            "coach": [
+              {
+                "load": 33,
+                "reps": 22
+              },
+              {
+                "load": 11,
+                "reps": 33
+              }
+            ]
+          },
+          "exCat": "Core",
+          "exType": "Crunches"
+        },
+        {
+          "exercise_id": "qweqweqwe-exercise-2",
+          "name": "Warrior I pose",
+          "exercise_class": "exercise-buttons",
+          "sets": 2,
+          "loads_reps": {
+            "coach": [
+              {
+                "load": 33,
+                "reps": 33
+              },
+              {
+                "load": 33,
+                "reps": 33
+              }
+            ]
+          },
+          "exCat": "Yoga",
+          "exType": "Warrior I pose"
+        }
+      ]
+    },
+    {
+      "block_id": "block-VVDSD",
+      "name": "VVDSD",
+      "exercises": [
+        {
+          "exercise_id": "VVDSD-exercise-1",
+          "name": "Machine chest press",
+          "exercise_class": "exercise-buttons",
+          "sets": 2,
+          "loads_reps": {
+            "coach": [
+              {
+                "load": 333,
+                "reps": 333
+              },
+              {
+                "load": 333,
+                "reps": 333
+              }
+            ]
+          },
+          "exCat": "Strength training",
+          "exType": "Hip hinge"
+        }
+      ]
+    }
+  ],
+  "team_id": "5",
+  "athlete_id": null
+}

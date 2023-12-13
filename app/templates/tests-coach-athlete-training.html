@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link rel="stylesheet" href="athlete-styles.css" /> -->
+    <!-- Include Bootstrap CSS -->
+    <!-- <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  /> -->
+  <!--Page Title-->
+  <title>Sports Performance Pro - All your records in one place</title>
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="../static/images/favicon.ico" title="Favicon"/>
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/css/select2.min.css"
+      rel="stylesheet"
+    />    
+
+    <link rel="stylesheet" href="../static/css/coach-team-training.css" />
+    <link rel="stylesheet" href="../static/css/assign-exercise-tree.css" />
+    
+    <script
+    type="text/javascript"
+    charset="utf8"
+    src="https://code.jquery.com/jquery-3.5.1.js"
+  ></script>
+  <script
+  type="text/javascript"
+  charset="utf8"
+  src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"
+></script>
+<script
+type="text/javascript"
+charset="utf8"
+src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"
+></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/js/select2.min.js"
+      defer
+    ></script>
+
+  </head>
+  <style>
+
+#loading-overlay {
+  display: none; /* Hidden by default */
+  position: fixed; /* Sit on top of the page content */
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order */
+  cursor: pointer; /* Add a pointer on hover */
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+.your-table-class {
+  width: 40%; /* Smaller width, adjust as needed */
+  margin: auto; /* This centers the table on the page */
+  font-size: 0.75em; /* Smaller font size for content fit, adjust as needed */
+  border-collapse: collapse;
+  background-color: #e6f7ff; /* Light blue background for the table */
+}
+
+.your-table-class th,
+.your-table-class td {
+  border: 2px solid #b3e0ff; /* Slightly darker blue border for cells */
+  text-align: left;
+  padding: 5px; /* Adjust padding for better spacing */
+  color: #333; /* Darker text color for contrast */
+}
+
+.your-table-class thead th {
+  background-color: #b3e0ff; /* Light blue background for the header cells */
+  color: #333; /* Darker text color for contrast */
+}
+
+/* Optional: Adjust the table size and font size on smaller screens */
+@media (max-width: 768px) {
+  .your-table-class {
+    width: 75%; /* Larger percentage for smaller devices */
+    font-size: 0.7em; /* Adjust if necessary for small screens */
+  }
+}
+
+
+
+
+ul, #myUL, .nested {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Style for the caret symbol */
+.caret::before {
+  content: "\25B6";  /* Unicode character for a right-pointing triangle */
+  color: black;       /* Caret color */
+  display: inline-block;
+  margin-right: 6px;  /* Space between the caret and the text */
+  cursor: pointer;
+}
+
+/* Rotate the caret symbol when the list item is expanded */
+.caret-down::before {
+  transform: rotate(90deg);
+}
+
+/* Style for list items */
+li {
+  padding: 5px 0;
+  cursor: pointer; /* Change cursor for the entire list item if clickable */
+}
+
+/* Style for nested items - initially hidden */
+.nested {
+  display: none;
+}
+
+/* Style for active nested items */
+.nested.active {
+  display: block;
+}
+li {
+  text-align: left; /* Align text to the left */
+}
+li {
+  padding-left: 0; /* Remove padding on the left */
+  margin-left: 0;  /* Remove margin on the left */
+}
+.caret-rotate {
+  transform: rotate(90deg); /* Adjust as needed for your design */
+}
+/* General styles for the workout container */
+/* General styles for the workout container */
+
+
+
+
+
+
+
+/* Style for nested items (blocks and exercises) */
+#workoutTree .nested {
+  display: none;
+  margin-left: 15px;
+}
+
+/* Style when a caret item is clicked to rotate down */
+#workoutTree .caret-down::before {
+  transform: rotate(90deg);
+}
+
+/* Styles for when nested items are active */
+#workoutTree .active {
+  display: block;
+}
+
+/* Highlight the current selection */
+#workoutTree .selected {
+  background-color: #e7f4e4;
+}
+
+/* Style for buttons within blockTabs */
+#block-tabs button {
+  background-color: #e0e0e0;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Hover effect for buttons */
+#block-tabs button:hover {
+  background-color: #d0d0d0;
+}
+
+/* Highlight for selected button */
+#block-tabs button.active {
+  background-color: #beb;
+}
+.nested {
+  display: none;
+}
+.nested.active {
+  display: block; /* or whatever display style you want for active lists */
+}
+
+
+/* General style for the details and dropdown */
+/* #exercise-details, #dropdown-container {
+  background-color: #f0f0f0;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+} */
+
+/* Style for the exercise table */
+.your-table-class {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.your-table-class th, .your-table-class td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.your-table-class tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Style for input fields */
+input[type="number"].my-input {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+/* Add additional styles as needed */
+#team-tree-container,
+#athlete-tree-container {
+  max-width: 100%; /* Adjust to desired width */
+  margin: 20px auto;
+  padding: 20px;
+  background: #e6f7ff; /* Subtle color of your choice */
+  color: #ffffff; /* White text */
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#team-tree h2,
+#athlete-tree h2 {
+  color: #ffffff;
+}
+
+.caret {
+  color: #ffffff;
+}
+
+.caret::before {
+  color: #ffffff;
+}
+
+.nested {
+  list-style-type: none;
+  padding-left: 20px;
+}
+
+#team-tree li,
+#athlete-tree li {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background: #0077B5; /* Slightly darker shade for contrast */
+  color: #ffffff;
+  margin-top: 5px;
+  border-radius: 4px;
+}
+
+#team-tree li:hover,
+#athlete-tree li:hover {
+  background: #0077B5; /* Lighter or different color for hover state */
+}
+
+/* Style for when a list item is active or open */
+.active > .caret,
+.active > .caret:hover,
+.active > .caret-down {
+  color: #ffffff;
+  background: #0077B5; /* Even darker shade for active state */
+}
+
+.athlete-caret,
+#team-tree .caret {
+  font-weight: bold; /* Make it bold if you like */
+}
+
+.athlete-workouts-container,
+#team-tree ul {
+  border-left: 3px solid #0077B5;
+  padding-left: 15px;
+}
+
+/* Remove the border styles if you prefer no borders */
+#team-tree li,
+#athlete-tree li {
+  border: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+  </style>
+
+  <body>
+    <header>
+      <h1 class="title">Sports Performance Pro</h1>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="/coachLanding">Home</a></li>
+        <li><a href="/workoutSelection">Assign Workouts</a></li>
+        <li><a href="/testSelection" class="current">Assign Tests</a></li>
+        <li><a href="/defineExercises">Create Exercises</a></li>
+        <li><a href="/notesLanding">Notes</a></li>
+        <li><a href="/coachhNotifications">Notifications</a></li>
+        <li><a href="/coachProfile">My Profile</a></li>
+      </ul>
+    </nav>
+    <!-- <div id="loading-overlay">
+      <div class="loader"></div>
+      <p>Analyzing the performance please wait...</p>
+    </div> -->
+
+
+
+
+    <div class="container">
+
+
+      <p id="user_id" data-user-email="{{athlete_username}}"></p>
+      <!-- Container for login forms -->
+      <div class="login-forms">
+        
+        <div class="login-container-1" style="margin-right: 20px">
+          
+          <div class="container mt-7">
+            <h1 class="text-center">Athlete Test-Workouts</h1>
+            <div class="row">
+              <div class="col-md-7">
+                <!-- Left side div for the calendar -->
+                <!-- <div id="athlete-calendar"></div> -->
+                <div
+                  class="container col-sm-4 col-md-7 col-lg-4 mt-5 d-flex justify-content-center"
+                  id="athlete-calendar"
+                >
+                  <div class="card">
+                    <h3 class="card-header" id="monthAndYear"></h3>
+                    <table
+                      class="table table-bordered table-responsive-sm"
+                      id="calendar"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Sun</th>
+                          <th>Mon</th>
+                          <th>Tue</th>
+                          <th>Wed</th>
+                          <th>Thu</th>
+                          <th>Fri</th>
+                          <th>Sat</th>
+                        </tr>
+                      </thead>
+                      <tbody id="calendar-body"></tbody>
+                    </table>
+                    <div class="form-inline" style="width: 100%">
+                      <button
+                        class="btn btn-outline-primary"
+                        style="width: 50%"
+                        id="previous"
+                        onclick="previous()"
+                      >
+                        Previous
+                      </button>
+                      <button
+                        class="btn btn-outline-primary"
+                        style="width: 50%"
+                        id="next"
+                        onclick="next()"
+                      >
+                        Next
+                      </button>
+                    </div>
+                    <br />
+                    <form class="form-inline" style="width: 100%">
+                      <label class="lead mr-2" for="month">Jump To:</label>
+                      <select
+                        class="form-control col-sm-6"
+                        name="month"
+                        id="month"
+                        onchange="jump()"
+                      >
+                        <option value="0">Jan</option>
+                        <option value="1">Feb</option>
+                        <option value="2">Mar</option>
+                        <option value="3">Apr</option>
+                        <option value="4">May</option>
+                        <option value="5">Jun</option>
+                        <option value="6">Jul</option>
+                        <option value="7">Aug</option>
+                        <option value="8">Sep</option>
+                        <option value="9">Oct</option>
+                        <option value="10">Nov</option>
+                        <option value="11">Dec</option>
+                      </select>
+
+                      <label for="year"></label>
+                      <select
+                        class="form-control col-sm-6"
+                        name="year"
+                        id="year"
+                        onchange="jump()"
+                      >
+                        <option value="1990">1990</option>
+                        <option value="1991">1991</option>
+                        <option value="1992">1992</option>
+                        <option value="1993">1993</option>
+                        <option value="1994">1994</option>
+                        <option value="1995">1995</option>
+                        <option value="1996">1996</option>
+                        <option value="1997">1997</option>
+                        <option value="1998">1998</option>
+                        <option value="1999">1999</option>
+                        <option value="2000">2000</option>
+                        <option value="2001">2001</option>
+                        <option value="2002">2002</option>
+                        <option value="2003">2003</option>
+                        <option value="2004">2004</option>
+                        <option value="2005">2005</option>
+                        <option value="2006">2006</option>
+                        <option value="2007">2007</option>
+                        <option value="2008">2008</option>
+                        <option value="2009">2009</option>
+                        <option value="2010">2010</option>
+                        <option value="2011">2011</option>
+                        <option value="2012">2012</option>
+                        <option value="2013">2013</option>
+                        <option value="2014">2014</option>
+                        <option value="2015">2015</option>
+                        <option value="2016">2016</option>
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                        <option value="2021">2021</option>
+                        <option value="2022">2022</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                        <option value="2028">2028</option>
+                        <option value="2029">2029</option>
+                        <option value="2030">2030</option>
+                      </select>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <!-- Right side div (vacant for now) -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+        <div class="login-container-2">
+          <div class="container">
+            <h1 style="color: rgb(15, 1, 1)">Tests</h1>
+            <button
+              type="button"
+              id="assign-session"
+              style="position: relative"
+            >
+              Assign Test Exercise
+            </button>
+            <div class="team-list">
+              <!-- <h1>Athlete: {Athlete Name}</h1>
+              <table id="trainingTable">
+                <thead>
+                  <tr>
+                    FIXME: PUT athletes username here -->
+                    <!-- <th></th>
+                  </tr>
+                </thead>
+                <tbody> -->
+                  <!-- Dynamically fill in the team names here -->
+                </tbody>
+              </table> 
+            </div>
+
+            <!-- This is a test-->
+            <!-- <ul class="appendingTest">
+              <li>This is a test to check appending</li>
+            </ul> -->
+
+            <div id="my-training">
+              <!-- Generate dynamically my training session from the databas -->
+              <!-- On clicking a particular team , should generate the below and add it to the specific team -->
+              <!-- Generate dynamically from the databas -->
+              <!-- Tabs for blocks and exercises -->
+              <!-- Tree View Container -->
+             
+              <!-- Place this in your HTML where you want the team tree to appear -->
+              <div id="team-tree-container"></div>
+              <div id="athlete-tree-container"></div>
+
+
+
+                <!-- Single layer items will be inserted here dynamically -->
+            </div>
+
+                  <!-- <button id="add-workout-button" class="add-workout-btn-hide">
+                    Add a Block
+                  </button> -->
+                </div>
+                <div class="horizontal-tabs" id="block-tabs">
+                  <!-- <button id="add-block-button" class="add-block-btn-hide">
+                    Add a Block
+                  </button> -->
+                </div>
+                <div class="vertical-tabs" id="exercise-tabs">
+                  <!-- PUTTING THIS OUT FOR A CHANGE-->
+                  <!-- <button id="add-exercise-button" class="add-exercise-btn-hide">
+                  Add an Exercise
+                </button> -->
+                </div>
+              </div>
+
+              <!-- <button id="add-exercise-button" class="add-exercise-btn-hide">
+                Add an Exercise
+              </button> -->
+              <!-- Display exercise details -->
+              <div id="exercise-details">
+                <!-- Select an exercise to view details. -->
+                <div id="table-container" class="create-exercise-table-hide">
+                  <!-- MOVED FROM HERE -->
+
+                  <button id="addSet-btn" class="add-Set--btns">Add SET</button>
+                  <form
+                    action="demo.html"
+                    method="GET"
+                    id="create-exercise-form"
+                  >
+                    <div id="dropdown-container">
+                      <!-- Dropdowns will be created here -->
+                    </div>
+                    <table id="create-exercise">
+                      <thead id="create-exercise-heads">
+                        <th
+                          id="header-set"
+                          style="text-align: center; color: white"
+                        >
+                          SET
+                        </th>
+                        <th
+                          id="header-load"
+                          style="text-align: center; color: white"
+                        >
+                          LOAD
+                        </th>
+                        <th
+                          id="header-reps"
+                          style="text-align: center; color: white"
+                        >
+                          REPS
+                        </th>
+                        <th
+                          id="header-input"
+                          style="text-align: center; color: white"
+                        >
+                          athletes_load
+                        </th>
+                      </thead>
+                      <tbody class="create-exercise-rows"></tbody>
+                    </table>
+                    <div id="error-message" style="color: red"></div>
+                    <div id="success-message" style="color: green"></div>
+                  </form>
+                  <!-- Table will be generated here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 100px"></div>
+    <div
+      id="athlete-username"
+      data-username="{{ username }}"
+      style="display: none"
+    ></div>
+
+
+    <div class="container-assign mt-5">
+      <button type="button" id="return-button" style="margin: 1% 0 0 90%">
+        Return to Top
+      </button>
+      <h1 id="team-name" class="text-center"></h1>
+      <label for="datepicker" class="text-center"
+        >Selected Date
+        <input
+          type="date"
+          id="datepicker"
+          name="datepicker"
+          class="text-center"
+          style="width: min-content"
+        />
+      </label>
+
+      <label for="team-picker" class="text-center">Selected Team</label>
+      <select
+        class="text-center form-select"
+        id="team-picker"
+        name="team-picker"
+        style="width: 40%"
+      >
+        <!-- Options will be dynamically generated using JavaScript -->
+      </select>
+
+      <label for="athlete-picker" class="text-center">Selected Athlete</label>
+      <select
+        class="text-center form-select"
+        id="athlete-picker"
+        name="athlete-picker"
+        style="width: 40%"
+      >
+        <!-- Options will be dynamically generated using JavaScript -->
+      </select>
+
+      <div class="delete-dialog">
+        <p id="delete-text">Are you sure you want to delete</p>
+        <button id="confirm-yes">Yes</button>
+        <button id="confirm-no">No</button>
+      </div>
+
+      <div class="delete-dialog-set">
+        <p id="delete-set-text"></p>
+        <button id="confirm-delete-set-yes">Yes</button>
+        <button id="confirm-delete-set-no">No</button>
+      </div>
+
+      <form id="create-exercise-form">
+        <!-- Name Field -->
+        <div class="mb-3">
+          <label for="workout-name" class="form-label"
+            ><p>Test name <span style="color: red">*</span></p></label
+          >
+          <!-- should fill in the team name using API call -->
+          <input
+            type="text"
+            class="form-control"
+            id="workout-name"
+            placeholder="Test Name"
+            name="workout-name"
+            required
+          />
+        </div>
+
+        <div id="my-training">
+          <!-- Generate dynamically my training session from the databas -->
+          <!-- On clicking a particular team , should generate the below and add it to the specific team -->
+          <!-- Generate dynamically from the databas -->
+          <!-- Tabs for blocks and exercises -->
+          <div class="tab-container">
+            <div class="horizontal-tabs" id="block-assign-tabs">
+              <button
+                id="add-block-button"
+                type="button"
+                class="add-block-btn-hide"
+              >
+                Add a Block
+              </button>
+              <br />
+              <p></p>
+            </div>
+
+            <!-- 
+            <div class="vertical-tabs" id="exercise-tabs">
+              <button
+                type="button"
+                id="add-exercise-button"
+                class="add-exercise-btn-hide"
+              >
+                Add an Exercise
+              </button>
+            </div>
+          </div>-->
+
+          <!-- <button id="add-exercise-button" class="add-exercise-btn-hide">
+              Add an Exercise
+            </button> -->
+          <!-- Display exercise details -->
+          <div id="exercise-assign-details">
+            <!-- Select an exercise to Set the loads and reps -->
+            <div id="table-container" class="create-exercise-table-hide">
+              <!-- MOVED FROM HERE -->
+              <form action="demo.html" method="GET" id="create-exercise-form">
+                <div id="dropdown-assign-container">
+                  <!-- Dropdowns will be created here -->
+
+                  <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select
+                      class="form-select"
+                      id="category"
+                      name="category"
+                      required
+                    >
+                      <!-- Options will be dynamically generated using JavaScript -->
+                    </select>
+                  </div>
+
+                  <!-- Exercise Type Field -->
+                  <div class="mb-3">
+                    <label for="exerciseType" class="form-label"
+                      >Exercise Type</label
+                    >
+                    <select
+                      class="form-select"
+                      id="exerciseType"
+                      name="exerciseType"
+                      required
+                    >
+                      <!-- Options will be dynamically generated using JavaScript -->
+                    </select>
+                  </div>
+
+                  <!-- Exercise Name Field -->
+                  <div class="mb-3">
+                    <label for="exerciseName" class="form-label"
+                      >Exercise Name</label
+                    >
+                    <select
+                      class="form-select"
+                      id="exerciseName"
+                      name="exerciseName"
+                      required
+                    >
+                      <!-- Options will be dynamically generated using JavaScript -->
+                    </select>
+                  </div>
+                </div>
+                <table id="create-exercise">
+                  <thead id="create-exercise-heads">
+                    <th
+                      id="header-set"
+                      style="
+                        text-align: center;
+                        background-color: #005599;
+                        color: white;
+                      "
+                    >
+                      SET
+                    </th>
+                    <th
+                      id="header-load"
+                      style="
+                        text-align: center;
+                        background-color: #005599;
+                        color: white;
+                      "
+                    >
+                      LOAD
+                    </th>
+                    <th
+                      id="header-reps"
+                      style="
+                        text-align: center;
+                        background-color: #005599;
+                        color: white;
+                      "
+                    >
+                      REPS
+                    </th>
+                    <!-- <th
+                      id="header-input"
+                      style="
+                        text-align: center;
+                        background-color: #005599;
+                        color: white;
+                      "
+                    >
+                      input_load
+                    </th> -->
+                    <th
+                      id="header-actions"
+                      style="
+                        text-align: center;
+                        background-color: #005599;
+                        color: white;
+                      "
+                    >
+                      Action
+                    </th>
+                  </thead>
+                  <tbody class="create-exercise-rows">
+                    <div id="buttonContainer">
+                      <!-- <button
+                        type="submit"
+                        id="submitExercise"
+                        class="btn btn-primary"
+                      >
+                        Submit
+                      </button> -->
+                      <!-- <button
+                          id="modifyButton"
+                          class="btn btn-secondary"
+                          disabled
+                        >
+                          Modify
+                        </button> -->
+                      <!-- <button id="returnButton" class="btn btn-secondary">
+                          Return
+                        </button> -->
+                    </div>
+                    <button id="addSet-btn" type="button" class="add-Set--btns">
+                      Add SET
+                    </button>
+                  </tbody>
+                </table>
+                <!-- <button type="button" id="testing">Save Exercise</button> -->
+                <div id="error-message" style="color: red"></div>
+                <div id="success-message" style="color: green"></div>
+              </form>
+              <!-- Table will be generated here -->
+            </div>
+          </div>
+        </div>
+
+        <div id="buttonContainer">
+          <button id="saveChangesButton" class="btn btn-primary">
+            Assign Test
+          </button>
+
+          <div id="workout-error-message" style="color: red"></div>
+          <div id="workout-success-message" style="color: green"></div>
+        </div>
+      </form>
+    </div>
+    <footer>
+      <div class="footer">2023 Sports Performance Pro</div>
+    </footer>
+    <script defer>
+      window.addEventListener("DOMContentLoaded", (event) => {
+        const athleteId = 2; // Set athlete ID
+        const coachId = 223; // Set coach ID
+
+        // Select the specific anchor element for "Notes"
+        const notesLink = document.querySelector('a[href="/notes_athlete"]');
+        if (notesLink) {
+          // Update the href attribute with the variables
+          notesLink.href = `/notes_athlete?coachId=${encodeURIComponent(
+            coachId
+          )}&athleteId=${encodeURIComponent(athleteId)}`;
+        }
+      });
+    </script>
+  
+    <script src="../static/js/calendar.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script> -->
+    <!-- <script src="../static/js/coach-athlete-training.js" defer></script> -->
+
+    <script src="../static/js/tests-coach-athlete-training_v2.js" defer></script>
+    <script src="../static/js/tests-assign-exercise_tree.js" defer></script>
+
+  </body>
+</html>

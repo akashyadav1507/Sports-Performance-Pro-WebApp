@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--Page Title-->
+    <title>Sports Performance Pro - All your records in one place</title>
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="../static/images/favicon.ico" title="Favicon"/>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css"/>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <style>
+        header {
+            background-color: #0077b5;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #0077b5;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav li {
+            margin: 0 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s ease-in-out;
+            padding: 15px 25px;
+            border-radius: 15px; /* Add rounded corners to the tab */
+        }
+
+        nav a.current {
+            color: #fff;
+            background-color: #005599;
+            font-weight: bold;
+            border-radius: 15px; /* Apply rounded corners to the selected tab */
+        }
+
+        nav a:hover,
+        nav a:focus {
+            color: #005599;
+            background-color: #fff;
+            border-radius: 15px; /* Apply the same rounded corners on hover/focus */
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-bottom: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 60px);
+            margin-bottom: 60px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 50%; /* Align the footer to the horizontal center of the viewport */
+            transform: translateX(-50%); /* Center the footer horizontally */
+            width: 100%;
+            background-color: #fff;
+            color: #333;
+            text-align: center;
+            padding: 10px 0;
+            z-index: 999;
+            box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #0077b5;
+        }
+
+        .title {
+            font-size: 30px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #fff; /* White color */
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #0077b5;
+        }
+
+        /* Basic styling for the DataTable */
+        #coachTable {
+            font-family: Arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #coachTable th,
+        #coachTable td {
+            border: 1px solid #ddd;
+            padding: 18px;
+            text-align: left;
+        }
+
+        #coachTable th {
+            background-color: #f2f2f2;
+        }
+
+        /* Style for Edit and Delete buttons */
+        .edit-button,
+        .delete-button {
+            background-color: #0077b5;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .edit-button:hover,
+        .delete-button:hover {
+            background-color: #00568d;
+        }
+
+        /* Hover effect for table rows */
+        #coachTable tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        #coachTable_filter {
+            margin-bottom: 20px;
+        }
+
+        #coachTable tbody tr.selected {
+            background-color: #0077b5;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        /* Style for the button container */
+        #buttonContainer {
+            text-align: center; /* Center align the buttons */
+            margin-top: 20px; /* Add spacing between the buttons and the table */
+        }
+
+        /* Style for the "Continue" button */
+        #continueButton {
+            margin-right: 20px;
+            padding: 10px;
+            padding-left: 25px;
+            padding-right: 25px;
+        }
+
+        /* Style for the "Return" button */
+        #returnButton {
+            margin-left: 20px;
+            padding: 10px;
+            padding-left: 25px;
+            padding-right: 25px;
+        }
+
+        .select-all-button {
+            background-color: #0077b5; /* Button background color */
+            color: #fff; /* Button text color */
+            border: none;
+            padding: 12px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            position: relative;
+            top: 35px;
+            left: 200px;
+            margin-right: 5px;
+        }
+
+        .clear-selection-button {
+            background-color: #0077b5; /* Button background color */
+            color: #fff; /* Button text color */
+            border: none;
+            padding:12px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            position: relative;
+            top: 35px;
+            left: 200px;
+            margin-right: 5px;
+        }
+
+        /* Hover effect for the button */
+        .select-all-button:hover {
+            background-color: #00568d; 
+        }
+
+        .clear-selection-button:hover {
+            background-color: #00568d; 
+        }
+    </style>
+</head>
+<body>
+    <header>
+    <h1 class="title">Sports Performance Pro</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/adminLanding">Coaches</a></li>
+            <li><a href="/adminAthlete">Athletes</a></li>
+            <li><a href="/coachSelection" class="current">Exercises</a></li>
+            <li><a href="/adminNotifications" >Notifications</a></li>
+            <li><a href="/logoutAdmin">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="container mt-5">
+    <h1 class="text-center">Select Coach</h1>
+    <table id="coachTable" class="display">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Sports</th>
+            <th>Institute</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Dynamic data will be inserted here -->
+        </tbody>
+    </table>
+
+    <div id="buttonContainer">
+        <button id="continueButton" class="btn btn-primary">Continue</button>
+        <button id="returnButton" class="btn btn-secondary">Return</button>
+    </div>
+    </div>
+
+    <!-- Your HTML code with confirm dialogs -->
+    <div id="confirmReturnDialog" title="Confirm Return" style="display: none">
+    <p>You have selected a Coach. Are you sure you want to return?</p>
+    </div>
+
+    <footer>
+    <div class="footer">2023 Sports Performance Pro</div>
+    </footer>
+
+    <script>
+    $(document).ready(function () {
+        // Initialize variables
+        var coachId;
+        // Create coach data
+        var coaches = [];
+        var selectedRows = [];
+
+        // Check if there are previously selected rows in sessionStorage
+        var storedSelectedRows = sessionStorage.getItem('selectedRows');
+        if (storedSelectedRows) {
+            selectedRows = JSON.parse(storedSelectedRows);
+
+            // Add 'selected' class to rows based on the stored selection
+            selectedRows.forEach(function (selectedRow) {
+                var rowIndex = coaches.findIndex(function (row) {
+                    return row.name === selectedRow.name;
+                });
+
+                if (rowIndex !== -1) {
+                    $('#coachTable tbody tr:eq(' + rowIndex + ')').addClass('selected');
+                }
+            });
+        }
+
+        // Initialize DataTable
+        var table = $("#coachTable").DataTable({
+            data: coaches,
+            columns: [
+                { data: "name" },
+                { data: "sports" },
+                { data: "institute" },
+            ],
+            dom: 'Blfrtip',
+            select: 'multi', // Enable multi-selection
+            buttons: [
+                {
+                    text: 'Select All Coaches',
+                    action: function () {
+                        // Handle the "New Exercise" action here
+                    },
+                    className: 'select-all-button'
+                },
+                {
+                    text: 'Clear Coach Selection',
+                    action: function () {
+                        // Handle the "New Category" action here
+                    },
+                    className: 'clear-selection-button'
+                }
+            ]
+        });
+
+        // Handle the "Clear Selection" button
+        $('.clear-selection-button').click(function (e) {
+            e.preventDefault();
+
+            // Deselect all rows with the 'selected' class using DataTables API
+            table
+                .rows('.selected')
+                .nodes()
+                .to$()
+                .removeClass('selected');
+
+            // Clear the selectedRows array
+            selectedRows = [];
+            sessionStorage.removeItem('selectedRows'); // Remove stored selection
+
+            console.log('Selection cleared.');
+        });
+
+        // Handle the "Select All Coaches" button
+        $('.select-all-button').click(function (e) {
+            e.preventDefault();
+
+            // Select all rows using DataTables API
+            table
+                .rows()
+                .nodes()
+                .to$()
+                .addClass('selected');
+
+            // Update the selectedRows array with all rows
+            selectedRows = table.rows('.selected').data().toArray();
+
+            // Extract only necessary information from rows for storage
+            var selectedRowsData = selectedRows.map(function (row) {
+                return {
+                    coach_id: row.coach_id, // Adjust the key based on your data
+                    name: row.name,
+                    sports: row.sports,
+                    institute: row.institute
+                    // Add other properties as needed
+                };
+            });
+
+            // Update sessionStorage with the latest selection
+            sessionStorage.setItem('selectedRows', JSON.stringify(selectedRowsData));
+
+            console.log(selectedRows);
+        });
+
+        $("#coachTable tbody").on("click", "tr", function () {
+            var data = table.row(this).data();
+            var coachName = data.name;
+
+            // Add or remove 'selected' class on click
+            $(this).toggleClass('selected');
+
+            // Update the selectedRows array
+            var isSelected = $(this).hasClass('selected');
+            if (isSelected) {
+                selectedRows.push(data);
+            } else {
+                // Remove the deselected row from the selectedRows array
+                var rowIndex = selectedRows.findIndex(function (row) {
+                    return row.name === data.name; // You might need to adjust the key based on your data
+                });
+                if (rowIndex !== -1) {
+                    selectedRows.splice(rowIndex, 1);
+                }
+            }
+            // Update sessionStorage with the latest selection
+            sessionStorage.setItem('selectedRows', JSON.stringify(selectedRows));
+        });
+
+        // Handle the "Continue" button
+        $("#continueButton").click(function (e) {
+            e.preventDefault(e);
+
+            // Get the selected rows using DataTables API
+            selectedRows = table.rows('.selected').nodes();
+
+            var coachIds = {
+                coach_ids: table.rows('.selected').data().map(function (row) {
+                    return row.coach_id;
+                })
+            };
+
+            console.log(coachIds);
+
+            if (selectedRows.length === 1) {
+                var data = table.row(selectedRows).data();
+                console.log(data);
+                // var coachId = data.coach_id;
+                var coachEmail = data.email;
+                console.log(coachEmail);
+                if (coachEmail) {
+                    // Redirect to the next page with coachId and coachEmail as query parameters
+                    window.location.href = `/adminExercises?coachEmail=${coachEmail}`;
+                }
+            } else if (selectedRows.length > 0) {
+                // Join the array of coachIds into a comma-separated string
+                var coachIdsString = coachIds.coach_ids.join(',');
+
+                console.log(coachIdsString);
+
+                // Pass the coachIdsString as a query parameter
+                window.location.href = `/adminMultiCoachExercises?coachIds=${coachIdsString}`;
+            }else {
+                // No coach selected, show a popup
+                alert(
+                    "No coach selected. Please select a coach before continuing."
+                );
+            }
+        });
+
+        // Handle the "Return" button
+        $("#returnButton").click(function () {
+            // Check if an coach is selected
+            var selectedRow = $("#coachTable tbody tr.selected");
+            if (selectedRow.length > 0) {
+                // Ask for confirmation using a dialog
+                $("#confirmReturnDialog").dialog({
+                    resizable: false,
+                    height: "auto",
+                    width: 400,
+                    modal: true,
+                    buttons: {
+                        Yes: function () {
+                            // Redirect to the previous page (workout-selection.html)
+                            window.location.href = "/adminLanding";
+                            $(this).dialog("close");
+                        },
+                        No: function () {
+                            $(this).dialog("close");
+                        },
+                    },
+                });
+            } else {
+                // No coach selected, directly redirect
+                window.location.href = "/adminLanding";
+            }
+        });
+
+        $.get("/getAllCoaches", function (data) {
+            if (data.error) {
+                // Handle the case where coaches are not found
+                // (e.g., redirect to a login page or display an error message)
+                console.error("Error fetching coaches:", data.error);
+            } else {
+                var coaches = data.coaches;
+                var coachTable = $("#coachTable").DataTable(); // assuming you have a table with id "coachTable"
+                
+                coaches.forEach(function (coach) {
+                    var coachData = {
+                        coach_id: coach.coach_id,
+                        name: coach.name,
+                        email: coach.email,
+                        phone: coach.phone,
+                        sports: coach.sports,
+                        institute: coach.institute
+                    };
+                    coachTable.row.add(coachData);
+                });
+                coachTable.draw();
+            }
+        });
+    });
+    </script>
+</body>
+</html>

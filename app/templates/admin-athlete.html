@@ -3,6 +3,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <!--Page Title-->
+    <title>Sports Performance Pro - All your records in one place</title>
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="../static/images/favicon.ico" title="Favicon"/>
+
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
@@ -307,6 +313,30 @@
         align-items: center;
         margin-bottom: 10px;
         }
+
+        .scrollable-menu {
+        max-height: 120px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 5px;
+        border-radius: var(--bs-border-radius);
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      }
+
+      .checkbox-group {
+        display: flex;
+        flex-direction: column; /* Display checkboxes in a vertical coln */
+      }
+
+      .checkbox-container {
+        display: flex;
+        align-items: center; /* Center the checkbox and text vertically */
+        margin-bottom: 5px; /* Add spacing between checkboxes */
+      }
+
+      .checkbox-container input[type="checkbox"] {
+        margin-right: 10px; /* Add spacing between the checkbox and text */
+      }
         /* ... */
     </style>
     <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -320,13 +350,13 @@
         <ul>
             <li><a href="/adminLanding">Coaches</a></li>
             <li><a href="/adminAthlete" class="current">Athletes</a></li>
-            <li><a href="/adminExercises">Exercises</a></li>
+            <li><a href="/coachSelection">Exercises</a></li>
+            <li><a href="/adminNotifications" >Notifications</a></li>
             <li><a href="/logoutAdmin">Logout</a></li>
         </ul>
     </nav>
     <table id="athleteTable" class="display">
         <h2 style="color: rgb(32, 145, 225);">Athletes</h2>
-        <input type="text" id="athleteSearchInput" placeholder="Search for an athlete">
         <thead>
             <tr>
                 <th>Athlete Name</th>
@@ -344,7 +374,10 @@
             <!-- Table rows will be inserted here dynamically -->
         </tbody>
     </table>
-
+    <div id="loadingSpinner" style="display: none;">
+        Loading...
+        <!-- You can replace this with an actual loading spinner -->
+    </div>
     <div class="modal fade" id="updateAthleteModal" tabindex="-1" role="dialog" aria-labelledby="updateAthleteModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -361,12 +394,15 @@
                             <input type="text" class="form-control" id="phoneInput" name="phone">
                         </div>
                             <input type="text" class="form-control" id="emailInput" name="email" style="display: none;">
-                        <div class="form-group">
-                            <label for="sportsInput">Sports:</label>
-                            <select multiple class="form-control" id="sportsInput" name="sports">
-                                <!-- Add options dynamically using JavaScript or load from the server -->
-                            </select>
-                        </div>
+                            <div class="form-group">
+                                <label for="sportsInput">Sports:</label>
+                                <div class="scrollable-menu">
+                                    <div class="checkbox-group" id="sportsInput">
+                                        <!-- Sports checkboxes will be added dynamically using JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                            
                         <div class="form-group">
                             <label for="instituteInput">Institute:</label>
                             <select class="form-control" id="instituteInput" name="institute">
@@ -383,11 +419,19 @@
     </div>    
 
     <script>
+        $(document).ready(function() {
+        $('#coachTable').DataTable({
+            paging: true,
+            pageLength: 10,
+        });
+    });
         $('#closeModalButton').on('click', function() {
         $('#updateAthleteModal').modal('hide');
     });
 function populateAthleteTable() {
+    $('#loadingSpinner').show();
     $.get('/getAthletesForAdmin', function (data) {
+        $('#loadingSpinner').hide();
         if (data) {
             const athleteTableBody = $('#athleteTable tbody');
 
@@ -423,6 +467,15 @@ function populateAthleteTable() {
                 });
                 
             });
+            var table = $('#athleteTable').DataTable({
+                    "paging": true,
+                    "lengthChange": true,
+                    "searching": true,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": false,
+                    "pageLength": 10
+            });
             $('.delete').click(function () {
                         console.log("Hi");
                         const athEmail = $(this).data('coach-id');
@@ -446,8 +499,8 @@ function populateUpdateAthleteFields(athlete){
     $('#emailInput').val(athlete.email);
     $('#updateAthleteModal').modal('show');
     // Split selectedSports and selectedInstitutes (comma-separated values)
-    const selectedSports = athlete.sports.split(', ');
-    const selectedInstitutes = athlete.institute.split(', ');
+    const selectedSports = athlete.sports.split(',');
+    const selectedInstitutes = athlete.institute.split(',');
 
     // Fetch all sports and institutions from the routes
     $.get('/getAllSports', function (sportsData) {
@@ -455,21 +508,22 @@ function populateUpdateAthleteFields(athlete){
             // Populate the Sports and Institutes dropdowns
             const sportsInput = $('#sportsInput');
             const instituteInput = $('#instituteInput');
-            sportsInput.empty();
             instituteInput.empty();
             const selectedSports = athlete.sports.split(', ');
-            const selectedOptions = [];
-            sportsData.sports.forEach(sport => {
-    // Create the option element and append it to the select element
-    const option = $('<option></option>')
-        .attr('value', sport)
-        .text(sport);
+            function addSportsCheckboxes(container, data, selectedItems) {
+            container.empty();
+            data.forEach(sport => {
+                const checkbox = $('<input type="checkbox">')
+                    .attr('name', 'sports[]')
+                    .attr('value', sport) // Assuming lowercase values for simplicity
+                    .attr('id', sport)
+                    .prop('checked', selectedItems.includes(sport));
 
-    sportsInput.append(option);
-});
-sportsInput.val(selectedSports);
-
-
+                const label = $('<label class="checkbox-container"></label>').text(sport).prepend(checkbox);
+                container.append(label);
+            });
+        }
+        addSportsCheckboxes($(sportsInput), sportsData.sports, selectedSports);
             institutesData.institutes.forEach(institute => {
                 const selected = selectedInstitutes.includes(institute) ? 'selected' : '';
                 instituteInput.append(`<option value="${institute}" ${selected}>${institute}</option>`);
@@ -482,14 +536,15 @@ sportsInput.val(selectedSports);
     // Get the updated phone, selected sports, and selected institutes
     const updatedPhone = $('#phoneInput').val();
     const athEmail = $('#emailInput').val();
-    const updatedSports = $('#sportsInput').val();
+    const updatedSports = $('input[name="sports[]"]:checked').map(function () {
+    return $(this).val();
+    }).get();
     const updatedInstitutes = $('#instituteInput').val();
-
     // Create an object to send in the update request
     const updateData = {
         email:athEmail,
         phone: updatedPhone,
-        sports: updatedSports.join(', '),
+        sports: updatedSports.join(','),
         institute: updatedInstitutes
     };
     const jsonData = JSON.stringify(updateData);
@@ -525,25 +580,6 @@ sportsInput.val(selectedSports);
                 }
             });
         }
-
-    const searchInput = document.getElementById('athleteSearchInput');
-    const athleteTable = document.getElementById('athleteTable');
-
-    // Add an event listener to the search input for real-time filtering
-    searchInput.addEventListener('input', function () {
-    const searchText = searchInput.value.toLowerCase();
-    const athleteRows = athleteTable.querySelectorAll('tbody tr');
-
-    athleteRows.forEach(function (row) {
-        const athleteName = row.querySelector('td:nth-child(1)').textContent.toLowerCase(); // Adjust the column index as needed
-
-        if (athleteName.includes(searchText)) {
-            row.style.display = ''; // Show the row if the name matches the search text
-        } else {
-            row.style.display = 'none'; // Hide the row if it doesn't match
-        }
-    });
-});
     </script>   
     
 </body>

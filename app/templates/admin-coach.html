@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <!--Page Title-->
+    <title>Sports Performance Pro - All your records in one place</title>
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="../static/images/favicon.ico" title="Favicon"/>
+
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
@@ -330,6 +336,30 @@
             font-size: 14px; /* Adjust the font size as needed */
         }
 
+        .scrollable-menu {
+        max-height: 120px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 5px;
+        border-radius: var(--bs-border-radius);
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      }
+
+      .checkbox-group {
+        display: flex;
+        flex-direction: column; /* Display checkboxes in a vertical coln */
+      }
+
+      .checkbox-container {
+        display: flex;
+        align-items: center; /* Center the checkbox and text vertically */
+        margin-bottom: 5px; /* Add spacing between checkboxes */
+      }
+
+      .checkbox-container input[type="checkbox"] {
+        margin-right: 10px; /* Add spacing between the checkbox and text */
+      }
+
 
         
 </style>
@@ -344,17 +374,17 @@
         <ul>
             <li><a href="/adminLanding" class="current">Coaches</a></li>
             <li><a href="/adminAthlete">Athletes</a></li>
-            <li><a href="/adminExercises">Exercises</a></li>
+            <li><a href="/coachSelection">Exercises</a></li>
+            <li><a href="/adminNotifications" >Notifications</a></li>
             <li><a href="/logoutAdmin">Logout</a></li>
         </ul>
     </nav>
+    <div id="buttonContainer" style="text-align: right; margin-bottom: 20px;">
+        <button id="addInstituteModalButton" class="add-institute-button" data-toggle="modal" data-target="#addInstituteModal">Add Institute</button>
+        <button id="addSportsModalButton">Add Sports</button>
+    </div>
+    <h2 style="color: rgb(32, 145, 225);">Coaches</h2>
     <table id="coachTable" class="display">
-        <div id="buttonContainer" style="text-align: right; margin-bottom: 20px;">
-            <button id="addInstituteModalButton" class="add-institute-button" data-toggle="modal" data-target="#addInstituteModal">Add Institute</button>
-            <button id="addSportsModalButton">Add Sports</button>
-        </div>
-        <h2 style="color: rgb(32, 145, 225);">Coaches</h2>
-        <input type="text" id="coachSearchInput" placeholder="Search for a coach">
         <thead>
             <tr>
                 <th>Coach Name</th>
@@ -385,12 +415,14 @@
                             <input type="text" class="form-control" id="coachPhoneInput" name="coachPhone">
                         </div>
                             <input type="text" class="form-control" id="coachEmailInput" name="coachEmail" style="display: none;">
-                        <div class="form-group">
-                            <label for="coachSportsInput">Sports:</label>
-                            <select multiple class="form-control" id="coachSportsInput" name="coachSports">
-                                <!-- Add options dynamically using JavaScript or load from the server -->
-                            </select>
-                        </div>
+                            <div class="form-group">
+                                <label for="coachSportsInput">Sports:</label>
+                                <div class="scrollable-menu">
+                                    <div class="checkbox-group" id="coachSportsInput">
+                                        <!-- Sports checkboxes will be added dynamically using JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
                         <div class="form-group">
                             <label for="coachInstituteInput">Institute:</label>
                             <select class="form-control" id="coachInstituteInput" name="coachInstitute">
@@ -428,7 +460,10 @@
             </div>
         </div>
     </div>    
-
+    <div id="loadingSpinner" style="display: none;">
+        Loading...
+        <!-- You can replace this with an actual loading spinner -->
+    </div>
     <div class="modal fade" id="addSportsModal" tabindex="-1" role="dialog" aria-labelledby="addSportsModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -462,7 +497,6 @@
     $('#sportsclose').on('click', function() {
         $('#addSportsModal').modal('hide');
     });
-        $(document).ready(function() {
     $('#addInstituteModalButton').click(function() {
         // Clear the input field
         $('#instituteName').val('');
@@ -496,7 +530,6 @@
             }
         });
     });
-});
 
 
 
@@ -539,53 +572,67 @@ $(document).ready(function () {
 
 
 
-        function populateCoachTable() {
-            $.get('/getAllCoaches', function (data) {
-                if (data.coaches) {
-                    const coachTableBody = $('#coachTableBody');
-    
-                    // Clear existing table rows
-                    coachTableBody.empty();
-    
-                    // Iterate through the received coach data and create table rows
-                    data.coaches.forEach(function (coach) {
-                        const newRow = `
-                            <tr>
-                                <td>${coach.name}</td>
-                                <td>${coach.institute}</td>
-                                <td>${coach.sports}</td>
-                                <td>${coach.phone}</td>
-                                <td>${coach.email}</td>
-                                <td>
-                                    <button class="delete" data-coach-id="${coach.email}">Delete</button>
-                                    <button class="update" data-coach-id="${coach.email}">Update</button>
-                                </td>
-                            </tr>
-                        `;
-                        coachTableBody.append(newRow);
-                        const updateButton = coachTableBody.find('.update').last();
-                        updateButton.click(function () {
-                        populateUpdateCoachFields(coach);
-                });
-                    });
-    
-                    // Attach event handlers for delete and update buttons
-                    $('.delete').click(function () {
-                        const coachId = $(this).data('coach-id');
-                        deleteCoach(coachId);
-                    });
+function populateCoachTable() {
+    // Show loading spinner while data is being fetched
+    $('#loadingSpinner').show();
 
-                    $('#updateCoachButton').click(function () {
-                    updateCoaches();
+    $.get('/getAllCoaches', function (data) {
+        // Hide loading spinner after data is loaded
+        $('#loadingSpinner').hide();
+
+        if (data.coaches) {
+            const coachTableBody = $('#coachTableBody');
+
+            // Clear existing table rows
+            coachTableBody.empty();
+
+            // Iterate through the received coach data and create table rows
+            data.coaches.forEach(function (coach) {
+                const newRow = `
+                    <tr>
+                        <td>${coach.name}</td>
+                        <td>${coach.institute}</td>
+                        <td>${coach.sports}</td>
+                        <td>${coach.phone}</td>
+                        <td>${coach.email}</td>
+                        <td>
+                            <button class="delete" data-coach-id="${coach.email}">Delete</button>
+                            <button class="update" data-coach-id="${coach.email}">Update</button>
+                        </td>
+                    </tr>
+                `;
+                coachTableBody.append(newRow);
+                const updateButton = coachTableBody.find('.update').last();
+                updateButton.click(function () {
+                    populateUpdateCoachFields(coach);
                 });
-    
-                   
-                } else {
-                    // Handle error or no data
-                    console.log('No coach data found');
-                }
             });
+
+            var table = $('#coachTable').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "pageLength": 10
+            });
+
+            // Attach event handlers for delete and update buttons
+            $('.delete').click(function () {
+                const coachId = $(this).data('coach-id');
+                deleteCoach(coachId);
+            });
+
+            $('#updateCoachButton').click(function () {
+                updateCoaches();
+            });
+        } else {
+            // Handle error or no data
+            console.log('No coach data found');
         }
+    });
+}
     
         // Function to delete a coach
         function deleteCoach(coachEmail) {
@@ -609,8 +656,9 @@ $(document).ready(function () {
             $('#coachEmailInput').val(coach.email);
             $('#updateCoachModal').modal('show');
             // Split selectedSports and selectedInstitutes (comma-separated values)
-            const selectedSports = coach.sports.split(', ');
-            const selectedInstitutes = coach.institute.split(', ');
+                    console.log(coach);
+            const selectedSports = coach.sports.split(',');
+            const selectedInstitutes = coach.institute.split(',');
 
             // Fetch all sports and institutions from the routes
             $.get('/getAllSports', function (sportsData) {
@@ -620,17 +668,21 @@ $(document).ready(function () {
                     const instituteInput = $('#coachInstituteInput');
                     sportsInput.empty();
                     instituteInput.empty();
-                    const selectedSports = coach.sports.split(', ');
                     const selectedOptions = [];
-                    sportsData.sports.forEach(sport => {
-                        // Create the option element and append it to the select element
-                        const option = $('<option></option>')
-                        .attr('value', sport)
-                        .text(sport);
+                    function addSportsCheckboxes(container, data, selectedItems) {
+                        container.empty();
+                        data.forEach(sport => {
+                            const checkbox = $('<input type="checkbox">')
+                                .attr('name', 'sports[]')
+                                .attr('value', sport) // Assuming lowercase values for simplicity
+                                .attr('id', sport)
+                                .prop('checked', selectedItems.includes(sport));
 
-            sportsInput.append(option);
-        });
-        sportsInput.val(selectedSports);
+                            const label = $('<label class="checkbox-container"></label>').text(sport).prepend(checkbox);
+                            container.append(label);
+                        });
+                    }
+                    addSportsCheckboxes($(coachSportsInput), sportsData.sports, selectedSports);
 
 
                     institutesData.institutes.forEach(institute => {
@@ -647,14 +699,16 @@ function updateCoaches(){
     // Get the updated phone, selected sports, and selected institutes
     const updatedPhone = $('#coachPhoneInput').val();
     const coachEmail = $('#coachEmailInput').val();
-    const updatedSports = $('#coachSportsInput').val();
+    const updatedSports = $('input[name="sports[]"]:checked').map(function () {
+    return $(this).val();
+    }).get();
     const updatedInstitutes = $('#coachInstituteInput').val();
 
     // Create an object to send in the update request
     const updateData = {
         email:coachEmail,
         phone: updatedPhone,
-        sports: updatedSports.join(', '),
+        sports: updatedSports.join(','),
         institute: updatedInstitutes
     };
     const jsonData = JSON.stringify(updateData);
@@ -684,24 +738,6 @@ function updateCoaches(){
     $('#closeModalButton').on('click', function() {
         $('#updateCoachModal').modal('hide');
     });
-    const searchInput = document.getElementById('coachSearchInput');
-    const coachTable = document.getElementById('coachTable');
-
-    // Add an event listener to the search input for real-time filtering
-    searchInput.addEventListener('input', function () {
-    const searchText = searchInput.value.toLowerCase();
-    const coachRows = coachTable.querySelectorAll('tbody tr');
-
-    coachRows.forEach(function (row) {
-        const coachName = row.querySelector('td:nth-child(1)').textContent.toLowerCase(); // Adjust the column index as needed
-
-        if (coachName.includes(searchText)) {
-            row.style.display = ''; // Show the row if the name matches the search text
-        } else {
-            row.style.display = 'none'; // Hide the row if it doesn't match
-        }
-    });
-});
     </script>    
     
 </body>

@@ -1,460 +1,1179 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sports Performance Pro</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--Page Title-->
+    <title>Sports Performance Pro - All your records in one place</title>
 
-    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+    <!--Favicon-->
+    <link
+      rel="shortcut icon"
+      href="../static/images/favicon.ico"
+      title="Favicon"
+    />
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <!-- Include jQuery and jQuery UI -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
-    
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+    />
 
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://code.jquery.com/jquery-3.5.1.js"
+    ></script>
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"
+    ></script>
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"
+    ></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"
+    ></script>
+
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"
+    ></script>
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            /* background-color: #f3f2ef; */
-            margin: 0;
-            padding: 0;
-            /* color: #333; */
-        }
+      body {
+        font-family: Arial, sans-serif;
+        /* background-color: #f3f2ef; */
+        margin: 0;
+        padding: 0;
+        /* color: #333; */
+      }
 
-        header {
-            background-color: #0077B5;
-            color: #fff;
-            padding: 20px 0;
-            text-align: center;
-        }
+      header {
+        background-color: #0077b5;
+        color: #fff;
+        padding: 20px 0;
+        text-align: center;
+      }
 
-        nav {
-            background-color: #0077B5;
-            color: #fff;
-            padding: 10px 0;
-        }
+      nav {
+        background-color: #0077b5;
+        color: #fff;
+        padding: 10px 0;
+      }
 
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-        }
+      nav ul {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+      }
 
-        nav li {
-            margin: 0 20px;
-        }
+      nav li {
+        margin: 0 20px;
+      }
 
-        nav a {
-            text-decoration: none;
-            color: #fff;
-            font-weight: bold;
-            font-size: 16px;
-            transition: color 0.3s ease-in-out;
-            padding: 15px 25px;
-            border-radius: 15px; /* Add rounded corners to the tab */
-        }
+      nav a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: bold;
+        font-size: 16px;
+        transition: color 0.3s ease-in-out;
+        padding: 15px 25px;
+        border-radius: 15px; /* Add rounded corners to the tab */
+      }
 
-        nav a.current {
-            color: #fff;
-            background-color: #005599;
-            font-weight: bold;
-            border-radius: 15px; /* Apply rounded corners to the selected tab */
-        }
+      nav a.current {
+        color: #fff;
+        background-color: #005599;
+        font-weight: bold;
+        border-radius: 15px; /* Apply rounded corners to the selected tab */
+      }
 
-        nav a:hover, nav a:focus {
-            color: #005599;
-            background-color: #fff;
-            border-radius: 15px; /* Apply the same rounded corners on hover/focus */
-        }
+      nav a:hover,
+      nav a:focus {
+        color: #005599;
+        background-color: #fff;
+        border-radius: 15px; /* Apply the same rounded corners on hover/focus */
+      }
 
-        .container {
-            width: 100%; 
-            max-width: 1400px;
-            margin: 0 auto;
-            padding-bottom: 20px;
-            padding-left: 20px;
-            padding-right: 20px;
-            background-color: #fff;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-            border-radius: 5px;
-            display: flex;
-            flex-direction: column;
-            min-height: calc(100vh - 60px); 
-            margin-bottom: 60px;
-        }
+      .container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding-bottom: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        background-color: #fff;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 60px);
+        margin-bottom: 60px;
+      }
 
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 50%; /* Align the footer to the horizontal center of the viewport */
-            transform: translateX(-50%); /* Center the footer horizontally */
-            width: 100%;
-            background-color: #fff;
-            color: #333;
-            text-align: center;
-            padding: 10px 0;
-            z-index: 999;
-            box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
-        }
+      .footer {
+        position: fixed;
+        bottom: 0;
+        left: 50%; /* Align the footer to the horizontal center of the viewport */
+        transform: translateX(-50%); /* Center the footer horizontally */
+        width: 100%;
+        background-color: #fff;
+        color: #333;
+        text-align: center;
+        padding: 10px 0;
+        z-index: 999;
+        box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+      }
 
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+      .footer-content {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
 
-        h1 {
-            font-size: 30px;
-            margin-top: 20px;
-            margin-bottom: 30px;
-            color: #0077B5;
-        }
+      h1 {
+        font-size: 30px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        color: #0077b5;
+      }
 
-        .title {
-            font-size: 28px;
-            margin-top: 20px;
-            margin-bottom: 30px;
-            color: #fff; /* White color */
-        }
+      .title {
+        font-size: 30px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        color: #fff;
+      }
 
-        h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-            color: #0077B5;
-        }
+      h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #0077b5;
+      }
 
-        /* Basic styling for the DataTable */
-        #teamTable {
-            font-family: Arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
+      /* Basic styling for the DataTable */
+      #teamTable {
+        font-family: Arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
 
-        #teamTable th, #teamTable td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
+      #teamTable th,
+      #teamTable td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
 
-        #teamTable th {
-            background-color: #f2f2f2;
-        }
+      #teamTable th {
+        background-color: #f2f2f2;
+      }
 
-        /* Style for Edit and Delete buttons */
-        .edit-button, .delete-button {
-            background-color: #0077b5;
-            color: #fff;
-            border: none;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
+      /* Style for Edit and Delete buttons */
+      .edit-button {
+        position: relative;
+        background-color: #0077b5;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
 
-        .edit-button:hover, .delete-button:hover {
-            background-color: #00568d;
-        }
+      .delete-button {
+        position: relative;
+        background-color: #0077b5;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
 
-        /* Hover effect for table rows */
-        #teamTable tbody tr:hover {
-            background-color: #f5f5f5;
-        }
+      .view-workouts-button {
+        position: relative;
+        background-color: #0077b5;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
 
-        #teamTable_filter {
-            margin-bottom: 20px;
-        }
+      .assign-workouts-button {
+        position: relative;
+        background-color: #0077b5;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
 
-        #teamTable tbody tr.selected {
-            background-color: #0077B5;
-            color: #fff;
-            font-weight: bold;
-        }
+      .assign-tests-button {
+        position: relative;
+        background-color: #0077b5;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
 
-        .new-team-button {
-            background-color: #0077b5; /* Button background color */
-            color: #fff; /* Button text color */
-            border: none;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-weight: bold;
-            position: relative;
-            top: 35px;
-            left: 200px;
-        }
+      .view-tests-button {
+        position: relative;
+        background-color: #0077b5;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
 
-        /* Hover effect for the button */
-        .new-team-button:hover {
-            background-color: #00568d; /* Button background color on hover */
-        }
+      .edit-button:hover::before,
+      .delete-button:hover::before,
+      .assign-workouts-button:hover::before,
+      .view-workouts-button:hover::before,
+      .view-tests-button:hover::before,
+      .assign-tests-button:hover::before {
+        content: attr(data-tooltip); /* Display the tooltip text */
+        position: absolute;
+        top: -50px;
+        left: 70%;
+        transform: translateX(-50%);
+        background-color: #7322a1;
+        color: #fff;
+        padding: 8px;
+        border-radius: 10px;
+        white-space: nowrap;
+        display: block;
+        z-index: 1;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      }
 
-        /* Basic styling for the DataTable */
-        #athleteTable {
-            font-family: Arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
+      .edit-button:hover,
+      .delete-button:hover,
+      .assign-workouts-button:hover,
+      .view-workouts-button:hover,
+      .view-tests-button:hover,
+      .assign-tests-button:hover {
+        background-color: #00568d;
+      }
 
-        #athleteTable th, #athleteTable td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
+      /* Hover effect for table rows */
+      #teamTable tbody tr:hover {
+        background-color: #f5f5f5;
+      }
 
-        #athleteTable th {
-            background-color: #f2f2f2;
-        }
+      #teamTable_filter {
+        margin-bottom: 20px;
+      }
 
-        /* Style for Edit and Delete buttons */
-        .edit-button, .delete-button {
-            background-color: #0077b5;
-            color: #fff;
-            border: none;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
+      #teamTable tbody tr.selected {
+        background-color: #0077b5;
+        color: #fff;
+        font-weight: bold;
+      }
 
-        .edit-button:hover, .delete-button:hover {
-            background-color: #00568d;
-        }
+      .new-team-button {
+        background-color: #0077b5; /* Button background color */
+        color: #fff; /* Button text color */
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-weight: bold;
+        position: relative;
+        top: 35px;
+        left: 200px;
+      }
 
-        #athleteTable tbody tr:hover {
-            background-color: #f5f5f5;
-        }
+      /* Hover effect for the button */
+      .new-team-button:hover {
+        background-color: #00568d; /* Button background color on hover */
+      }
 
-        #athleteTable_filter {
-            margin-bottom: 20px;
-        }
+      /* Basic styling for the DataTable */
+      #athleteTable {
+        font-family: Arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
 
-        #athleteTable tbody tr.selected {
-            background-color: #0077B5;
-            color: #fff;
-            font-weight: bold;
-        }
+      #athleteTable th,
+      #athleteTable td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
 
+      #athleteTable th {
+        background-color: #f2f2f2;
+      }
+
+      /* Style for Edit and Delete buttons */
+      .edit-button,
+      .delete-button {
+        background-color: #0077b5;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      .edit-button:hover,
+      .delete-button:hover {
+        background-color: #00568d;
+      }
+
+      #athleteTable tbody tr:hover {
+        background-color: #f5f5f5;
+      }
+
+      #athleteTable_filter {
+        margin-bottom: 20px;
+      }
+
+      #athleteTable tbody tr.selected {
+        background-color: #0077b5;
+        color: #fff;
+        font-weight: bold;
+      }
+
+      #welcomeMessageContainer {
+        background-color: #3498db;
+        padding: 15px;
+        margin-top: 20px;
+        border-radius: 5px;
+      }
+
+      #welcomeMessage {
+        color: white;
+      }
+
+      /* Style for form labels */
+      .ui-dialog label {
+        font-weight: bold;
+        display: inline-block;
+        width: 100px; /* Adjust the width as needed */
+        margin-right: 10px; /* Add spacing between label and input */
+      }
+
+      /* Style for input text fields */
+      .ui-dialog input[type="text"],
+      .ui-dialog select {
+        width: 200px; /* Adjust the width as needed */
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+
+      /* Style for validation messages */
+      .validation-message {
+        color: red;
+        margin-top: 5px;
+      }
+
+      /* Style for buttons in dialog boxes */
+      .ui-dialog-buttonpane {
+        text-align: center;
+        padding-top: 10px;
+      }
+
+      .ui-dialog-buttonset button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+      }
+
+      .ui-dialog-buttonset button:hover {
+        background-color: #005599;
+      }
+
+      /* Style for the success message dialog */
+      #successDialog {
+        text-align: center;
+      }
+      .ui-dialog .input-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .scrollable-menu {
+        max-height: 120px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 5px;
+        border-radius: var(--bs-border-radius);
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      }
+
+      .checkbox-group {
+        display: flex;
+        flex-direction: column; /* Display checkboxes in a vertical coln */
+      }
+
+      .checkbox-container {
+        display: flex;
+        align-items: center; /* Center the checkbox and text vertically */
+        margin-bottom: 5px; /* Add spacing between checkboxes */
+      }
+
+      .checkbox-container input[type="checkbox"] {
+        margin-right: 10px; /* Add spacing between the checkbox and text */
+      }
     </style>
-</head>
-<body>
-    
+  </head>
+  <body>
     <header>
-        <h1 class="title">Sports Performance Pro - Welcome Coach TJ!</h1>
+      <h1 class="title">Sports Performance Pro</h1>
     </header>
 
     <nav>
-        <ul>
-            <li><a href="/coachLanding" class="current">Home</a></li>
-            <li><a href="/workoutSelection">Assign Workouts</a></li>
-            <li><a href="/testSelection">Assign Tests</a></li>
-            <li><a href="/defineExercises">Create Exercises</a></li>
-            <li><a href="/notesLanding">Notes</a></li>
-            <li><a href="#">Notifications</a></li>
-            <li><a href="/coachProfile">My Profile</a></li>
-        </ul>
+      <ul>
+        <li><a href="/coachLanding" class="current">Home</a></li>
+        <li><a href="/workoutSelection">Assign Workouts</a></li>
+        <li><a href="/testSelection">Assign Tests</a></li>
+        <li><a href="/defineExercises">Create Exercises</a></li>
+        <li><a href="/notesLanding">Notes</a></li>
+        <li><a href="/coachhNotifications">Notifications</a></li>
+        <li><a href="/coachProfile">My Profile</a></li>
+      </ul>
     </nav>
 
     <div class="container mt-5">
-        <!-- Team Section -->        
-        <h1 class="text-center">Teams</h1>
-        <table id="teamTable" class="display">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Sports</th>
-                    <!-- <th>Institute</th> -->
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Dynamic data will be inserted here -->
-            </tbody>
-        </table>
-        
-        <!-- Athlete Section -->
-        <h1 class="text-center">Athletes</h1>
-        <table id="athleteTable" class="display">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Sports</th>
-                    <th>Institute</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Dynamic data will be inserted here -->
-            </tbody>
-        </table>
-        
+      <div id="welcomeMessageContainer" class="text-center">
+        <h1 id="welcomeMessage">{Coach Name}</h1>
+      </div>
+      <!-- Team Section -->
+      <h1 class="text-center">Teams</h1>
+      <table id="teamTable" class="display">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Sports</th>
+            <!-- <th>Institute</th> -->
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dynamic data will be inserted here -->
+        </tbody>
+      </table>
+
+      <!-- Athlete Section -->
+      <h1 class="text-center">Athletes</h1>
+      <table id="athleteTable" class="display">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Sports</th>
+            <th>Institute</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dynamic data will be inserted here -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Dialog box for team -->
+    <div
+      id="confirmDeleteTeamDialog"
+      title="Confirm Delete Team"
+      style="display: none"
+    >
+      <p>
+        Are you sure you want to delete the team:
+        <span id="teamNameToDelete"></span>?
+      </p>
+    </div>
+
+    <div
+      id="alertDeleteTeamSuccessDialog"
+      title="Team Deleted"
+      style="display: none"
+    >
+      <p></p>
+    </div>
+
+    <div id="alertDeleteTeamErrorDialog" title="Error" style="display: none">
+      <p></p>
+    </div>
+
+    <!-- Dialog box for athlete  -->
+    <div
+      id="confirmDeleteAthleteDialog"
+      title="Confirm Delete Athlete"
+      style="display: none"
+    >
+      <p>
+        Are you sure you want to delete the athlete:
+        <span id="athleteNameToDelete"></span>
+      </p>
+    </div>
+
+    <div
+      id="alertDeleteAthleteSuccessDialog"
+      title="Athlete Deleted"
+      style="display: none"
+    >
+      <p></p>
+    </div>
+
+    <div id="alertDeleteAthleteErrorDialog" title="Error" style="display: none">
+      <p></p>
     </div>
 
     <footer>
-        <div class = footer>
-            2023 Sports Performance Pro
-        </div>
+      <div class="footer">2023 Sports Performance Pro</div>
     </footer>
 
-
     <script type="text/javascript">
-        $(document).ready(function () {
-            // Create team data
-            var teams = [];
+      // Add a global variable to store the selected date
+      let selectedDate = null;
 
-            // Initialize DataTable
-            var teamTable = $('#teamTable').DataTable({
-                data: teams,
-                columns: [
-                    { data: 'name' },
-                    { data: 'sports' },
-                    // { data: 'institute' },
-                    {
-                        title: 'Actions',
-                        render: function (data, type, row, meta) {
-                            return `
-                                <button class="edit-button" data-id="${meta.row}">
+      // Initialize selectedDate with the current date
+      let currentDay;
+      let currentMonth;
+      let currentYear;
+      let today;
+
+      function updateCurrentDate() {
+        today = new Date();
+        currentDay = today.getDate();
+        currentMonth = today.getMonth();
+        currentYear = today.getFullYear();
+      }
+
+      updateCurrentDate();
+
+      // Set the selectedDate variable with the current date
+      selectedDate = `${currentYear}-${currentMonth + 1}-${currentDay}`;
+      console.log("selectedDate:", selectedDate);
+
+      $(document).ready(function () {
+        // Fetch the coach_id using the coach's email
+        var coachEmail = "{{ session['username'] }}";
+        var coachId;
+        // Create team data
+        var teams = [];
+
+        // Initialize DataTable
+        var teamTable = $("#teamTable").DataTable({
+          data: teams,
+          columns: [
+            { data: "name" },
+            { data: "sports" },
+            // { data: 'institute' },
+            {
+              title: "Actions",
+              render: function (data, type, row, meta) {
+                return `
+                                <button class="edit-button" data-tooltip="Edit" data-id="${meta.row}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
                                         <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
                                     </svg>
                                 </button>
-                                <button class="delete-button" data-id="${meta.row}">
+                                <button class="delete-button" data-tooltip="Delete" data-id="${meta.row}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                                         <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
                                     </svg>
+                                </button>
+                                <button class="assign-workouts-button" data-tooltip="Assign Workouts" data-id="${meta.row}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-data-fill" viewBox="0 0 16 16">
+                                        <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+                                        <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1ZM10 8a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0V8Zm-6 4a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0v-1Zm4-3a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1Z"/>
+                                    </svg>
+                                </button>
+                                <button class="view-workouts-button" data-tooltip="View Workouts" data-id="${meta.row}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journal-plus" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5z"/>
+                                        <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
+                                        <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
+                                    </svg>
+                                </button>
+                                <button class="assign-tests-button" data-tooltip="Assign Tests" data-id="${meta.row}">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box2" viewBox="0 0 16 16">
+                                    <path d="M2.95.4a1 1 0 0 1 .8-.4h8.5a1 1 0 0 1 .8.4l2.85 3.8a.5.5 0 0 1 .1.3V15a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V4.5a.5.5 0 0 1 .1-.3L2.95.4ZM7.5 1H3.75L1.5 4h6zm1 0v3h6l-2.25-3zM15 5H1v10h14z"/>
+                                  </svg>
+                                </button>
+                                <button class="view-tests-button" data-tooltip="View Tests" data-id="${meta.row}">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box2-fill" viewBox="0 0 16 16">
+                                    <path d="M3.75 0a1 1 0 0 0-.8.4L.1 4.2a.5.5 0 0 0-.1.3V15a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4.5a.5.5 0 0 0-.1-.3L13.05.4a1 1 0 0 0-.8-.4h-8.5ZM15 4.667V5H1v-.333L1.5 4h6V1h1v3h6z"/>
+                                  </svg>
                                 </button>`;
-                        }
-                    }
-                ],
-                dom: 'Blfrtip',
-                buttons: [
-                    {
-                        text: 'Add a new Team',
-                        action: function () {
-                            // Handle the "New Team" action here
-                            window.location.href = '/createTeam';
+              },
+            },
+          ],
+          dom: "Blfrtip",
+          buttons: [
+            {
+              text: "Create a new Team",
+              action: function () {
+                // Handle the "New Team" action here
+                window.location.href = "/createTeam";
+              },
+              className: "new-team-button",
+            },
+          ],
+        });
+
+        // Click event for team rows to view the team details
+        $("#teamTable tbody").on("click", "tr", function (e) {
+          e.stopPropagation(); // Prevent the event from propagating to the parent
+          var data = teamTable.row(this).data();
+          var teamId = data.team_id; // Replace 'team_id' with the actual property name
+          if (teamId) {
+            // window.location.href = '/viewTeam?teamId=' + teamId;
+            window.location.href = `/viewTeam?teamId=${teamId}`;
+          }
+        });
+
+        $("#teamTable tbody").on("click", "button.edit-button", function (e) {
+          // var data = teamTable.row($(this).parents('tr')).data();
+          e.stopPropagation(); // Prevent the event from propagating to the parent
+          var rowIndex = $(this).data("id");
+          var data = teamTable.row(rowIndex).data();
+
+          // Log the entire data object to the console for debugging
+          console.log("Team data:", data);
+
+          if (data && data.team_id) {
+            var teamId = data.team_id;
+            window.location.href = `/viewTeam?teamId=${teamId}`;
+          } else {
+            console.error("Team data or team_id is undefined.");
+          }
+        });
+
+        // Handle the "Delete Team" button
+        $("#teamTable tbody").on("click", "button.delete-button", function (e) {
+          e.stopPropagation(); // Prevent the event from propagating to the parent
+          var data = teamTable.row($(this).parents("tr")).data();
+          var teamId = data.team_id;
+
+          // Log the entire data object to the console for debugging
+          console.log("Team data:", data);
+
+          // Confirm with the user before deleting the team using a dialog
+          $("#confirmDeleteTeamDialog").dialog({
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            buttons: {
+              Yes: function () {
+                // Make an Ajax request to delete the team
+                $.ajax({
+                  url: "/deleteTeam",
+                  type: "DELETE",
+                  data: { teamId: teamId },
+                  success: function (response) {
+                    // Show a success message in the success dialog
+                    $("#alertDeleteTeamSuccessDialog p").text(response.message);
+                    $("#alertDeleteTeamSuccessDialog").dialog({
+                      modal: true,
+                      buttons: {
+                        Ok: function () {
+                          $(this).dialog("close");
+                          // Refresh the page after successfully deleting the team
+                          location.reload();
                         },
-                        className: 'new-team-button'
-                    }
-                ]
-            });
+                      },
+                    });
+                  },
+                  error: function (xhr) {
+                    // Show an error message in the error dialog
+                    $("#alertDeleteTeamErrorDialog p").text(
+                      "Error deleting team. Please try again."
+                    );
+                    $("#alertDeleteTeamErrorDialog").dialog({
+                      modal: true,
+                      buttons: {
+                        Ok: function () {
+                          $(this).dialog("close");
+                        },
+                      },
+                    });
+                    console.error("Error deleting team:", xhr.responseText);
+                  },
+                });
 
-            // Click event for team rows to view the team details
-            $('#teamTable tbody').on('click', 'tr', function (e) {
-                var data = teamTable.row(this).data();
-                var teamId = data.team_id; // Replace 'team_id' with the actual property name
-                if (teamId) {
-                    // window.location.href = '/viewTeam?teamId=' + teamId;
-                    window.location.href = `/viewTeam?teamId=${teamId}`;
-                }
-            });
+                // Set the team name in the confirmation dialog
+                $("#teamNameToDelete").text(data.name);
 
-            $('#teamTable tbody').on('click', 'button.edit-button', function (e) {
-                // var data = teamTable.row($(this).parents('tr')).data();
-                // console.log("should not be a table row");
-                // alert('Edit: ' + data.name);
-                e.stopPropagation(); // Prevent the event from propagating to the parent
-                var data = teamTable.row($(this).parents('tr')).data();
-                console.log("should not be a table row");
-                alert('Edit: ' + data.name);
-            });
+                $(this).dialog("close");
+              },
+              No: function () {
+                $(this).dialog("close");
+              },
+            },
+          });
+        });
 
-            $('#teamTable tbody').on('click', 'button.delete-button', function (e) {
-                // var data = teamTable.row($(this).parents('tr')).data();
-                // alert('Delete: ' + data.name);
-                e.stopPropagation(); // Prevent the event from propagating to the parent
-                var data = teamTable.row($(this).parents('tr')).data();
-                alert('Delete: ' + data.name);
-            });    
-            
-            //Athlete section
+        $("#teamTable tbody").on(
+          "click",
+          "button.assign-workouts-button",
+          function (e) {
+            // var data = teamTable.row($(this).parents('tr')).data();
+            e.stopPropagation(); // Prevent the event from propagating to the parent
+            var rowIndex = $(this).data("id");
+            var data = teamTable.row(rowIndex).data();
 
-            var athletes = [];
+            // Log the entire data object to the console for debugging
+            console.log("Team data:", data);
 
-            // Initialize DataTable
-            var athleteTable = $('#athleteTable').DataTable({
-                data: athletes,
-                columns: [
-                    { data: 'name' },
-                    { data: 'sports' },
-                    { data: 'institute' },
-                    {
-                        title: 'Actions',
-                        render: function (data, type, row, meta) {
-                            return `
-                                <button class="edit-button" data-id="${meta.row}">
+            if (data && data.team_id) {
+              var teamId = data.team_id;
+              var teamName = data.name;
+              // window.location.href = /viewTeam?teamId=${teamId};
+              window.location.href = `/coachAthleteWorkout?teamId=${teamId}&coachId=${coachId}&date=${Datee}#return-button`;
+            } else {
+              console.error("Team data or team_id is undefined.");
+            }
+          }
+        );
+
+        $("#teamTable tbody").on(
+          "click",
+          "button.assign-tests-button",
+          function (e) {
+            // var data = teamTable.row($(this).parents('tr')).data();
+            e.stopPropagation(); // Prevent the event from propagating to the parent
+            var rowIndex = $(this).data("id");
+            var data = teamTable.row(rowIndex).data();
+
+            // Log the entire data object to the console for debugging
+            console.log("Team data:", data);
+
+            if (data && data.team_id) {
+              var teamId = data.team_id;
+              var teamName = data.name;
+              // window.location.href = /viewTeam?teamId=${teamId};
+              window.location.href = `/coachAthleteTest?teamId=${teamId}&coachId=${coachId}&date=${Datee}#return-button`;
+            } else {
+              console.error("Team data or team_id is undefined.");
+            }
+          }
+        );
+
+        $("#teamTable tbody").on(
+          "click",
+          "button.view-tests-button",
+          function (e) {
+            // var data = teamTable.row($(this).parents('tr')).data();
+            e.stopPropagation(); // Prevent the event from propagating to the parent
+            var rowIndex = $(this).data("id");
+            var data = teamTable.row(rowIndex).data();
+
+            // Log the entire data object to the console for debugging
+            console.log("Team data:", data);
+
+            if (data && data.team_id) {
+              var teamId = data.team_id;
+              var teamName = data.name;
+              // window.location.href = /viewTeam?teamId=${teamId};
+              window.location.href = `/coachAthleteTest?teamId=${teamId}&coachId=${coachId}&date=${Datee}`;
+            } else {
+              console.error("Team data or team_id is undefined.");
+            }
+          }
+        );
+
+        $("#teamTable tbody").on(
+          "click",
+          "button.view-workouts-button",
+          function (e) {
+            // var data = teamTable.row($(this).parents('tr')).data();
+            e.stopPropagation(); // Prevent the event from propagating to the parent
+            var rowIndex = $(this).data("id");
+            var data = teamTable.row(rowIndex).data();
+
+            // Log the entire data object to the console for debugging
+            console.log("Team data:", data);
+
+            if (data && data.team_id) {
+              var teamId = data.team_id;
+              var teamName = data.name;
+              // window.location.href = /viewTeam?teamId=${teamId};
+              window.location.href = `/coachAthleteWorkout?teamId=${teamId}&coachId=${coachId}&date=${Datee}`;
+            } else {
+              console.error("Team data or team_id is undefined.");
+            }
+          }
+        );
+
+        //Athlete section
+
+        var athletes = [];
+
+        // Initialize DataTable
+        var athleteTable = $("#athleteTable").DataTable({
+          data: athletes,
+          columns: [
+            { data: "name" },
+            { data: "sports" },
+            { data: "institute" },
+            {
+              title: "Actions",
+              render: function (data, type, row, meta) {
+                return `
+                                <button class="edit-button" data-tooltip="Edit" data-id="${meta.row}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
                                         <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
                                     </svg>
                                 </button>
-                                <button class="delete-button" data-id="${meta.row}">
+                                <button class="delete-button" data-tooltip="Delete" data-id="${meta.row}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                                         <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
                                     </svg>
+                                </button>
+                                <button class="assign-workouts-button" data-tooltip="Assign Workouts" data-id="${meta.row}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-data-fill" viewBox="0 0 16 16">
+                                        <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+                                        <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1ZM10 8a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0V8Zm-6 4a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0v-1Zm4-3a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1Z"/>
+                                    </svg>
+                                </button>
+                                <button class="view-workouts-button" data-tooltip="View Workouts" data-id="${meta.row}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journal-plus" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5z"/>
+                                        <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
+                                        <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
+                                    </svg>
+                                </button>
+                               
+                                <button class="assign-tests-button" data-tooltip="Assign Tests" data-id="${meta.row}">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box2" viewBox="0 0 16 16">
+                                    <path d="M2.95.4a1 1 0 0 1 .8-.4h8.5a1 1 0 0 1 .8.4l2.85 3.8a.5.5 0 0 1 .1.3V15a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V4.5a.5.5 0 0 1 .1-.3L2.95.4ZM7.5 1H3.75L1.5 4h6zm1 0v3h6l-2.25-3zM15 5H1v10h14z"/>
+                                  </svg>
+                                </button>
+                                <button class="view-tests-button" data-tooltip="View Tests" data-id="${meta.row}">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box2-fill" viewBox="0 0 16 16">
+                                    <path d="M3.75 0a1 1 0 0 0-.8.4L.1 4.2a.5.5 0 0 0-.1.3V15a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4.5a.5.5 0 0 0-.1-.3L13.05.4a1 1 0 0 0-.8-.4h-8.5ZM15 4.667V5H1v-.333L1.5 4h6V1h1v3h6z"/>
+                                  </svg>
                                 </button>`;
-                        }
-                    }
-                ]
+              },
+            },
+          ],
+          dom: "Blfrtip",
+          buttons: [
+            {
+              text: "Add a new Signed Up Athlete",
+              action: function () {
+                // Handle the "New Team" action here
+                window.location.href = "/addNewAthlete";
+              },
+              className: "new-team-button",
+            },
+          ],
+        });
+
+        $("#athleteTable tbody").on(
+          "click",
+          "button.edit-button",
+          function (e) {
+            // var data = athleteTable.row($(this).parents('tr')).data();
+            // var data = teamTable.row($(this).parents('tr')).data();
+
+            e.stopPropagation(); // Prevent the event from propagating to the parent
+            var rowIndex = $(this).data("id");
+            var data = athleteTable.row(rowIndex).data();
+
+            // Log the entire data object to the console for debugging
+            console.log("Athlete data:", data);
+
+            if (data && data.athlete_id) {
+              var athleteEmail = data.email;
+              // window.location.href = `/viewTeam?teamId=${teamId}`;
+              console.log("athlete email: ", athleteEmail);
+              window.location.href = `/editAthleteDetails?athleteEmail=${athleteEmail}`;
+            } else {
+              console.error("Athlete data or athlete email is undefined.");
+            }
+          }
+        );
+        function getBuffaloDateInISO() {
+          // Get the current UTC date and time
+          const nowUTC = new Date();
+
+          // Check if it's currently Daylight Saving Time in Eastern Time Zone
+          function isDST(now) {
+            const jan = new Date(now.getFullYear(), 0, 1).getTimezoneOffset();
+            const jul = new Date(now.getFullYear(), 6, 1).getTimezoneOffset();
+            return Math.max(jan, jul) !== now.getTimezoneOffset();
+          }
+
+          // Calculate the time offset for Eastern Time Zone (UTC-5 or UTC-4 depending on Daylight Saving Time)
+          // Buffalo, New York follows Eastern Time, which is either UTC-5 or UTC-4
+          const easternTimeOffset = isDST(nowUTC) ? -240 : -300; // -240 for DST, -300 for standard time
+
+          // Adjust the UTC time by the Eastern Time offset to get the time in Eastern Time
+          const buffaloTime = new Date(
+            nowUTC.getTime() + easternTimeOffset * 60000
+          );
+
+          // Format to ISO date (YYYY-MM-DD)
+          return buffaloTime.toISOString().split("T")[0];
+        }
+
+        const Datee = getBuffaloDateInISO();
+        console.log(Datee);
+
+        // Handle the "Delete Athlete" button
+        $("#athleteTable tbody").on(
+          "click",
+          "button.delete-button",
+          function () {
+            var data = athleteTable.row($(this).parents("tr")).data();
+            var athleteId = data.athlete_id;
+
+            console.log("Athlete data:", data);
+
+            // Confirm with the user before deleting the athlete using a dialog
+            $("#confirmDeleteAthleteDialog").dialog({
+              resizable: false,
+              height: "auto",
+              width: 400,
+              modal: true,
+              buttons: {
+                Yes: function () {
+                  // Make an Ajax request to delete the athlete
+                  $.ajax({
+                    url: "/deleteCoachAthleteMembership/" + athleteId,
+                    type: "DELETE",
+                    success: function (response) {
+                      // Show a success message in the success dialog
+                      $("#alertDeleteAthleteSuccessDialog").text(
+                        response.message
+                      );
+                      $("#alertDeleteAthleteSuccessDialog").dialog({
+                        modal: true,
+                        buttons: {
+                          Ok: function () {
+                            $(this).dialog("close");
+                            // Refresh the page after successfully deleting the athlete
+                            location.reload();
+                          },
+                        },
+                      });
+                    },
+                    error: function (xhr) {
+                      // Show an error message in the error dialog
+                      $("#alertDeleteAthleteErrorDialog p").text(
+                        "Error deleting athlete. Please try again."
+                      );
+                      $("#alertDeleteAthleteErrorDialog").dialog({
+                        modal: true,
+                        buttons: {
+                          Ok: function () {
+                            $(this).dialog("close");
+                          },
+                        },
+                      });
+                      console.error(
+                        "Error deleting athlete:",
+                        xhr.responseText
+                      );
+                    },
+                  });
+
+                  // Set the athlete name in the confirmation dialog
+                  $("#athleteNameToDelete").text(data.name);
+
+                  $(this).dialog("close");
+                },
+                No: function () {
+                  $(this).dialog("close");
+                },
+              },
             });
+          }
+        );
 
-            $('#athleteTable tbody').on('click', 'button.edit-button', function () {
-                var data = athleteTable.row($(this).parents('tr')).data();
-                alert('Edit: ' + data.name);
-            });
+        $("#athleteTable tbody").on(
+          "click",
+          "button.assign-workouts-button",
+          function (e) {
+            e.stopPropagation(); // Prevent the event from propagating to the parent
+            var rowIndex = $(this).data("id");
+            var data = athleteTable.row(rowIndex).data();
 
-            $('#athleteTable tbody').on('click', 'button.delete-button', function () {
-                var data = athleteTable.row($(this).parents('tr')).data();
-                alert('Delete: ' + data.name);
-            });
+            // Log the entire data object to the console for debugging
+            console.log("Athlete data:", data);
 
+            if (data && data.athlete_id) {
+              var athleteId = data.athlete_id;
+              var athleteName = data.name;
+              // window.location.href = `/viewTeam?teamId=${teamId}`;
+              console.log("athlete name: ", athleteName);
 
+              window.location.href = `/coachAthleteWorkout?athleteId=${athleteId}&coachId=${coachId}&date=${Datee}#return-button`;
+              //window.location.href = `/assignExercise?coachId=${coachId}&athleteId=${athleteId}&athleteName=${athleteName}&date=${selectedDate}`;
+            } else {
+              console.error("Athlete data or athlete email is undefined.");
+            }
+          }
+        );
 
-            $(document).ready(function () {
-                // Fetch the coach_id using the coach's email
-                var coachEmail = "{{ session['username'] }}"; 
+        $("#athleteTable tbody").on(
+          "click",
+          "button.assign-tests-button",
+          function (e) {
+            e.stopPropagation(); // Prevent the event from propagating to the parent
+            var rowIndex = $(this).data("id");
+            var data = athleteTable.row(rowIndex).data();
 
-                $.get("/getAllCoaches?email=" + coachEmail, function (data) {
-                    if (data.error) {
-                        // Handle the case where the coach is not found (e.g., redirect to a login page)
-                        window.location.href = '/coachAthleteHome';
-                    } else {
-                        var coachId = data.coach_id;
+            // Log the entire data object to the console for debugging
+            console.log("Athlete data:", data);
 
-                        // Use coachId to fetch athlete data
-                        $.get("/getAllAthletes?coach_id=" + coachId, function (athleteData) {
-                            var athletes = athleteData.athletes;
-                            var athleteTable = $("#athleteTable").DataTable();
-                            athleteTable.clear();
+            if (data && data.athlete_id) {
+              var athleteId = data.athlete_id;
+              var athleteName = data.name;
+              // window.location.href = `/viewTeam?teamId=${teamId}`;
+              console.log("athlete name: ", athleteName);
 
-                            // Iterate through athletes and add them to the table
-                            athletes.forEach(function (athlete) {
-                                var athleteDataWithCoach = {
-                                    name: athlete.name,
-                                    sports: athlete.sports,
-                                    institute: athlete.institute,
-                                    coach_id: coachId,  // Use the coach_id from the request parameter
-                                };
-                                athleteTable.row.add(athleteDataWithCoach);
-                            });
-                            athleteTable.draw();
-                        });
+              window.location.href = `/coachAthleteTest?athleteId=${athleteId}&coachId=${coachId}&date=${Datee}#return-button`;
+              //window.location.href = `/assignExercise?coachId=${coachId}&athleteId=${athleteId}&athleteName=${athleteName}&date=${selectedDate}`;
+            } else {
+              console.error("Athlete data or athlete email is undefined.");
+            }
+          }
+        );
 
-                        $.get("/getAllTeams?coach_id=" + coachId, function (teamData) {
-                            var teams = teamData.teams;
-                            var teamTable = $("#teamTable").DataTable();
-                            teamTable.clear().rows.add(teams).draw();
-                        });
-                    }
+        $("#athleteTable tbody").on(
+          "click",
+          "button.view-workouts-button",
+          function (e) {
+            e.stopPropagation(); // Prevent the event from propagating to the parent
+            var rowIndex = $(this).data("id");
+            var data = athleteTable.row(rowIndex).data();
+
+            // Log the entire data object to the console for debugging
+            console.log("Athlete data:", data);
+
+            if (data && data.athlete_id) {
+              var athleteEmail = data.email;
+              var athleteId = data.athlete_id;
+              var athleteName = data.name;
+              // window.location.href = `/viewTeam?teamId=${teamId}`;
+              console.log("athlete email: ", athleteEmail);
+              // window.location.href = `/editAthleteDetails?athleteEmail=${athleteEmail}`;
+              window.location.href = `/coachAthleteWorkout?athleteId=${athleteId}&coachId=${coachId}&date=${Datee}`;
+            } else {
+              console.error("Athlete data or athlete email is undefined.");
+            }
+          }
+        );
+
+        $("#athleteTable tbody").on(
+          "click",
+          "button.view-tests-button",
+          function (e) {
+            e.stopPropagation(); // Prevent the event from propagating to the parent
+            var rowIndex = $(this).data("id");
+            var data = athleteTable.row(rowIndex).data();
+
+            // Log the entire data object to the console for debugging
+            console.log("Athlete data:", data);
+
+            if (data && data.athlete_id) {
+              var athleteEmail = data.email;
+              var athleteId = data.athlete_id;
+              var athleteName = data.name;
+              // window.location.href = `/viewTeam?teamId=${teamId}`;
+              console.log("athlete email: ", athleteEmail);
+              // window.location.href = `/editAthleteDetails?athleteEmail=${athleteEmail}`;
+              window.location.href = `/coachAthleteTest?athleteId=${athleteId}&coachId=${coachId}&date=${Datee}`;
+            } else {
+              console.error("Athlete data or athlete email is undefined.");
+            }
+          }
+        );
+
+        $.get("/getAllCoaches?email=" + coachEmail, function (data) {
+          if (data.error) {
+            // Handle the case where the coach is not found (e.g., redirect to a login page)
+            window.location.href = "/coachAthleteHome";
+          } else {
+            var coachName = data.name;
+
+            // Update the welcome message with the coach's name
+            $("#welcomeMessage").text("Coach: " + coachName);
+            coachId = data.coach_id;
+
+            // Use coachId to fetch athlete data
+            $.get(
+              "/getAllAthletes?coach_id=" + coachId,
+              function (athleteData) {
+                var athletes = athleteData.athletes;
+                var athleteTable = $("#athleteTable").DataTable();
+                athleteTable.clear();
+
+                // Iterate through athletes and add them to the table
+                athletes.forEach(function (athlete) {
+                  var athleteDataWithCoach = {
+                    name: athlete.name,
+                    athlete_id: athlete.athlete_id,
+                    email: athlete.email,
+                    sports: athlete.sports,
+                    institute: athlete.institute,
+                    coach_id: coachId, // Use the coach_id from the request parameter
+                  };
+                  athleteTable.row.add(athleteDataWithCoach);
                 });
+                athleteTable.draw();
+              }
+            );
+
+            $.get("/getAllTeams?coach_id=" + coachId, function (teamData) {
+              var teams = teamData.teams;
+              var teamTable = $("#teamTable").DataTable();
+              teamTable.clear().rows.add(teams).draw();
             });
-        });   
+          }
+        });
+      });
     </script>
-</body>
+  </body>
 </html>

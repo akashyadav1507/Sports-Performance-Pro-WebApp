@@ -3,12 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Athlete</title>
+    <!--Page Title-->
+    <title>Sports Performance Pro - All your records in one place</title>
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="../static/images/favicon.ico" title="Favicon"/>
+
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
     <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <style>
         header {
@@ -223,7 +232,32 @@
             <button id="selectAthleteButton" class="btn btn-primary" disabled>Continue</button>
             <button id="returnButton" class="btn btn-secondary">Return</button>
         </div>
+    </div>
 
+    <!-- Your HTML code for return dialogs -->
+    <div id="confirmReturnDialog" title="Confirm Return" style="display: none;">
+        <p>You have selected an athlete. Are you sure you want to return?</p>
+    </div>
+
+    <div id="alertNoReferrerDialog" title="No Referrer Found" style="display: none;">
+        <p>No referrer found. Redirecting to a default page.</p>
+    </div>
+
+    <!-- Your HTML code for Select dialogs -->
+    <div id="alertAthleteAlreadyMemberDialog" title="Athlete Already a Member" style="display: none;">
+        <p>Athlete is already a member of the team.</p>
+    </div>
+
+    <div id="alertFailedToAddAthleteDialog" title="Failed to Add Athlete" style="display: none;">
+        <p>Failed to add athlete to the team. Please try again.</p>
+    </div>
+
+    <div id="alertNoAthleteSelectedDialog" title="No Athlete Selected" style="display: none;">
+        <p>No athlete selected. Please select an athlete before continuing.</p>
+    </div>
+
+    <div id="successAddAthleteDialog" title="Athlete Added Successfully" style="display: none;">
+        <p>Athlete added to the team successfully.</p>
     </div>
 
     <footer>
@@ -237,6 +271,14 @@
 
             var coachEmail = "{{ session['username'] }}";
             var coachId;
+
+            // Retrieve the teamId from the query parameter
+            var params = new URLSearchParams(window.location.search);
+            var teamId = params.get('teamId');
+            var selectedSport = params.get('selectedSport');
+
+            console.log(teamId);
+            console.log(selectedSport);
             // Create athlete data and a mapping of athlete names to athlete IDs
             var athletes = [];
             var athleteIdMapping = {}; // Mapping of athlete names to athlete IDs
@@ -257,31 +299,32 @@
                     window.location.href = '/coachAthleteHome';
                 } else {
                     coachId = data.coach_id;
+                    
+                    $.get("/getAthletesBySports", {
+                        coach_id: coachId,
+                        selectedSport: selectedSport
+                    }, function (response) {
+                        if (response.error) {
+                            console.error('Error fetching athletes:', response.error);
+                            return;
+                        }
 
-                    // Use coachId to fetch athlete and team data
-                    $.get("/getAllAthletes?coach_id=" + coachId, function (athleteData) {
-                        var athletesData = athleteData.athletes;
+                        var athletes = response.filtered_athletes;
                         var athleteTable = $("#athleteTable").DataTable();
+                        athleteTable.clear();
 
-                        // console.log(athleteData)
-                        // Clear the existing data and reset the arrays
-                        athletes = [];
-                        athleteIdMapping = {};
-
-                        // Populate the athlete data and the athlete name-to-ID mapping
-                        athletesData.forEach(function (athlete) {
-                            var athleteId = athlete.athlete_id; // Correctly retrieve athlete_id
-                            athletes.push({
-                                athleteId: athleteId, // Store athlete_id
+                        athletes.forEach(function (athlete) {
+                            var athleteDataWithCoach = {
+                                athlete_id: athlete.athlete_id,
                                 name: athlete.name,
                                 sports: athlete.sports,
                                 institute: athlete.institute,
-                            });
-
-                            athleteIdMapping[athlete.name] = athleteId; // Map athlete name to athlete_id
+                                coach_id: coachId,
+                            };
+                            athleteTable.row.add(athleteDataWithCoach);
                         });
 
-                        athleteTable.clear().rows.add(athletes).draw();
+                        athleteTable.draw();
                     });
                 }
             });
@@ -289,7 +332,7 @@
             $('#athleteTable tbody').on('click', 'tr', function () {
                 var data = table.row(this).data();
                 var athleteName = data.name; // Retrieve athlete name
-                var athleteId = athleteIdMapping[athleteName]; // Get athleteId from the mapping
+                var athleteId = data.athlete_id; // Get athleteId 
 
                 // Remove highlighting from previously selected row
                 $('#athleteTable tbody tr').removeClass('selected');
@@ -321,21 +364,64 @@
                         contentType: 'application/json',
                         data: JSON.stringify({ athlete_id: athleteId, team_id: teamId }),
                         success: function (response) {
-                            alert(response.message); // Show a success message
-                            // Redirect to the previous page
-                            window.location.href = '/viewTeam?teamId=' + teamId;
+                            // Show a success message using a dialog
+                            $("#successAddAthleteDialog").dialog({
+                                resizable: false,
+                                height: "auto",
+                                width: 400,
+                                modal: true,
+                                buttons: {
+                                    "OK": function () {
+                                        // Redirect to the previous page
+                                        window.location.href = '/viewTeam?teamId=' + teamId;
+                                        $(this).dialog("close");
+                                    }
+                                }
+                            });
                         },
                         error: function (xhr, status, error) {
                             if (xhr.status === 400) {
-                                alert('Athlete is already a member of the team.');
+                                // Show an alert for athlete already a member using a dialog
+                                $("#alertAthleteAlreadyMemberDialog").dialog({
+                                    resizable: false,
+                                    height: "auto",
+                                    width: 400,
+                                    modal: true,
+                                    buttons: {
+                                        "OK": function () {
+                                            $(this).dialog("close");
+                                        }
+                                    }
+                                });
                             } else {
-                                alert('Failed to add athlete to the team. Please try again.');
+                                // Show an alert for failed to add athlete using a dialog
+                                $("#alertFailedToAddAthleteDialog").dialog({
+                                    resizable: false,
+                                    height: "auto",
+                                    width: 400,
+                                    modal: true,
+                                    buttons: {
+                                        "OK": function () {
+                                            $(this).dialog("close");
+                                        }
+                                    }
+                                });
                             }
                         }
                     });
                 } else {
                     // No athlete selected, show a popup
-                    alert('No athlete selected. Please select an athlete before continuing.');
+                    $("#alertNoAthleteSelectedDialog").dialog({
+                        resizable: false,
+                        height: "auto",
+                        width: 400,
+                        modal: true,
+                        buttons: {
+                            "OK": function () {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
                 }
             });
 
@@ -345,23 +431,44 @@
                 var selectedRow = $('#athleteTable tbody tr.selected');
 
                 if (selectedRow.length > 0) {
-                    // Ask for confirmation
-                    var confirmReturn = confirm('You have selected an athlete. Do you still want to return?');
-                    if (!confirmReturn) {
-                        // User clicked "Cancel," so do nothing
-                        return;
-                    }
-                }
-
-                // Check if the page has a referrer (previous page)
-                if (document.referrer) {
-                    // Redirect to the previous page while preserving its data
-                    window.location.href = document.referrer;
+                    // Ask for confirmation using a dialog
+                    $("#confirmReturnDialog").dialog({
+                        resizable: false,
+                        height: "auto",
+                        width: 400,
+                        modal: true,
+                        buttons: {
+                            "Yes": function () {
+                                // Redirect to the previous page while preserving its data
+                                window.location.href = document.referrer;
+                                $(this).dialog("close");
+                            },
+                            "No": function () {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
                 } else {
-                    // If there's no referrer, you can provide a default URL or do something else
-                    alert("No referrer found. Redirecting to a default page.");
-                    // Redirect to a default page
-                    window.location.href = '/defaultPage';
+                    // Check if the page has a referrer (previous page)
+                    if (document.referrer) {
+                        // Redirect to the previous page while preserving its data
+                        window.location.href = document.referrer;
+                    } else {
+                        // If there's no referrer, show an alert using a dialog
+                        $("#alertNoReferrerDialog").dialog({
+                            resizable: false,
+                            height: "auto",
+                            width: 400,
+                            modal: true,
+                            buttons: {
+                                "OK": function () {
+                                    $(this).dialog("close");
+                                    // Redirect to a default page
+                                    window.location.href = '/coachLanding';
+                                }
+                            }
+                        });
+                    }
                 }
             });
         });

@@ -6,7 +6,8 @@ let currentDay;
 let currentMonth;
 let currentYear;
 let today;
-
+let monthValue;
+let currentOperation = 0;
 function updateCurrentDate() {
   today = new Date();
   currentDay = today.getDate();
@@ -39,34 +40,40 @@ showCalendar(currentMonth, currentYear);
 
 function next() {
   blockTabs.innerHTML = "";
-  exerciseDetails.innerHTML = "";
-  exerciseTabs.innerHTML = "";
+  // exerciseDetails.innerHTML = "";
+  // exerciseTabs.innerHTML = "";
   currentYear = currentMonth === 11 ? currentYear + 1 : currentYear;
   currentMonth = (currentMonth + 1) % 12;
   showCalendar(currentMonth, currentYear);
   handleDateSelection();
+  if (typeof coachId !== "undefined") highlightWorkoutDatesForCoaches(coachId);
+  else highlightWorkoutDatesForAthletes(athleteId, teamIds);
 }
 
 function previous() {
-  blockTabs.innerHTML = "";
-  exerciseDetails.innerHTML = "";
-  exerciseTabs.innerHTML = "";
+  // blockTabs.innerHTML = "";
+  // exerciseDetails.innerHTML = "";
+  // exerciseTabs.innerHTML = "";
 
   currentYear = currentMonth === 0 ? currentYear - 1 : currentYear;
   currentMonth = currentMonth === 0 ? 11 : currentMonth - 1;
   showCalendar(currentMonth, currentYear);
   handleDateSelection();
+  if (typeof coachId !== "undefined") highlightWorkoutDatesForCoaches(coachId);
+  else highlightWorkoutDatesForAthletes(athleteId, teamIds);
 }
 
 function jump() {
-  blockTabs.innerHTML = "";
-  exerciseDetails.innerHTML = "";
-  exerciseTabs.innerHTML = "";
+  // blockTabs.innerHTML = "";
+  // exerciseDetails.innerHTML = "";
+  // exerciseTabs.innerHTML = "";
 
   currentYear = parseInt(selectYear.value);
   currentMonth = parseInt(selectMonth.value);
   showCalendar(currentMonth, currentYear);
   handleDateSelection();
+  if (typeof coachId !== "undefined") highlightWorkoutDatesForCoaches(coachId);
+  else highlightWorkoutDatesForAthletes(athleteId, teamIds);
 }
 
 function highlightCurrentDate() {
@@ -90,14 +97,12 @@ function highlightCurrentDate() {
 }
 
 function showCalendar(month, year) {
-  let firstDay = new Date(year, month).getDay();
-
-  let tbl = document.getElementById("calendar-body"); // body of the calendar
+  const firstDay = new Date(year, month).getDay();
+  const tbl = document.getElementById("calendar-body"); // body of the calendar
 
   // clearing all previous cells
   tbl.innerHTML = "";
-
-  // filing data about month and in the page via DOM.
+  // filling data about month and in the page via DOM.
   monthAndYear.innerHTML = months[month] + " " + year;
   selectYear.value = year;
   selectMonth.value = month;
@@ -106,26 +111,40 @@ function showCalendar(month, year) {
   let date = 1;
   for (let i = 0; i < 6; i++) {
     // creates a table row
-    let row = document.createElement("tr");
+    const row = document.createElement("tr");
 
     // creating individual cells, filling them up with data
     for (let j = 0; j < 7; j++) {
+      const cell = document.createElement("td");
+
       if (i === 0 && j < firstDay) {
-        cell = document.createElement("td");
-        cellText = document.createTextNode("");
-        cell.appendChild(cellText);
-        row.appendChild(cell);
+        // Empty cells for the days before the first day of the month
+        cell.appendChild(document.createTextNode(""));
       } else if (date > daysInMonth(month, year)) {
+        // Break if we've filled all days for the month
         break;
       } else {
-        cell = document.createElement("td");
-        cellText = document.createTextNode(date);
-
+        // Create a cell with the date
+        const cellText = document.createTextNode(date);
         cell.appendChild(cellText);
-        row.appendChild(cell);
+        // Add a mouseover event listener to the date cell
+        cell.addEventListener("mouseover", function () {
+          if (cell.classList.contains("workout-date"))
+            var operationNumber = ++currentOperation;
+          handleCellHover(cell, operationNumber);
+        });
+
+        // Add a mouseout event listener to the date cell
+        cell.addEventListener("mouseout", function () {
+          hoverOut();
+        });
+
         date++;
       }
+
+      row.appendChild(cell);
     }
+
     tbl.appendChild(row); // appending each row into the calendar body
   }
 
@@ -181,8 +200,8 @@ function handleDateSelection() {
     cell.addEventListener("click", function () {
       // Clear the tables
       blockTabs.innerHTML = "";
-      exerciseDetails.innerHTML = "";
-      exerciseTabs.innerHTML = "";
+      // exerciseDetails.innerHTML = "";
+      // exerciseTabs.innerHTML = "";
 
       // Remove the "clicked-date" class from all cells
       tbl
@@ -209,6 +228,108 @@ function handleDateSelection() {
       main();
     });
   });
+  monthValue = selectYear.value + "-" + (parseInt(selectMonth.value) + 1);
+}
+
+async function highlightWorkoutDatesForAthletes(
+  athleteIdForDate,
+  teamIdForDate
+) {
+  try {
+    const response = await fetch(
+      `getWorkoutDates?athleteId=${athleteIdForDate}&teamId=${teamIdForDate}&date_param=${monthValue}`
+    );
+    const jsonData = await response.json();
+    highlightWorkoutDates(jsonData);
+  } catch (error) {
+    console.error("Error fetching or processing data:", error);
+  }
+}
+
+async function highlightWorkoutDatesForCoaches(coachId) {
+  try {
+    const response = await fetch(
+      `getWorkoutDates?coachId=${coachId}&date_param=${monthValue}`
+    );
+    const jsonData = await response.json();
+    highlightWorkoutDates(jsonData);
+  } catch (error) {
+    console.error("Error fetching or processing data:", error);
+  }
+}
+
+async function highlightWorkoutDates(jsonData) {
+  const tbl = document.querySelector("#calendar");
+  const cells = document.querySelectorAll("td");
+  const workoutDates = jsonData.workoutDates;
+  workoutDates.forEach((workoutDate) => {
+    const dateObject = new Date(workoutDate);
+    const workoutMonth = dateObject.getMonth() + 1; // January is 0, so we add 1
+    const workoutYear = dateObject.getFullYear();
+    // Check if the month and year match the currentMonth and currentYear
+    if (workoutMonth === currentMonth + 1 && workoutYear === currentYear) {
+      // Find the corresponding cell and highlight it
+      cells.forEach((cell) => {
+        const cellDate = cell.innerHTML;
+        if (parseInt(cellDate) === dateObject.getDate() && tbl.contains(cell)) {
+          cell.classList.add("workout-date");
+        }
+      });
+    }
+  });
+}
+
+async function handleCellHover(cell, operationNumber) {
+  hoverOut();
+  try {
+    const hoverDate =
+      currentYear + "-" + (currentMonth + 1) + "-" + cell.innerHTML;
+    const response = await fetch(
+      `hoverForCoaches?coachId=${coachId}&dateParam=${hoverDate}`
+    );
+    if (operationNumber === currentOperation) {
+      var infoText = "";
+      const jsonData = await response.json();
+      if (Array.isArray(jsonData) && jsonData.length > 0) {
+        const infoBox = document.createElement("div");
+        infoBox.className = "info-box";
+        jsonData.forEach((item) => {
+          const assignmentType = item.assignment_type;
+          const assignmentName = item.assignment_name;
+          if(item.workout_name){
+            const workoutName = item.workout_name;
+            infoText += `Workout : ${workoutName} assigned to ${assignmentType} : ${assignmentName}\n\n`;
+          }else{
+            const testName = item.test_name;
+            infoText += `Test : ${testName} assigned to ${assignmentType} : ${assignmentName}\n\n`;
+          }
+
+        });
+        infoBox.textContent = infoText;
+        // Append the info box to the document body
+        document.body.appendChild(infoBox);
+
+        // Position the info box near the cell using absolute positioning
+        const cellRect = cell.getBoundingClientRect();
+        infoBox.style.position = "absolute";
+        infoBox.style.top = cellRect.bottom + window.scrollY + "px";
+        infoBox.style.left = cellRect.left + window.scrollX + "px";
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching or processing data:", error);
+  }
+
+  // Add a mouseout event listener to remove the info box when the mouse leaves the cell
+}
+
+function hoverOut() {
+  var infoBox = document.querySelector(".info-box");
+  if (infoBox) {
+    console.log("Mouse out");
+    infoBox.remove();
+    infoBox = null;
+  }
 }
 
 document.addEventListener("DOMContentLoaded", handleDateSelection);

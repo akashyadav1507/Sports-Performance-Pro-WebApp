@@ -1,0 +1,23 @@
+# Requirements for Python Flask application
+
+bcrypt==4.0.1
+Flask==3.0.0
+Flask-Bcrypt==1.0.1
+Flask-SQLAlchemy==3.1.1
+Flask-Mail==0.9.1
+mysqlclient==2.1.0 
+mysql-connector==2.2.9
+mysql-connector-python==8.1.0
+protobuf==4.21.12
+pycparser==2.21
+pycrypto==2.6.1
+pycryptodome==3.17
+pycryptodomex==3.17
+pyparsing==3.0.9
+python-dateutil==2.8.2
+SQLAlchemy==2.0.22
+urllib3==2.0.7
+
+# you can use the following command to install the dependencies:
+
+# pip install -r requirements.txt

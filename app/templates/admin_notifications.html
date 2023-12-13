@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Page Title-->
+    <title>Sports Performance Pro - All your records in one place</title>
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="../static/images/favicon.ico" title="Favicon"/>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<style>
+            nav {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav li {
+            margin: 0 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s ease-in-out;
+            padding: 15px 25px;
+            border-radius: 15px; /* Add rounded corners to the tab */
+        }
+
+        nav a.current {
+            color: #fff;
+            background-color: #005599;
+            font-weight: bold;
+            border-radius: 15px; /* Apply rounded corners to the selected tab */
+        }
+
+        nav a:hover, nav a:focus {
+            color: #005599;
+            background-color: #fff;
+            border-radius: 15px; /* Apply the same rounded corners on hover/focus */
+        }
+
+        header {
+            background-color: #0077B5;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    padding: 40px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.notification-section {
+    width: 45%;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 10px;
+    float: left; /* Added to make the containers float next to each other */
+}
+
+.section-title {
+    color: #0077B5;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px;
+}
+
+.notification-list {
+    overflow-y: auto;
+    max-height: 500px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.notification-list li {
+    overflow-y: auto;
+    cursor: pointer;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.3s, color 0.3s;
+    position: relative; /* Added for positioning the dot */
+    white-space: nowrap; /* Prevent line breaks */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Display ellipsis (...) for overflowed text */
+}
+
+.notification-list li .unopened-dot {
+    width: 10px;
+    height: 10px;
+    background-color: blue; /* Blue dot for unopened notifications */
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Change left to right for dot placement */
+    transform: translateY(-50%);
+}
+
+.notification-list li .notification-date {
+    overflow-y: auto;
+    font-size: 12px; /* Adjust the font size as needed */
+    color: #888; /* Color for the date */
+    position: absolute;
+    top: 50%;
+    right: 30px; /* Adjust the right spacing as needed */
+    transform: translateY(-50%);
+}
+
+.notification-list li:hover {
+    overflow-y: auto;
+    background-color: #0077B5;
+    color: #fff;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.notification-item.opened {
+    background-color: #00FF00; /* Green background for opened notifications */
+}
+
+.notification-item.closed {
+    background-color: #FFFFFF; /* White background for closed notifications */
+}
+
+</style>
+<body>
+    <header>
+        <h1 class="title">Sports Performance Pro - Welcome Admin!</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/adminLanding">Coaches</a></li>
+            <li><a href="/adminAthlete">Athletes</a></li>
+            <li><a href="/coachSelection">Exercises</a></li>
+            <li><a href="/adminNotifications"  class="current">Notifications</a></li>
+            <li><a href="/logoutAdmin">Logout</a></li>
+        </ul>
+    </nav>
+    <div class="notification-page">
+        <div class="notification-section" id="coachNotifications">
+            <h2 style="color: #0077B5; text-align: center;">Coach Registrations</h2>
+
+            <ul class="notification-list">
+                <!-- Add more coach notifications here -->
+            </ul>
+        </div>
+
+        <div class="notification-section" id="athleteNotifications">
+            <h2 style="color: #0077B5; text-align: center;">Athlete Registrations</h2>
+            <ul class="notification-list">
+                <!-- Add more athlete notifications here -->
+            </ul>
+        </div>
+    </div>
+
+    <div id="notificationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <p id="notificationText">Notification Details</p>
+        </div>
+    </div>
+
+    <script>
+      
+      $(document).ready(function() {
+        var coachNotifications = []; // Store coach notifications here
+        var athleteNotifications = []; 
+
+    function fetchNotifications() {
+        $.ajax({
+            url: '/getNotifications',
+            type: 'GET',
+            success: function(notifications) {
+                coachNotifications = notifications; 
+                notifications.forEach(function(notification) {
+    var fullText = `A new coach with the following details added: Name: ${notification.name}, Email: ${notification.email}, Sports: ${notification.sports}, Institute: ${notification.institute}`;
+    var limitedText = limitText(fullText, 11);
+    
+    var listItem = $('<li>')
+        .addClass('notification-item ' + (notification.flag === 'unopened' ? 'unopened' : ''))
+        .attr('data-id', notification.notification_id)
+        .html(`<span class="notification-content">${limitedText}</span>
+               ${notification.flag === 'unopened' ? '<span class="unopened-dot"></span>' : ''}
+               <span class="notification-date">${notification.date_created}</span>`)
+        .appendTo('#coachNotifications .notification-list');
+
+    listItem.on('click', function() {
+        var id = parseInt($(this).attr('data-id'));
+        console.log('Clicked ID:', id);
+        showNotificationDetails(id);
+        $(this).removeClass('closed').addClass('opened'); 
+    });
+});
+
+            },
+            error: function(error) {
+                console.log("Error fetching notifications:", error);
+            }
+        });
+    }
+     // Function to fetch athlete notifications
+     function fetchAthleteNotifications() {
+        $.ajax({
+            url: '/getAthletesNotifications',
+            type: 'GET',
+            success: function(notifications) {
+                athleteNotifications = notifications; 
+                notifications.forEach(function(notification) {
+                    var fullText = `A new athlete with the following details added: Name: ${notification.name}, Email: ${notification.email}, Sports: ${notification.sports}, Institute: ${notification.institute}`;
+                    var limitedText = limitText(fullText, 11);
+    
+                    var listItem = $('<li>')
+                        .addClass('notification-item ' + (notification.flag === 'unopened' ? 'unopened' : ''))
+                        .attr('data-id', notification.notification_id)
+                        .html(`<span class="notification-content">${limitedText}</span>
+                               ${notification.flag === 'unopened' ? '<span class="unopened-dot"></span>' : ''}
+                               <span class="notification-date">${notification.date_created}</span>`)
+                        .appendTo('#athleteNotifications .notification-list');
+
+                    listItem.on('click', function() {
+                        var id = parseInt($(this).attr('data-id'));
+                        console.log('Clicked ID:', id);
+                        showAthleteNotificationDetails(id);
+                        $(this).removeClass('closed').addClass('opened'); 
+                    });
+                });
+            },
+            error: function(error) {
+                console.log("Error fetching athlete notifications:", error);
+            }
+        });
+    }
+
+    function showAthleteNotificationDetails(notificationId) {
+        var notification = athleteNotifications.find(n => n.notification_id === notificationId);
+        if (notification) {
+            var modalContent = `
+                <p>A new athlete has been added with the following details:</p>
+                <ul>
+                    <li>Name: ${notification.name}</li>
+                    <li>Email: ${notification.email}</li>
+                    <li>Sports: ${notification.sports}</li>
+                    <li>Institute: ${notification.institute}</li>
+                    <li>Date Created: ${notification.date_created}</li>
+                </ul>`;
+            $('#notificationText').html(modalContent);
+            $('#notificationModal').show();
+
+            // Update notification status if it is unopened
+            if (notification.flag === 'unopened') {
+                updateAthleteNotificationStatus(notificationId);
+            }
+        }
+    }
+
+    function showNotificationDetails(notificationId) {
+        var notification = coachNotifications.find(n => n.notification_id === notificationId);
+        if (notification) {
+            var modalContent = `
+                <p>A new coach has been added with the following details:</p>
+                <ul>
+                    <li>Name: ${notification.name}</li>
+                    <li>Email: ${notification.email}</li>
+                    <li>Sports: ${notification.sports}</li>
+                    <li>Institute: ${notification.institute}</li>
+                    <li>Date Created: ${notification.date_created}</li>
+                </ul>`;
+            $('#notificationText').html(modalContent);
+            $('#notificationModal').show();
+
+            // Update notification status if it is unopened
+            if (notification.flag === 'unopened') {
+                updateNotificationStatus(notificationId);
+            }
+        }
+    }
+
+    function updateAthleteNotificationStatus(notificationId) {
+    $.ajax({
+        url: `/updateAthleteNotification/${notificationId}`,
+        type: 'PUT',
+        success: function(response) {
+            console.log(response.message);
+            $(`#athleteNotifications [data-id='${notificationId}']`).removeClass('unopened').find('.unopened-dot').remove();
+
+            var notification = athleteNotifications.find(n => n.notification_id === notificationId);
+            if (notification) {
+                notification.flag = 'opened';
+            }
+        },
+        error: function(error) {
+            console.log("Error updating athlete notification status:", error);
+        }
+    });
+}
+
+    function updateNotificationStatus(notificationId) {
+        $.ajax({
+            url: `/updateNotification/${notificationId}`,
+            type: 'PUT',
+            success: function(response) {
+                console.log(response.message);
+                // Update the notification item to reflect the opened status
+                $(`[data-id='${notificationId}']`).removeClass('unopened').find('.unopened-dot').remove();
+                
+                // Update the flag in the allNotifications array
+                var notification = coachNotifications.find(n => n.notification_id === notificationId);
+                if (notification) {
+                    notification.flag = 'opened';
+                }
+            },
+            error: function(error) {
+                console.log("Error updating notification status:", error);
+            }
+        });
+    }
+
+    function limitText(text, wordLimit) {
+        var words = text.split(' ');
+        if (words.length > wordLimit) {
+            return words.slice(0, wordLimit).join(' ') + '...';
+        }
+        return text;
+    }
+
+    $('.close-button').click(function() {
+        $('#notificationModal').hide();
+        $('.notification-item').removeClass('opened').addClass('closed');
+    });
+
+    fetchNotifications();
+    fetchAthleteNotifications();
+});
+
+
+
+
+    </script>
+    
+    
+</body>
+</html>

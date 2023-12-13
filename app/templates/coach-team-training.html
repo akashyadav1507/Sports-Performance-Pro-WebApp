@@ -3,11 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--Page Title-->
+    <title>Sports Performance Pro - All your records in one place</title>
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="../static/images/favicon.ico" title="Favicon"/>
 
     <link rel="stylesheet" href="../static/css/coach-team-training.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css"/>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/css/select2.min.css" rel="stylesheet"/>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/js/select2.min.js" defer></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/css/select2.min.css"
+      rel="stylesheet"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/js/select2.min.js"
+      defer
+    ></script>
   </head>
 
   <body>
@@ -22,7 +36,7 @@
         <li><a href="/testSelection">Assign Tests</a></li>
         <li><a href="/defineExercises">Create Exercises</a></li>
         <li><a href="/notesLanding">Notes</a></li>
-        <li><a href="#">Notifications</a></li>
+        <li><a href="/coachhNotifications">Notifications</a></li>
         <li><a href="/coachProfile">My Profile</a></li>
       </ul>
     </nav>
@@ -32,7 +46,6 @@
       <!-- <p id="user_id" data-user-email="{{athlete_username}}"></p> -->
       <!-- Container for login forms -->
       <div class="login-forms">
-
         <div class="login-container-1" style="margin-right: 20px">
           <div class="container mt-7">
             <h1 class="text-center">Teams</h1>
@@ -166,7 +179,14 @@
 
         <div class="login-container-2">
           <div class="container">
-            <h1>Team: {Team Name}</h1>
+            <h1 style="color: black">My Team</h1>
+            <button
+              type="button"
+              id="assign-session"
+              style="position: relative"
+            >
+              Assign Exercise
+            </button>
             <div class="team-list">
               <table id="trainingTable">
                 <thead>
@@ -186,6 +206,11 @@
               <!-- Generate dynamically from the databas -->
               <!-- Tabs for blocks and exercises -->
               <div class="tab-container">
+                <div class="horizontal-tabs" id="workout-tabs">
+                  <!-- <button id="add-workout-button" class="add-workout-btn-hide">
+                    Add a Block
+                  </button> -->
+                </div>
                 <div class="horizontal-tabs" id="block-tabs">
                   <!-- <button id="add-block-button" class="add-block-btn-hide">
                     Add a Block
@@ -288,7 +313,7 @@
     <script src="../static/js/calendar.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
-
-    <script src="../static/js/coach-team-training.js" defer></script>
+    <script src="../static/js/coach-team-training_v2.js" defer></script>
+    <!-- <script src="../static/js/coach-team-training.js" defer></script> -->
   </body>
 </html>

@@ -283,6 +283,10 @@ blockTabs.addEventListener("click", (e) => {
   if (e.target.tagName == "BUTTON") {
     e.preventDefault();
     e.stopPropagation();
+    $(e.target).siblings("button").css("background-color", "");
+
+    // Add the "highlight" class to the clicked element
+    $(e.target).css("background-color", "green");
     exerciseTabs.innerHTML = "";
     exerciseDetails.innerHTML = "Select an Exercise to view details.";
     successMessage.innerText = "";
@@ -327,6 +331,11 @@ function displayExercises2(blockEvent, block) {
 
 exerciseTabs.addEventListener("click", (e) => {
   if (e.target.tagName == "BUTTON") {
+    $(e.target).siblings("button").css("background-color", "");
+
+    // Add the "highlight" class to the clicked element
+    $(e.target).css("background-color", "green");
+
     e.preventDefault();
     e.stopPropagation();
     currentExerciseId = Number(e.target.id); // Setting id for retrival
@@ -411,26 +420,32 @@ function viewAssignedExercise(e) {
                 // var inputCell = document.createElement("td");
                 // inputCell.textContent = data["input_load"][i]["load"];
                 // inputCell.dataset.loadId = data["load_id"];
-                var inputCell = data["input_load"][i]["load"];
+                // var inputCell = data["input_load"][i]["load"];
+                var inputCell = `<input type="number" data-input=${
+                  i + 1
+                } name="load_entry-${i + 1}" value=${
+                  data["input_load"][i]["load"]
+                }>`;
+
                 console.log(inputCell);
               }
               rowData.push(inputCell);
-              if (!(typeof inputCell === String)) {
-                rowData.push(
-                  `<button type="button" class="edit-load-button" data-load-modify-number=${
-                    i + 1
-                  }>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
-                <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/></svg></button>` +
-                    "    " +
-                    `<button type="button" class="save-load-button data-load-save-number=${
-                      i + 1
-                    }"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy" viewBox="0 0 16 16">
-                 <path d="M11 2H9v3h2V2Z"/>
-                 <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0ZM1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5Zm3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4v4.5ZM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5V15Z"/>
-               </svg></button>`
-                );
-              }
+              // if (!(typeof inputCell === String)) {
+              //   rowData.push(
+              //     `<button type="button" class="edit-load-button" data-load-modify-number=${
+              //       i + 1
+              //     }>
+              //   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+              //   <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/></svg></button>` +
+              //       "    " +
+              //       `<button type="button" class="save-load-button data-load-save-number=${
+              //         i + 1
+              //       }"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy" viewBox="0 0 16 16">
+              //    <path d="M11 2H9v3h2V2Z"/>
+              //    <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0ZM1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5Zm3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4v4.5ZM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5V15Z"/>
+              //  </svg></button>`
+              //   );
+              // }
 
               // Add the row data to the DataTable
               dataTable.row.add(rowData);
@@ -484,12 +499,15 @@ async function initialData() {
 
     teamIds = athleteTeams.map((team) => team.team_id);
     console.log("My coach Ids :", coachIds); // is an array of coach_ids json
-
+    highlightWorkoutDatesForAthletes(athleteId, teamIds);
     personalCoaches = await fetchPersonalCoaches(athleteId);
-    peronalCoachIds = personalCoaches.map(
-      (personcalCoach) => personcalCoach.coach_id
-    );
-
+    if (personalCoaches.error === "No coaches found for the athlete") {
+      personalCoaches = [];
+    } else {
+      peronalCoachIds = personalCoaches.map(
+        (personcalCoach) => personcalCoach.coach_id
+      );
+    }
     console.log("My personal coach Ids :", peronalCoachIds);
 
     myWorkouts = await fetchWorkoutsForAthleteAndTeams(athleteId, teamIds);
@@ -647,10 +665,8 @@ $("#trainingTable tbody").on("click", "tr", function () {
           });
 });
 
-// FIXME: Make the submit button to hit the database with values✅
-// TODO: Once the database is hit, make the modify button visible
-// TODO: Modify button submit enabled only once all entries of load are filled
-// TODO: Mobile workout
+//  Make the submit button to hit the database with values✅
+
 $(document).ready(function () {
   // Function to collect and submit form data
   var table = $("#create-exercise").DataTable();

@@ -5,8 +5,41 @@ const urlParams = new URLSearchParams(window.location.search);
 const athleteId = urlParams.get("athleteId");
 const coachId = urlParams.get("coachId");
 
-let myAthleteId = athleteId; 
-let currentCoachId = coachId; 
+const assignExerciseBtn = document.getElementById("assign-session");
+let athleteName;
+fetch(`/getAthleteName?athlete_id=${athleteId}`)
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+    athleteName = data.athlete_name;
+    document.querySelector(
+      "#trainingTable th"
+    ).textContent = `Athlete : ${athleteName}`;
+  })
+  .catch((error) => {
+    console.error("There was an error fetching", error);
+  });
+
+console.log("This is athlete Name", { athleteName });
+
+var athleteUsernameElement = document.getElementById("athlete-username");
+var athleteUsername = athleteUsernameElement.getAttribute("data-username");
+
+// Redirect to new page on clicking Assign exercise
+assignExerciseBtn.addEventListener("click", function (e) {
+  e.preventDefault();
+  window.location.href = `/assignExercise?coachId=${coachId}&athleteId=${athleteId}&date=${currentDate}&athleteName=${athleteName}`;
+});
+
+// console.log(" Athlete Username ", athleteUsername);
+
+// const testingElement = document.getElementById("testValue");
+// const testVal = testingElement.getAttribute("data-testing");
+// console.log("The test val :", testVal);
+
+let newWorkoutData = [];
+let myAthleteId = athleteId;
+let currentCoachId = coachId;
 let currentWorkout;
 let currentBlocks;
 let currentExercises;
@@ -112,7 +145,6 @@ async function fetcWorkoutforAthletebyTeamsByCoach(
   return data;
 }
 
-
 async function fetchTeamsForAthleteByCoach(athlete_id, coach_id) {
   const response = fetch(
     `/getTeamsForAthleteByCoach?athleteId=${athlete_id}&coachId=${coachId}`
@@ -159,26 +191,26 @@ async function fetchWorkoutsForAthleteAndTeams(athleteId, teamIds) {
 }
 
 // Get All Blocks
-function getAllBlockNames(workoutData) {
-  // workoutData is workout_name arrays
-  // Each workout_name array has blocks which are again arrays
-  const blockNames = [];
-  workoutData.forEach((workout) => {
-    if (Array.isArray(workout)) {
-      workout.forEach((w) => {
-        w.blocks.forEach((block) => {
-          blockNames.push(block.block_name);
-        });
-      });
-    }
-    if (Array.isArray(workout.blocks)) {
-      workout.blocks.forEach((block) => {
-        blockNames.push(block.block_name);
-      });
-    }
-  });
-  return blockNames;
-}
+// function getAllBlockNames(workoutData) {
+//   // workoutData is workout_name arrays
+//   // Each workout_name array has blocks which are again arrays
+//   const blockNames = [];
+//   workoutData.forEach((workout) => {
+//     if (Array.isArray(workout)) {
+//       workout.forEach((w) => {
+//         w.blocks.forEach((block) => {
+//           blockNames.push(block.block_name);
+//         });
+//       });
+//     }
+//     if (Array.isArray(workout.blocks)) {
+//       workout.blocks.forEach((block) => {
+//         blockNames.push(block.block_name);
+//       });
+//     }
+//   });
+//   return blockNames;
+// }
 
 function getMyBlockNames(workoutData) {
   const blockNames = [];
@@ -211,6 +243,10 @@ function displayBlocks2(blocks) {
 
 blockTabs.addEventListener("click", (e) => {
   if (e.target.tagName == "BUTTON") {
+    $(e.target).siblings("button").css("background-color", "");
+
+    // Add the "highlight" class to the clicked element
+    $(e.target).css("background-color", "green");
     e.preventDefault();
     e.stopPropagation();
     exerciseTabs.innerHTML = "";
@@ -257,6 +293,10 @@ function displayExercises2(blockEvent, block) {
 
 exerciseTabs.addEventListener("click", (e) => {
   if (e.target.tagName == "BUTTON") {
+    $(e.target).siblings("button").css("background-color", "");
+
+    // Add the "highlight" class to the clicked element
+    $(e.target).css("background-color", "green");
     e.preventDefault();
     e.stopPropagation();
     currentExerciseId = Number(e.target.id); // Setting id for retrival
@@ -450,6 +490,7 @@ async function initialData() {
 // Main Function which has all details:
 async function main() {
   try {
+    highlightWorkoutDatesForCoaches(coachId);
     const data = await initialData(); // Gets all the initial Data
   } catch (error) {
     console.error("An error occured", error);
@@ -498,7 +539,6 @@ $("#trainingTable tbody").on("click", "tr", function (event) {
   // Set the teamID if there is one:
 
   console.log("View the data of clicked Item : ", data);
-
 
   // Everytime I clikc on a Team, a fetch request is sent to get workout and display the blocks of the team
   // FIXME: Change the date to currentDate later

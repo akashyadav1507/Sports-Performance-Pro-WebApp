@@ -4,7 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration - Sports Performance Pro</title>
+    <!--Page Title-->
+    <title>Sports Performance Pro - All your records in one place</title>
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="../static/images/favicon.ico" title="Favicon"/>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,7 +32,6 @@
             text-align: center;
             padding: 10px 0;
         }
-
         nav ul {
             list-style-type: none;
             padding: 0;
@@ -101,7 +105,7 @@
         input[type="password"],
         select {
             width: 100%;
-            padding: 12px 20px;
+            padding: 9px 20px;
             margin-bottom: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -137,13 +141,24 @@
             background-color: #005599;
         }
 
-        footer {
-            width: 100%;
-            background-color: #fff;
-            color: #333;
-            text-align: center;
-            padding: 10px 0;
-        }
+        .footer {
+        position: fixed;
+        bottom: 0;
+        left: 50%; /* Align the footer to the horizontal center of the viewport */
+        transform: translateX(-50%); /* Center the footer horizontally */
+        width: 100%;
+        background-color: #fff;
+        color: #333;
+        text-align: center;
+        padding: 10px 0;
+        z-index: 999;
+        box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+      }
+
+      .footer-content {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
 
         .login-link {
             font-size: 16px;
@@ -268,16 +283,16 @@
                     <div style="text-align:center;">
                         <span class="error-message" id="general-error"></span>
                         <button type="submit" id="registerButton">Register</button>
+                        <a class="login-link" href="/coachAthleteHome">Already have an account? Login</a>
+                        <a class="login-link" href="/">Go to Homepage</a>
                     </div>
                 </form>
             </div>
         </div>
-
-        <a class="login-link" href="/coachAthleteHome">Already have an account? Login</a>
     </div>
 
     <footer>
-        &copy; 2023 Sports Performance Pro
+        <div class="footer">2023 Sports Performance Pro</div>
     </footer>
 
     <script>
@@ -361,7 +376,38 @@
                 
           });
             }
+
+        if (valid) {
+        var dateCreated = getCurrentDate(); // Get the current date
+
+        var notificationData = {
+            "name": nameInput.value,
+            "email": emailInput.value,
+            "sports": selectedSports.join(', '), // Assuming sports is a comma-separated string
+            "institute": instituteInput.value,
+            "date_created": dateCreated
+        };
+
+        // Send data to the API
+        $.ajax({
+            url: '/postAthletesNotification',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(notificationData),
+            success: function(response) {
+                // Handle success
+                console.log("Success:", response.message);
+                // You can display a success message or redirect the user
+            },
+            error: function(xhr, status, error) {
+                // Handle errors
+                console.log("Error:", xhr.responseText);
+                // You can display an error message
+            }
         });
+    }
+    event.preventDefault(); // Prevent form submission
+});
 
         function isValidEmail(email) {
             // Simple email validation regex
@@ -390,6 +436,13 @@
         function isValidPassword(password) {
             // Password validation: at least 8 characters long
             return password.length >= 8;
+        }
+        function getCurrentDate() {
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+            var yyyy = today.getFullYear();
+            return yyyy + '-' + mm + '-' + dd;
         }
         
         $.get('/getAllSports', function (data) {
