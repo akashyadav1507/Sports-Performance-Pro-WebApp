@@ -1,4 +1,4 @@
-# Sports Performancee Pro - Elevating Athlete Workouts & Training Management
+# Sports Performance Pro - Elevating Athlete Workouts & Training Management
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
